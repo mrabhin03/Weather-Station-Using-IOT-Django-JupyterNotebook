@@ -1,0 +1,284 @@
+<html>
+    <head>
+        {% load static %}
+        <title>Weather</title>
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+    </head>
+    <body>
+        <div class="main">
+            <div class="temperature">
+                <div class="thead">
+                    <div class="sun">
+
+                    </div>
+                </div>
+                <div class="shead">
+                    <table>
+                        <td>
+                            <tr>
+                                Today {{ tdate }}
+                            </tr>
+                            <tr>
+                                {{ ttime }}
+                            </tr>
+                        </td>
+                    </table>
+                </div>
+                <div class="tmep">
+                    <div>{{ temt| default:"!0" }}°</div>
+                </div>
+                <div class="base">
+                    <img src="{% static 't3.png' %}" alt="">
+                </div>
+
+            </div>
+            <div class="details">
+                <div class="details_head">
+                    <div>
+                        <div><b>Welcome to weather station</b></div>
+                        <div>Check out Today's weather information</div>
+                    </div>
+                </div>
+                <div class="details_div1">
+                    <div>
+                        <div class="graphtitle">
+                            <div class="barhead">
+                                <div><b>This week's weather</b></div>
+                                <div><button type='submit' id='submitBtn' name='updatedata'>Previous week</button></div>
+                            </div>
+                            
+                            <div class="barlabel">
+                                <div class="val"><ion-icon name="{{ rain.0 }}"></ion-icon>{{ graph.graph_data.0.value1|default:"_" }}°</div>
+                                <div class="val"><ion-icon name="{{ rain.1 }}"></ion-icon>{{ graph.graph_data.1.value1|default:"_" }}°</div>
+                                <div class="val"><ion-icon name="{{ rain.2 }}"></ion-icon>{{ graph.graph_data.2.value1|default:"_" }}°</div>
+                                <div class="val"><ion-icon name="{{ rain.3 }}"></ion-icon>{{ graph.graph_data.3.value1|default:"_" }}°</div>
+                                <div class="val"><ion-icon name="{{ rain.4 }}"></ion-icon>{{ graph.graph_data.4.value1|default:"_" }}°</div>
+                                <div class="val"><ion-icon name="{{ rain.5 }}"></ion-icon>{{ graph.graph_data.5.value1|default:"_" }}°</div>
+                                <div class="val"><ion-icon name="{{ rain.6 }}"></ion-icon>{{ graph.graph_data.6.value1|default:"_" }}°</div>
+                            </div>
+                        </div>
+                        <div style="width: 96%; height: 70%; margin-bottom: -2px;">
+                            <canvas id="graphdisplay" width="10800" height="2060"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                    let labels = ['{{ graph.graph_data.0.date|date:"d"|default:"0" }}', 
+                    '{{ graph.graph_data.1.date|date:"d"|default:"0" }}', 
+                    '{{ graph.graph_data.2.date|date:"d"|default:"0" }}', 
+                    '{{ graph.graph_data.3.date|date:"d"|default:"0" }}', 
+                    '{{ graph.graph_data.4.date|date:"d"|default:"0" }}', 
+                    '{{ graph.graph_data.5.date|date:"d"|default:"0" }}', 
+                    '{{ graph.graph_data.6.date|date:"d"|default:"0" }}'];
+                    let itemdata = [{{ graph.graph_data.0.value1|default:"0" }},
+                    {{ graph.graph_data.1.value1|default:"0" }}
+                    , {{ graph.graph_data.2.value1|default:"0" }}
+                    , {{ graph.graph_data.3.value1|default:"0" }}
+                    , {{ graph.graph_data.4.value1|default:"0" }}
+                    , {{ graph.graph_data.5.value1|default:"0" }}
+                    , {{ graph.graph_data.6.value1|default:"0" }}
+                    ];
+                    const data = {
+                        labels: labels,
+                        datasets: [{
+                            data: itemdata,
+                            borderColor: 'rgb(100, 180, 280)',
+                            fill: true,
+                            backgroundColor: "rgb(81, 159, 226)",
+                            tension: 0.15,
+                            borderWidth: 3
+                        }]
+                    };
+                    const config = {
+                        type: 'line',
+                        data: data,
+                        options: {
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                title: {
+                                    display: false,
+                                }
+                            }
+                        }
+                    };
+                    const chart = new Chart(
+                        document.getElementById('graphdisplay'),
+                        config
+                    );
+                </script>
+                
+                <div class="details_div2">
+                    <div class="subdetails">
+                        <div>
+                            <div>
+                                <div class="humditytitle">
+                                    <b>Humidity</b>
+                                    <div class="icon"><b><ion-icon name="cloud-outline"></ion-icon></b></div>
+                                </div>
+                                <div class="humdity">
+                                    <b>{{ database.weather_data.0.device_values| default:"!0" }}%</b>
+                                </div>
+                                <div class="level">
+                                    <div class="limits">
+                                        <div style="justify-content: baseline;" >0%</div>
+                                        <div style="justify-content: center;">50%</div>
+                                        <div style="justify-content: end;">100%</div>
+                                    </div>
+                                    <div class="levelbar">
+                                        <div style="width: {{ database.weather_data.0.device_values| default:"0" }}%;
+                                        {% if database.weather_data.0.device_values >= 60 %}
+                                        background-color:red;
+                                        {% elif database.weather_data.0.device_values >= 30 %}
+                                        background-color:orange;
+                                        {% elif database.weather_data.0.device_values >= 15 %}
+                                        background-color:rgb(81, 159, 226);
+                                        {% else %} 
+                                        background-color:rgb(3, 209, 255);
+                                        {% endif %}
+                                        "></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="temperaturetitle">
+                                    <b>Temperature</b>
+                                    <div class="icon" style="{% if database.weather_data.1.device_values >= 60 %}
+                                        background-color:red;
+                                        {% elif database.weather_data.1.device_values >= 30 %}
+                                        background-color:orange;
+                                        {% elif database.weather_data.1.device_values >= 15 %}
+                                        background-color:rgb(81, 159, 226);
+                                        {% else %} 
+                                        background-color:rgb(3, 209, 255);
+                                        {% endif %}
+                                        "><b><ion-icon name="thermometer-outline"></ion-icon></b></div>
+                                </div>
+                                <div class="temperatured">
+                                    <b>{{ database.weather_data.1.device_values| default:"!0" }}°</b>
+                                </div>
+                                <div class="level">
+                                    <div class="limits">
+                                        <div style="justify-content: baseline;" >0°</div>
+                                        <div style="justify-content: center;">50°</div>
+                                        <div style="justify-content: end;">100°</div>
+                                    </div>
+                                    <div class="levelbar">
+                                        <div style="width: {{ database.weather_data.1.device_values| default:"0" }}%;
+                                        {% if database.weather_data.1.device_values >= 60 %}
+                                        background-color:red;
+                                        {% elif database.weather_data.1.device_values >= 30 %}
+                                        background-color:orange;
+                                        {% elif database.weather_data.1.device_values >= 15 %}
+                                        background-color:rgb(81, 159, 226);
+                                        {% else %} 
+                                        background-color:rgb(3, 209, 255);
+                                        {% endif %}
+                                        " ></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="soundtitle">
+                                    <b>Sound</b>
+                                    <div class="icon"><b><ion-icon name="volume-high-outline"></ion-icon></b></div>
+                                </div>
+                                <div class="sound">
+                                    <b>{{ database.weather_data.2.device_values| default:"!0" }}%</b>
+                                </div>
+                                <div class="level">
+                                    <div class="limits">
+                                        <div style="justify-content: baseline;" >0%</div>
+                                        <div style="justify-content: center;">50%</div>
+                                        <div style="justify-content: end;">100%</div>
+                                    </div>
+                                    <div class="levelbar">
+                                        <div style="width: {{ database.weather_data.2.device_values| default:"0" }}%;
+                                        {% if database.weather_data.2.device_values >= 60 %}
+                                        background-color:red;
+                                        {% elif database.weather_data.2.device_values >= 30 %}
+                                        background-color:orange;
+                                        {% elif database.weather_data.2.device_values >= 15 %}
+                                        background-color:rgb(81, 159, 226);
+                                        {% else %} 
+                                        background-color:rgb(3, 209, 255);
+                                        {% endif %}" ></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <div class="co2title">
+                                    <b>CO²</b>
+                                    <div class="icon" style="{% if database.weather_data.3.device_values >= 20 %}
+                                        background-color:rgb(255, 53, 53); {% endif %}"><b><ion-icon name="warning-outline"></ion-icon></b></div>
+                                </div>
+                                <div class="co2">
+                                    <b style="{% if database.weather_data.3.device_values >= 20 %}
+                                        color:rgb(255, 53, 53); {% endif %}">
+                                        {{ database.weather_data.3.device_values| default:"!0" }}%</b>
+                                </div>
+                                <div class="level">
+                                    <div class="limits">
+                                        <div style="justify-content: baseline;" >0%</div>
+                                        <div style="justify-content: center;">50%</div>
+                                        <div style="justify-content: end;">100%</div>
+                                    </div>
+                                    <div class="levelbar">
+                                        <div style="width: {{ database.weather_data.3.device_values| default:"0" }}%;
+                                        {% if database.weather_data.3.device_values >= 20 %}
+                                        background-color:rgb(255, 53, 53);
+                                        {% elif database.weather_data.3.device_values >= 8 %}
+                                        background-color:orange;
+                                        {% elif database.weather_data.3.device_values >= 4 and database.weather_data.3.device_values <= 2 %}
+                                        background-color:rgb(81, 159, 226);
+                                        {% else %} 
+                                        background-color:rgb(3, 209, 255);
+                                        {% endif %}
+                                        " ></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="raintitle">
+                                    <b >Chance of Rain</b>
+                                    <div class="icon" style=" 
+                                    {% if database.weather_data.4.device_values >= 50 %}
+                                    background-color:rgb(0, 255, 174);color:black;
+                                    {% else %} 
+                                    background-color:yellow; color:black;
+                                    {% endif %}"><b><ion-icon name="{{ rain.6 }}"></ion-icon></b></div>
+                                </div>
+                                <div class="rain">
+                                    <b>{{ database.weather_data.4.device_values| default:"!0" }}%</b>
+                                </div>
+                                <div class="level">
+                                    <div class="limits">
+                                        <div style="justify-content: baseline;" >0%</div>
+                                        <div style="justify-content: center;">50%</div>
+                                        <div style="justify-content: end;">100%</div>
+                                    </div>
+                                    <div class="levelbar">
+                                        <div style="width: {{ database.weather_data.4.device_values| default:"0" }}%; 
+                                        {% if database.weather_data.4.device_values >= 50 %}
+                                        background-color:rgb(0, 255, 174);
+                                        {% else %} 
+                                        background-color:yellow;
+                                        {% endif %}" ></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-direction: row; align-items: center; justify-content: center; font-size: 25px;">More details <ion-icon name="arrow-forward-outline"></ion-icon></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    </body>
+</html>
