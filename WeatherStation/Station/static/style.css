@@ -56,6 +56,10 @@ body{
     color: white;
     font-size: 20px;
 }
+.shead > table {
+    color: white;
+    font-size: 20px;
+}
 .tmep
 {
     width: 100%;
@@ -178,11 +182,21 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 .subdetails{
     height: 90%;
     width: 85%;
     border-radius: 20px;
+}
+.details_div2 > input{
+    color:  black;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: 0;
+    height: 25px;
+    width: 150px;
+
 }
 .subdetails > div{
     width: 100%;
@@ -221,6 +235,7 @@ body{
     justify-content: center;
     align-items: center;
     color: white;
+    transition: all 1s ease-in-out;
 }
 .humdity,.temperatured,.sound,.co2,.rain{
     height: 40%;
@@ -270,4 +285,8 @@ body{
     background-color: rgb(81, 159, 226);
     border-radius: 5px;
     height: 100%;
+    width: 0%;
+    transition: all 1s ease-in-out;
+    
+   
 }

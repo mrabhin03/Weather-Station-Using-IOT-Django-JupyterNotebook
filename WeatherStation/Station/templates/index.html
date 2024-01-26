@@ -3,6 +3,7 @@
         {% load static %}
         <title>Weather</title>
         <link rel="stylesheet" href="{% static 'style.css' %}">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     </head>
     <body>
         <div class="main">
@@ -14,18 +15,18 @@
                 </div>
                 <div class="shead">
                     <table>
-                        <td>
-                            <tr>
-                                Today {{ tdate }}
-                            </tr>
-                            <tr>
-                                {{ ttime }}
-                            </tr>
-                        </td>
+                        <tr>
+                            <td id="todaydate">
+                                Today 
+                            </td>
+                            <td id="todaytime">
+                               0
+                            </td>
+                        </tr>
                     </table>
                 </div>
                 <div class="tmep">
-                    <div>{{ temt| default:"!0" }}°</div>
+                    <div id="todayTemperature">0°</div>
                 </div>
                 <div class="base">
                     <img src="{% static 't3.png' %}" alt="">
@@ -44,17 +45,18 @@
                         <div class="graphtitle">
                             <div class="barhead">
                                 <div><b>This week's weather</b></div>
-                                <div><button type='submit' id='submitBtn' name='updatedata'>Previous week</button></div>
+                                <div><button onclick="dateupdations(1)" id='submitBtn' name='updatedata'>Previous week</button>
+                                    <button onclick="dateupdations(2)" id='submitBtn' name='updatedata'>Next week</button></div>
                             </div>
                             
                             <div class="barlabel">
-                                <div class="val"><ion-icon name="{{ rain.0 }}"></ion-icon>{{ graph.graph_data.0.value1|default:"_" }}°</div>
-                                <div class="val"><ion-icon name="{{ rain.1 }}"></ion-icon>{{ graph.graph_data.1.value1|default:"_" }}°</div>
-                                <div class="val"><ion-icon name="{{ rain.2 }}"></ion-icon>{{ graph.graph_data.2.value1|default:"_" }}°</div>
-                                <div class="val"><ion-icon name="{{ rain.3 }}"></ion-icon>{{ graph.graph_data.3.value1|default:"_" }}°</div>
-                                <div class="val"><ion-icon name="{{ rain.4 }}"></ion-icon>{{ graph.graph_data.4.value1|default:"_" }}°</div>
-                                <div class="val"><ion-icon name="{{ rain.5 }}"></ion-icon>{{ graph.graph_data.5.value1|default:"_" }}°</div>
-                                <div class="val"><ion-icon name="{{ rain.6 }}"></ion-icon>{{ graph.graph_data.6.value1|default:"_" }}°</div>
+                                <div class="val"><ion-icon id="rainic0" name="sunny-outline"></ion-icon><div id="daystem0">0°</div></div>
+                                <div class="val"><ion-icon id="rainic1" name="sunny-outline"></ion-icon><div id="daystem1">0°</div></div>
+                                <div class="val"><ion-icon id="rainic2" name="sunny-outline"></ion-icon><div id="daystem2">0°</div></div>
+                                <div class="val"><ion-icon id="rainic3" name="sunny-outline"></ion-icon><div id="daystem3">0°</div></div>
+                                <div class="val"><ion-icon id="rainic4" name="sunny-outline"></ion-icon><div id="daystem4">0°</div></div>
+                                <div class="val"><ion-icon id="rainic5" name="sunny-outline"></ion-icon><div id="daystem5">0°</div></div>
+                                <div class="val"><ion-icon id="rainic6" name="sunny-outline"></ion-icon><div id="daystem6">0°</div></div>
                             </div>
                         </div>
                         <div style="width: 96%; height: 70%; margin-bottom: -2px;">
@@ -64,53 +66,74 @@
                 </div>
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script>
-                    let labels = ['{{ graph.graph_data.0.date|date:"d"|default:"0" }}', 
-                    '{{ graph.graph_data.1.date|date:"d"|default:"0" }}', 
-                    '{{ graph.graph_data.2.date|date:"d"|default:"0" }}', 
-                    '{{ graph.graph_data.3.date|date:"d"|default:"0" }}', 
-                    '{{ graph.graph_data.4.date|date:"d"|default:"0" }}', 
-                    '{{ graph.graph_data.5.date|date:"d"|default:"0" }}', 
-                    '{{ graph.graph_data.6.date|date:"d"|default:"0" }}'];
-                    let itemdata = [{{ graph.graph_data.0.value1|default:"0" }},
-                    {{ graph.graph_data.1.value1|default:"0" }}
-                    , {{ graph.graph_data.2.value1|default:"0" }}
-                    , {{ graph.graph_data.3.value1|default:"0" }}
-                    , {{ graph.graph_data.4.value1|default:"0" }}
-                    , {{ graph.graph_data.5.value1|default:"0" }}
-                    , {{ graph.graph_data.6.value1|default:"0" }}
-                    ];
-                    const data = {
-                        labels: labels,
-                        datasets: [{
-                            data: itemdata,
-                            borderColor: 'rgb(100, 180, 280)',
-                            fill: true,
-                            backgroundColor: "rgb(81, 159, 226)",
-                            tension: 0.15,
-                            borderWidth: 3
-                        }]
-                    };
-                    const config = {
-                        type: 'line',
-                        data: data,
-                        options: {
-                            plugins: {
-                                legend: {
-                                    display: false
-                                },
-                                title: {
-                                    display: false,
-                                }
-                            }
+                    var k=0
+                    var chart
+                    function graph(gradata)
+                    {
+                        for(i=0;i<7;i++){
+                            $('#daystem'+i).text(gradata[i].value1+"°");
+                            var iconElement = document.getElementById('rainic'+i);
+                            iconElement.setAttribute('name', gradata[i].value2);
                         }
-                    };
-                    const chart = new Chart(
-                        document.getElementById('graphdisplay'),
-                        config
-                    );
+                        let labels = [gradata[0].date.split('-')[1]+"/"+gradata[0].date.split('-')[2],
+                        gradata[1].date.split('-')[1]+"/"+gradata[1].date.split('-')[2],
+                        gradata[2].date.split('-')[1]+"/"+gradata[2].date.split('-')[2],
+                        gradata[3].date.split('-')[1]+"/"+gradata[3].date.split('-')[2],
+                        gradata[4].date.split('-')[1]+"/"+gradata[4].date.split('-')[2],
+                        gradata[5].date.split('-')[1]+"/"+gradata[5].date.split('-')[2],
+                        gradata[6].date.split('-')[1]+"/"+gradata[6].date.split('-')[2]];
+                        let itemdata = [gradata[0].value1,
+                        gradata[1].value1,
+                        gradata[2].value1,
+                        gradata[3].value1,
+                        gradata[4].value1,
+                        gradata[5].value1,
+                        gradata[6].value1];
+                        if(k==0)
+                        {
+                            const data = {
+                                labels: labels,
+                                datasets: [{
+                                    data: itemdata,
+                                    borderColor: 'rgb(100, 180, 280)',
+                                    fill: true,
+                                    backgroundColor: "rgb(81, 159, 226)",
+                                    tension: 0.15,
+                                    borderWidth: 3
+                                }]
+                            };
+                            const config = {
+                                type: 'line',
+                                data: data,
+                                options: {
+                                    plugins: {
+                                        legend: {
+                                            display: false
+                                        },
+                                        title: {
+                                            display: false,
+                                        }
+                                    }
+                                }
+                            };
+                            
+                                chart = new Chart(
+                                    document.getElementById('graphdisplay'),
+                                    config
+                                );
+                                k++
+                        }
+                        else{
+                            chart.data.labels = labels;
+                            chart.data.datasets[0].data = itemdata;
+                            chart.update()
+                        }
+                    }
+                    
                 </script>
                 
                 <div class="details_div2">
+                    <input id="thedatevalue" type="date" onchange="inputdataupdate()" value="{{ tdate }}">
                     <div class="subdetails">
                         <div>
                             <div>
@@ -119,7 +142,7 @@
                                     <div class="icon"><b><ion-icon name="cloud-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="humdity">
-                                    <b>{{ database.weather_data.0.device_values| default:"!0" }}%</b>
+                                    <b id="humidity">0%</b>
                                 </div>
                                 <div class="level">
                                     <div class="limits">
@@ -128,36 +151,17 @@
                                         <div style="justify-content: end;">100%</div>
                                     </div>
                                     <div class="levelbar">
-                                        <div style="width: {{ database.weather_data.0.device_values| default:"0" }}%;
-                                        {% if database.weather_data.0.device_values >= 60 %}
-                                        background-color:red;
-                                        {% elif database.weather_data.0.device_values >= 30 %}
-                                        background-color:orange;
-                                        {% elif database.weather_data.0.device_values >= 15 %}
-                                        background-color:rgb(81, 159, 226);
-                                        {% else %} 
-                                        background-color:rgb(3, 209, 255);
-                                        {% endif %}
-                                        "></div>
+                                        <div id="humiditybar" ></div>
                                     </div>
                                 </div>
                             </div>
                             <div>
                                 <div class="temperaturetitle">
                                     <b>Temperature</b>
-                                    <div class="icon" style="{% if database.weather_data.1.device_values >= 60 %}
-                                        background-color:red;
-                                        {% elif database.weather_data.1.device_values >= 30 %}
-                                        background-color:orange;
-                                        {% elif database.weather_data.1.device_values >= 15 %}
-                                        background-color:rgb(81, 159, 226);
-                                        {% else %} 
-                                        background-color:rgb(3, 209, 255);
-                                        {% endif %}
-                                        "><b><ion-icon name="thermometer-outline"></ion-icon></b></div>
+                                    <div id="ticon" class="icon"><b><ion-icon name="thermometer-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="temperatured">
-                                    <b>{{ database.weather_data.1.device_values| default:"!0" }}°</b>
+                                    <b id="Temperature">0°</b>
                                 </div>
                                 <div class="level">
                                     <div class="limits">
@@ -166,17 +170,7 @@
                                         <div style="justify-content: end;">100°</div>
                                     </div>
                                     <div class="levelbar">
-                                        <div style="width: {{ database.weather_data.1.device_values| default:"0" }}%;
-                                        {% if database.weather_data.1.device_values >= 60 %}
-                                        background-color:red;
-                                        {% elif database.weather_data.1.device_values >= 30 %}
-                                        background-color:orange;
-                                        {% elif database.weather_data.1.device_values >= 15 %}
-                                        background-color:rgb(81, 159, 226);
-                                        {% else %} 
-                                        background-color:rgb(3, 209, 255);
-                                        {% endif %}
-                                        " ></div>
+                                        <div id="Temperaturebar"></div>
                                     </div>
                                 </div>
                             </div>
@@ -186,7 +180,7 @@
                                     <div class="icon"><b><ion-icon name="volume-high-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="sound">
-                                    <b>{{ database.weather_data.2.device_values| default:"!0" }}%</b>
+                                    <b id="Sound">0%</b>
                                 </div>
                                 <div class="level">
                                     <div class="limits">
@@ -195,16 +189,7 @@
                                         <div style="justify-content: end;">100%</div>
                                     </div>
                                     <div class="levelbar">
-                                        <div style="width: {{ database.weather_data.2.device_values| default:"0" }}%;
-                                        {% if database.weather_data.2.device_values >= 60 %}
-                                        background-color:red;
-                                        {% elif database.weather_data.2.device_values >= 30 %}
-                                        background-color:orange;
-                                        {% elif database.weather_data.2.device_values >= 15 %}
-                                        background-color:rgb(81, 159, 226);
-                                        {% else %} 
-                                        background-color:rgb(3, 209, 255);
-                                        {% endif %}" ></div>
+                                        <div id="Soundbar" ></div>
                                     </div>
                                 </div>
                             </div>
@@ -213,13 +198,10 @@
                             <div>
                                 <div class="co2title">
                                     <b>CO²</b>
-                                    <div class="icon" style="{% if database.weather_data.3.device_values >= 20 %}
-                                        background-color:rgb(255, 53, 53); {% endif %}"><b><ion-icon name="warning-outline"></ion-icon></b></div>
+                                    <div class="icon" id="co2icon"><b><ion-icon name="warning-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="co2">
-                                    <b style="{% if database.weather_data.3.device_values >= 20 %}
-                                        color:rgb(255, 53, 53); {% endif %}">
-                                        {{ database.weather_data.3.device_values| default:"!0" }}%</b>
+                                    <b id="co2">0%</b>
                                 </div>
                                 <div class="level">
                                     <div class="limits">
@@ -228,32 +210,18 @@
                                         <div style="justify-content: end;">100%</div>
                                     </div>
                                     <div class="levelbar">
-                                        <div style="width: {{ database.weather_data.3.device_values| default:"0" }}%;
-                                        {% if database.weather_data.3.device_values >= 20 %}
-                                        background-color:rgb(255, 53, 53);
-                                        {% elif database.weather_data.3.device_values >= 8 %}
-                                        background-color:orange;
-                                        {% elif database.weather_data.3.device_values >= 4 and database.weather_data.3.device_values <= 2 %}
-                                        background-color:rgb(81, 159, 226);
-                                        {% else %} 
-                                        background-color:rgb(3, 209, 255);
-                                        {% endif %}
-                                        " ></div>
+                                        <div id="co2bar"></div>
                                     </div>
                                 </div>
                             </div>
                             <div>
                                 <div class="raintitle">
                                     <b >Chance of Rain</b>
-                                    <div class="icon" style=" 
-                                    {% if database.weather_data.4.device_values >= 50 %}
-                                    background-color:rgb(0, 255, 174);color:black;
-                                    {% else %} 
-                                    background-color:yellow; color:black;
-                                    {% endif %}"><b><ion-icon name="{{ rain.6 }}"></ion-icon></b></div>
+                                    <div class="icon" id="rainicon">
+                                        <b><ion-icon id="rainnew" name="sunny-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="rain">
-                                    <b>{{ database.weather_data.4.device_values| default:"0" }}%</b>
+                                    <b id="rain">0%</b>
                                 </div>
                                 <div class="level">
                                     <div class="limits">
@@ -262,12 +230,7 @@
                                         <div style="justify-content: end;">100%</div>
                                     </div>
                                     <div class="levelbar">
-                                        <div style="width: {{ database.weather_data.4.device_values| default:"0" }}%; 
-                                        {% if database.weather_data.4.device_values >= 50 %}
-                                        background-color:rgb(0, 255, 174);
-                                        {% else %} 
-                                        background-color:yellow;
-                                        {% endif %}" ></div>
+                                        <div id="rainbar"></div>
                                     </div>
                                 </div>
                             </div>
@@ -278,6 +241,167 @@
 
             </div>
         </div>
+        <script>
+            delays=5000;
+            function fulldata(data) {
+                humidityValue = data[0].device_values;
+                $('#humidity').text(humidityValue+"%");
+                document.getElementById('humiditybar').style.width =  humidityValue+"%";
+                if(humidityValue >= "60"){document.getElementById('humiditybar').style.backgroundColor="red";}
+                else if(humidityValue >= "30"){document.getElementById('humiditybar').style.backgroundColor="orange";}
+                else if(humidityValue >= "15"){document.getElementById('humiditybar').style.backgroundColor="rgb(81, 159, 226)";}
+                else {document.getElementById('humiditybar').style.backgroundColor="rgb(3, 209, 255)";}
+                
+
+                var temperatureValue = data[1].device_values;
+                $('#Temperature').text(temperatureValue+"°");
+                document.getElementById('Temperature').style.color="black"
+                document.getElementById('Temperaturebar').style.width =  temperatureValue+"%";
+                if(temperatureValue >= "60"){document.getElementById('Temperaturebar').style.backgroundColor="red";
+                document.getElementById('ticon').style.backgroundColor="red";
+                document.getElementById('Temperature').style.color="red"}
+                else if(temperatureValue >= "30"){document.getElementById('Temperaturebar').style.backgroundColor="orange";
+                document.getElementById('ticon').style.backgroundColor="orange";}
+                else if(temperatureValue >= "15"){document.getElementById('Temperaturebar').style.backgroundColor="rgb(81, 159, 226)";
+                document.getElementById('ticon').style.backgroundColor="rgb(81, 159, 226)";}
+                else {document.getElementById('Temperaturebar').style.backgroundColor="rgb(3, 209, 255)";
+                document.getElementById('ticon').style.backgroundColor="rgb(3, 209, 255)";}
+
+                
+                var soundValue = data[2].device_values;
+                $('#Sound').text(soundValue+"%");
+                document.getElementById('Soundbar').style.width =  soundValue+"%";
+                if(soundValue >= "60"){document.getElementById('Soundbar').style.backgroundColor="rgb(255, 53, 53)";}
+                else if(soundValue >= "30"){document.getElementById('Soundbar').style.backgroundColor="orange";}
+                else if(soundValue >= "15"){document.getElementById('Soundbar').style.backgroundColor="rgb(81, 159, 226)";}
+                else {document.getElementById('Soundbar').style.backgroundColor="rgb(3, 209, 255)";}
+
+
+                var co2Value = data[3].device_values;
+                document.getElementById('co2').style.color="black"
+                $('#co2').text(co2Value+"%");
+                document.getElementById('co2bar').style.width =  co2Value+"%";
+                if(co2Value >= "20"){document.getElementById('co2bar').style.backgroundColor="rgb(255, 53, 53)";
+                document.getElementById('co2').style.color="rgb(255, 53, 53)";
+                document.getElementById('co2icon').style.backgroundColor="rgb(255, 53, 53)"}
+                else if(co2Value >= "8"){document.getElementById('co2bar').style.backgroundColor="orange";
+                document.getElementById('co2icon').style.backgroundColor="orange"}
+                else if(co2Value >= "2" && co2Value <= "4"){document.getElementById('co2bar').style.backgroundColor="rgb(81, 159, 226)";
+                document.getElementById('co2icon').style.backgroundColor="rgb(81, 159, 226)"}
+                else {document.getElementById('co2bar').style.backgroundColor="rgb(3, 209, 255)";
+                document.getElementById('co2icon').style.backgroundColor="violet"
+                document.getElementById('co2icon').style.color="white"}
+
+
+                var rainValue = data[4].device_values;
+                $('#rain').text(rainValue+"%");
+                document.getElementById('rainbar').style.width =  rainValue+"%";
+                if(rainValue > "50"){document.getElementById('rainbar').style.backgroundColor="rgb(0, 255, 174)";
+                document.getElementById('rainicon').style.backgroundColor="rgb(0, 255, 174)";
+                document.getElementById('rainicon').style.color="black"}
+                else if(rainValue < "50"){document.getElementById('rainbar').style.backgroundColor="yellow";
+                document.getElementById('rainicon').style.color="black"
+                document.getElementById('rainicon').style.backgroundColor="yellow"}
+                else {document.getElementById('rainbar').style.backgroundColor="rgb(81, 159, 226)";
+                document.getElementById('rainicon').style.backgroundColor="rgb(81, 159, 226)";
+                document.getElementById('rainicon').style.color="white"}
+                var iconElement = document.getElementById('rainnew');
+                if(rainValue >= "75"){iconElement.setAttribute('name', 'rainy-outline');}
+                else if(rainValue >= "50"){iconElement.setAttribute('name', 'cloudy-outline');}
+                else if(rainValue >= "30"){iconElement.setAttribute('name', 'partly-sunny-outline');}
+                else {iconElement.setAttribute('name', 'sunny-outline');}
+                
+                
+            }
+
+            function fullalldaydata() {
+                $.ajax({
+                    url: '/all_data/',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        fulldata(data);
+                    },
+                    error: function (error) {
+                        console.error('Error fetching live data:', error);
+                    },
+                    complete: function () {
+                        setTimeout(fullalldaydata, delays);
+                    }
+                });
+            }
+            function todaytemper() {
+                $.ajax({
+                    url: '/today_temp/',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        var newdata = data.split(',');
+                        $('#todayTemperature').text(newdata[0]+"°");
+                        $('#todaydate').text("Today "+newdata[1]);
+                        $('#todaytime').text(newdata[2]);
+                    },
+                    error: function (error) {
+                        console.error('Error fetching live data:', error);
+                    },
+                    complete: function () {
+                        setTimeout(todaytemper, delays);
+                    }
+                });
+            }
+            function graphupdates() {
+                $.ajax({
+                    url: '/graph_data/',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        graph(data)
+                    },
+                    error: function (error) {
+                        console.error('Error fetching live data:', error);
+                    },
+                    complete: function () {
+                        setTimeout(graphupdates, delays);
+                    }
+                });
+            }
+            function dateupdations(val) {
+               
+                para=val
+                $.ajax({
+                    url: '/value_up/',
+                    method: 'GET',
+                    data: { 'way': para }, 
+                    dataType: 'json',
+                    success: function (data) {
+                        graphupdates();
+                    },
+                    error: function (error) {
+                        console.error('Error fetching new date:', error);
+                    },
+                });
+            }
+            function inputdataupdate() {
+                var inputElement = document.getElementById('thedatevalue').value;
+                $.ajax({
+                    url: '/day_update/',
+                    method: 'GET',
+                    data: { 'dates': inputElement }, 
+                    dataType: 'json',
+                    success: function (data) {
+                        fullalldaydata();
+                    },
+                    error: function (error) {
+                        console.error('Error fetching new date:', error);
+                    },
+                });
+            }
+            
+            graphupdates();
+            todaytemper();
+            fullalldaydata();
+
+        </script>
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     </body>

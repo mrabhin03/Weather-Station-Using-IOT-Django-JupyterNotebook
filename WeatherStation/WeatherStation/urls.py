@@ -20,4 +20,9 @@ from Station import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home,name='home'),
+    path('all_data/', views.livedatasend,name='live'),
+    path('today_temp/', views.today,name='tday'),
+    path('graph_data/', views.gdatacal,name='graph'),
+    path('value_up/', views.valueup,name='valueup'),
+    path('day_update/', views.day_update,name='day_update'),
 ]
