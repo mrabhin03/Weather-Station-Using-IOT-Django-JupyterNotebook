@@ -9,9 +9,9 @@ body{
     background-color: rgb(78, 152, 216);
 }
 .main{
-    background-color: rgb(75,196,243);
-    height: 95%;
-    width: 95%;
+    background-color: rgb(27, 185, 248);
+    height: 99%;
+    width: 96%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -72,7 +72,7 @@ body{
     font-size: 80px;
 }
 .details{
-    background-color: rgba(255, 255, 255, 0.718);
+    background-color: rgba(223, 248, 255, 0.79);
     border-radius: 20px;
     height: 100%;
     width: 80%;
@@ -161,11 +161,10 @@ body{
 }
 .base{
     margin-top: 180px;
-    background-color: rgb(255, 255, 255);
     height: 52%;
-    width: 100%;
+    width: 99%;
     display: flex;
-    align-items: baseline;
+    align-items: end;
 }
 .base > img{
     width: 292px;
@@ -177,18 +176,23 @@ body{
     background-color: rgb(255, 255, 255);
 }
 .details_div2{
-    height: 50%;
+    height: 51%;
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: baseline;
     flex-direction: column;
+    margin-top: -5px;
 }
 .subdetails{
     height: 90%;
     width: 85%;
     border-radius: 20px;
+    overflow-y: auto;
 }
+.subdetails::-webkit-scrollbar {
+    width: 1px;
+  }
 .details_div2 > input{
     color:  black;
     text-align: center;
@@ -205,10 +209,11 @@ body{
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 10px;
 }
 .subdetails > div > div{
     background-color: white;
-    height: 130px;
+    height: 150px;
     width: 270px;
     border-radius: 30px;
     overflow: hidden;
@@ -217,7 +222,7 @@ body{
     justify-content: baseline;
     align-items: center;
 }
-.humditytitle,.temperaturetitle,.soundtitle,.co2title,.raintitle{
+.humditytitle,.temperaturetitle,.soundtitle,.co2title,.raintitle,.windtitle,.no2title,.atmtitle{
     height: 30%;
     width: 80%;
     display: flex;
@@ -237,16 +242,19 @@ body{
     color: white;
     transition: all 1s ease-in-out;
 }
-.humdity,.temperatured,.sound,.co2,.rain{
+.humdity,.temperatured,.sound,.co2,.rain,.wind,.no2,.atm{
     height: 40%;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 40px;
+    font-size: 45px;
     color: rgb(50, 50, 50);
 }
-
+.wind,.atm{
+    height: 70%;
+    flex-direction: column;
+}
 .level{
     
     width: 100%;
@@ -287,6 +295,130 @@ body{
     height: 100%;
     width: 0%;
     transition: all 1s ease-in-out;
-    
-   
 }
+.speedar{
+    height: 100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+}
+.speedar2{
+    height: 30px;
+    background-color: rgb(255, 255, 255);
+    width: 136px;
+    text-align: center;
+    font-size: 15px;
+}
+.speedarcir{
+    margin-top: 60px;
+    border-radius: 50%;
+    height: 130px;
+    width: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 5px solid rgb(6, 116, 212);
+    border-bottom: 5px solid rgb(194, 194, 194);
+    border-right: 5px solid rgb(194, 194, 194);
+    border-top: 5px solid rgb(194, 194, 194);
+    background-position: center;
+    background-size: cover;
+    color: aliceblue;
+    transform: rotate(-45deg);
+    transition: all 1s ease-in-out;
+    background: radial-gradient(circle, #ffffff, #dfdfdf);
+}
+.seccirlcle,.seccirlcle2{
+    transition: all 1s ease-in-out;
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: baseline;
+    background-position: center;
+    background-size: cover;
+    color: aliceblue;
+    background-image:  url(meter.png);
+    transform: rotate(45deg);
+}
+.seccirlcle2{
+    background-image:  url(meter2.png);
+}
+.speedararrowco{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    height: 24px;
+    width: 50%;
+    margin-left: 0px;
+    transform: rotate(0deg);
+    transform-origin: right center;
+    transition: all 1s ease-in-out;
+}
+.speed1{
+    margin-right: 7px;
+    background-color: rgb(81, 159, 226);
+    width: 40px;
+    height: 6px;
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+.speed2{    
+    height: 10px;
+    width: 10px;
+    background-color: rgb(2, 87, 172);
+    border-radius: 50%;
+    margin-left: -5px;
+}
+.speed0{
+    position: fixed;
+    color: rgb(46, 46, 46);
+    font-size: 14px;
+    transform: translate(3px,0px);
+}
+.windpower{
+    height: 100%;
+    width: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.windpowersub{
+    height: 97%;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    flex-direction: column-reverse;
+    border: 2px solid rgb(195, 195, 195);
+    border-radius: 5px;
+    overflow: hidden;
+}
+.windlevel{
+    height: 10%;
+    width: 100%;
+    border-radius: 2px;
+    border: 1px solid white;
+    box-sizing: border-box;
+}
+.atmlevel{
+    height: 10%;
+    width: 100%;
+    border-radius: 2px;
+    border: 1px solid white;
+    box-sizing: border-box;
+}
+.warning{
+    animation: blink .5s infinite;
+    
+}
+@keyframes blink {
+    0% { background-color: red; }
+    50% { background-color: rgb(225, 225, 225); }
+    100% { background-color: red; }
+  }

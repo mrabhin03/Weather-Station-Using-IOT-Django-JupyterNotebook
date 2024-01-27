@@ -3,6 +3,7 @@
         {% load static %}
         <title>Weather</title>
         <link rel="stylesheet" href="{% static 'style.css' %}">
+        <link rel="icon" href="{% static 'rain.png' %}">
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     </head>
     <body>
@@ -29,7 +30,7 @@
                     <div id="todayTemperature">0°</div>
                 </div>
                 <div class="base">
-                    <img src="{% static 't3.png' %}" alt="">
+                    <img src="{% static 'Backgroundicon.png' %}" alt="">
                 </div>
 
             </div>
@@ -70,25 +71,17 @@
                     var chart
                     function graph(gradata)
                     {
+                        newlabelarray=[];
+                        newitemarray=[];
                         for(i=0;i<7;i++){
                             $('#daystem'+i).text(gradata[i].value1+"°");
                             var iconElement = document.getElementById('rainic'+i);
                             iconElement.setAttribute('name', gradata[i].value2);
+                            newlabelarray[i]=gradata[i].date.split('-')[1]+"/"+gradata[i].date.split('-')[2];
+                            newitemarray[i]=gradata[i].value1;
                         }
-                        let labels = [gradata[0].date.split('-')[1]+"/"+gradata[0].date.split('-')[2],
-                        gradata[1].date.split('-')[1]+"/"+gradata[1].date.split('-')[2],
-                        gradata[2].date.split('-')[1]+"/"+gradata[2].date.split('-')[2],
-                        gradata[3].date.split('-')[1]+"/"+gradata[3].date.split('-')[2],
-                        gradata[4].date.split('-')[1]+"/"+gradata[4].date.split('-')[2],
-                        gradata[5].date.split('-')[1]+"/"+gradata[5].date.split('-')[2],
-                        gradata[6].date.split('-')[1]+"/"+gradata[6].date.split('-')[2]];
-                        let itemdata = [gradata[0].value1,
-                        gradata[1].value1,
-                        gradata[2].value1,
-                        gradata[3].value1,
-                        gradata[4].value1,
-                        gradata[5].value1,
-                        gradata[6].value1];
+                        let labels = newlabelarray
+                        let itemdata = newitemarray
                         if(k==0)
                         {
                             const data = {
@@ -133,7 +126,7 @@
                 </script>
                 
                 <div class="details_div2">
-                    <input id="thedatevalue" type="date" onchange="inputdataupdate()" value="{{ tdate }}">
+                    <input  id="thedatevalue" type="date" onchange="inputdataupdate()" value="{{ tdate }}">
                     <div class="subdetails">
                         <div>
                             <div>
@@ -158,7 +151,7 @@
                             <div>
                                 <div class="temperaturetitle">
                                     <b>Temperature</b>
-                                    <div id="ticon" class="icon"><b><ion-icon name="thermometer-outline"></ion-icon></b></div>
+                                    <div id="ticon" class="icon"><b><ion-icon id="tempwarningicon" name="thermometer-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="temperatured">
                                     <b id="Temperature">0°</b>
@@ -197,7 +190,146 @@
                         <div>
                             <div>
                                 <div class="co2title">
-                                    <b>CO²</b>
+                                    <b>CO² Presents</b>
+                                    <div class="icon" id="co2icon"><b><ion-icon id="co2warningicon" name="warning-outline"></ion-icon></b></div>
+                                </div>
+                                <div class="co2">
+                                    <b id="co2">0%</b>
+                                </div>
+                                <div class="level">
+                                    <div class="limits">
+                                        <div style="justify-content: baseline;" >0%</div>
+                                        <div style="justify-content: center;">50%</div>
+                                        <div style="justify-content: end;">100%</div>
+                                    </div>
+                                    <div class="levelbar">
+                                        <div id="co2bar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="windtitle">
+                                    <b >Wind Speed</b>
+                                    <div class="icon" id="windicon">
+                                        <b><ion-icon name="speedometer-outline"></ion-icon></b>
+                                    </div>
+                                </div>
+                                <div class="wind">
+                                    <div class="speedar">
+                                        <div class="windpower">
+                                            <div id="powerhigh1" class="windpowersub">
+                                            </div>
+                                        </div>
+                                        <div id="ficr" class="speedarcir">
+                                            <div id="scecr" class="seccirlcle">
+                                                <div class="speedararrowco" id="windbar">
+                                                    <div id="wibar" class="speed1"></div>
+                                                </div>
+                                                <div class="speed2"></div>
+                                            </div>
+                                        </div>    
+                                        <div class="windpower">
+                                            <div id="powerhigh2" class="windpowersub">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="speedar2" ><b id="winds">0km/h</b></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="raintitle">
+                                    <b >Chance of Rain</b>
+                                    <div class="icon" id="rainicon">
+                                        <b><ion-icon id="rainnew" name="sunny-outline"></ion-icon></b></div>
+                                </div>
+                                <div class="rain">
+                                    <b id="rain">0%</b>
+                                </div>
+                                <div class="level">
+                                    <div class="limits">
+                                        <div style="justify-content: baseline;" >0%</div>
+                                        <div style="justify-content: center;">50%</div>
+                                        <div style="justify-content: end;">100%</div>
+                                    </div>
+                                    <div class="levelbar">
+                                        <div id="rainbar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div>
+                            <div>
+                                <div class="no2title">
+                                    <b>NO² Presents</b>
+                                    <div class="icon" id="no2icon"><b><ion-icon name="logo-electron"></ion-icon></b></div>
+                                </div>
+                                <div class="no2">
+                                    <b id="no2">0%</b>
+                                </div>
+                                <div class="level">
+                                    <div class="limits">
+                                        <div style="justify-content: baseline;" >0%</div>
+                                        <div style="justify-content: center;">50%</div>
+                                        <div style="justify-content: end;">100%</div>
+                                    </div>
+                                    <div class="levelbar">
+                                        <div id="no2bar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="atmtitle">
+                                    <b >Atmospheric Pressure</b>
+                                    <div class="icon" id="atmicon">
+                                        <b><ion-icon name="contract-outline"></ion-icon></b></div>
+                                </div>
+                                <div class="atm">
+                                    <div class="speedar">
+                                        <div class="windpower">
+                                            <div id="powerhigh3" class="windpowersub">
+                                            </div>
+                                        </div>
+                                        <div id="ficr2" class="speedarcir">
+                                            <div  id="scecr2" class="seccirlcle2">
+                                                <div  class="speedararrowco" id="atmbar">
+                                                    <div class="speed1"></div>
+                                                </div>
+                                                <div class="speed2"></div>
+                                            </div>
+                                        </div>    
+                                        <div class="windpower">
+                                            <div id="powerhigh4" class="windpowersub">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="speedar2" ><b id="atmdata">0hPa</b></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="co2title">
+                                    <b>UV Sensor</b>
+                                    <div class="icon" id="co2icon"><b><ion-icon name="warning-outline"></ion-icon></b></div>
+                                </div>
+                                <div class="co2">
+                                    <b id="co2">0%</b>
+                                </div>
+                                <div class="level">
+                                    <div class="limits">
+                                        <div style="justify-content: baseline;" >0%</div>
+                                        <div style="justify-content: center;">50%</div>
+                                        <div style="justify-content: end;">100%</div>
+                                    </div>
+                                    <div class="levelbar">
+                                        <div id="co2bar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <div class="co2title">
+                                    <b>Wind Direction</b>
                                     <div class="icon" id="co2icon"><b><ion-icon name="warning-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="co2">
@@ -216,7 +348,7 @@
                             </div>
                             <div>
                                 <div class="raintitle">
-                                    <b >Chance of Rain</b>
+                                    <b >Air Quality</b>
                                     <div class="icon" id="rainicon">
                                         <b><ion-icon id="rainnew" name="sunny-outline"></ion-icon></b></div>
                                 </div>
@@ -243,6 +375,10 @@
         </div>
         <script>
             delays=5000;
+            barcount=0;
+            barcount2=0;
+            var onbar1=onbar2="5px solid rgb(6, 116, 212)"
+            var offbar1=offbar2="5px solid rgb(194, 194, 194)"
             function fulldata(data) {
                 humidityValue = data[0].device_values;
                 $('#humidity').text(humidityValue+"%");
@@ -255,9 +391,14 @@
 
                 var temperatureValue = data[1].device_values;
                 $('#Temperature').text(temperatureValue+"°");
-                document.getElementById('Temperature').style.color="black"
+                document.getElementById('Temperature').style.color="black";
+                var tempbarwar = document.getElementById('Temperaturebar');
+                if (tempbarwar.classList.contains('warning')) {
+                    tempbarwar.classList.remove('warning');
+                }
                 document.getElementById('Temperaturebar').style.width =  temperatureValue+"%";
                 if(temperatureValue >= "60"){document.getElementById('Temperaturebar').style.backgroundColor="red";
+                tempbarwar.classList.add("warning");
                 document.getElementById('ticon').style.backgroundColor="red";
                 document.getElementById('Temperature').style.color="red"}
                 else if(temperatureValue >= "30"){document.getElementById('Temperaturebar').style.backgroundColor="orange";
@@ -281,10 +422,14 @@
                 document.getElementById('co2').style.color="black"
                 $('#co2').text(co2Value+"%");
                 document.getElementById('co2bar').style.width =  co2Value+"%";
-                if(co2Value >= "20"){document.getElementById('co2bar').style.backgroundColor="rgb(255, 53, 53)";
+                var co2WarningIcon = document.getElementById('co2bar');
+                if (co2WarningIcon.classList.contains('warning')) {co2WarningIcon.classList.remove('warning');}
+                if(co2Value >= "20"){
+                co2WarningIcon.classList.add('warning');
+                document.getElementById('co2bar').style.backgroundColor="rgb(255, 53, 53)";
                 document.getElementById('co2').style.color="rgb(255, 53, 53)";
                 document.getElementById('co2icon').style.backgroundColor="rgb(255, 53, 53)"}
-                else if(co2Value >= "8"){document.getElementById('co2bar').style.backgroundColor="orange";
+                else if(co2Value >= "5"){document.getElementById('co2bar').style.backgroundColor="orange";
                 document.getElementById('co2icon').style.backgroundColor="orange"}
                 else if(co2Value >= "2" && co2Value <= "4"){document.getElementById('co2bar').style.backgroundColor="rgb(81, 159, 226)";
                 document.getElementById('co2icon').style.backgroundColor="rgb(81, 159, 226)"}
@@ -311,8 +456,157 @@
                 else if(rainValue >= "30"){iconElement.setAttribute('name', 'partly-sunny-outline');}
                 else {iconElement.setAttribute('name', 'sunny-outline');}
                 
+                var windValue = data[5].device_values;
+                per=(180/30)*windValue;
+                var windarrow = document.getElementById('windbar');
+                if (windarrow.classList.contains('speedwarning')) {windarrow.classList.remove('speedwarning');}
+                if(per<=0){per=0}
+                else if(per>=180){per=180}
+                $('#winds').text(windValue+"km/h");
+                if(windValue>18){windarrow.classList.add('speedwarning');}
+                document.getElementById('windicon').style.color="white";
+                document.getElementById('windbar').style.transform =  "rotate("+per+"deg)";
+                tr1=per-45
+                var levels1=document.getElementById('ficr')
+                levels1.style.transform =  "rotate("+tr1+"deg)";
+                document.getElementById('scecr').style.transform =  "rotate("+(tr1*-1)+"deg)";
+
+                if(windValue>=25)
+                {document.getElementById('windicon').style.backgroundColor="red";
+                levels1.style.borderBottom = onbar1;
+                levels1.style.borderRight = onbar1;}
+                else if(windValue>12){document.getElementById('windicon').style.backgroundColor="orange";
+                levels1.style.borderBottom = onbar1;
+                levels1.style.borderRight = offbar1;}
+                else{ document.getElementById('windicon').style.backgroundColor="rgb(0, 255, 174)";
+                levels1.style.borderBottom = offbar1;
+                levels1.style.borderRight = offbar1;
+                document.getElementById('windicon').style.color="black";}
+                if(barcount!=windValue)
+                {   document.getElementById('powerhigh1').innerHTML = '';
+                    document.getElementById('powerhigh2').innerHTML = '';
+                    barcount = windValue;
+                    createWindLevels(0,windValue);}
+
+
+                var no2Value = data[6].device_values;
+                $('#no2').text(no2Value+"%");
+                document.getElementById('no2bar').style.width =  no2Value+"%";
+                if(no2Value >= "20"){document.getElementById('no2bar').style.backgroundColor="rgb(255, 53, 53)";}
+                else if(no2Value >= "10"){document.getElementById('no2bar').style.backgroundColor="orange";}
+                else if(no2Value >= "5"){document.getElementById('no2bar').style.backgroundColor="rgb(81, 159, 226)";}
+                else {document.getElementById('no2bar').style.backgroundColor="rgb(3, 209, 255)";}
+
+
+                var atmValue = data[7].device_values;
+                $('#atmdata').text(atmValue+"hPa");
+                thepsvalue = ((atmValue - 300) / (1100 - 300)) * (180 - 0) + 0;
+                if(thepsvalue<=0){thepsvalue=0}
+                else if(thepsvalue>=180){thepsvalue=180}
+                document.getElementById('atmbar').style.transform =  "rotate("+thepsvalue+"deg)";
+                tr2=thepsvalue-45;
+                var levelbar2=document.getElementById('ficr2')
+                levelbar2.style.transform =  "rotate("+tr2+"deg)";
+                document.getElementById('scecr2').style.transform =  "rotate("+(tr2*-1)+"deg)";
+                if(barcount2!=atmValue)
+                {   document.getElementById('powerhigh3').innerHTML = '';
+                    document.getElementById('powerhigh4').innerHTML = '';
+                    barcount2 = atmValue;
+                    if(atmValue<900){createatmLevels(0,atmValue,1);}
+                    else{createatmLevels(900,atmValue,0);}
+                }
+                    
+                if(atmValue>=1013){
+                    levelbar2.style.borderBottom = onbar2;
+                    levelbar2.style.borderRight = onbar2;
+                    
+                }
+                else if(atmValue>=980){
+                    levelbar2.style.borderBottom = onbar2;
+                    levelbar2.style.borderRight = offbar2;
+                }
+                else{
+                    if(atmValue>=1100/2)
+                    {
+                        levelbar2.style.borderBottom = onbar2;
+                        levelbar2.style.borderRight = offbar2;
+                    }
+                    else{levelbar2.style.borderBottom = offbar2;
+                    levelbar2.style.borderRight = offbar2;}}
+            }
+
+
+            function createWindLevels(i,windValue) {
+                let divcolor;
+            
+                if (i < windValue && i<30) {
+                    const newDiv1 = document.createElement("div");
+                    const newDiv2 = document.createElement("div");
+                    newDiv1.classList.add("windlevel");
+                    newDiv2.classList.add("windlevel");
+            
+                    if (i < 12) {
+                        divcolor = "rgb(0, 255, 170)";
+                    } else if (i < 18) {
+                        divcolor = "orange";
+                    } else {
+                        divcolor = "red";
+                    }
+            
+                    newDiv1.style.backgroundColor = divcolor;
+                    newDiv2.style.backgroundColor = divcolor;
+            
+                    document.getElementById('powerhigh1').appendChild(newDiv1);
+                    document.getElementById('powerhigh2').appendChild(newDiv2);
+                    setTimeout(() => createWindLevels(i + 3,windValue), 200);
+                }
+            }
+            function createatmLevels(i,atmValue,k) {
+                let divcolor;
+                if(k==0)
+                {
+                    if (i < atmValue && i<1100) {
+                        const newDiv1 = document.createElement("div");
+                        const newDiv2 = document.createElement("div");
+                        newDiv1.classList.add("atmlevel");
+                        newDiv2.classList.add("atmlevel");
+                
+                        if (i <= 940) {
+                            divcolor = "orange";
+                        } else if (i < 1013) {
+                            divcolor = "rgb(0, 255, 170)";
+                        } else {
+                            divcolor = "red";
+                        }
+                
+                        newDiv1.style.backgroundColor = divcolor;
+                        newDiv2.style.backgroundColor = divcolor;
+                
+                        document.getElementById('powerhigh3').appendChild(newDiv1);
+                        document.getElementById('powerhigh4').appendChild(newDiv2);
+                        setTimeout(() => createatmLevels(i + 20,atmValue,k), 200);
+                    }
+                }
+                else{
+                    if (i < 10) {
+                        const newDiv1 = document.createElement("div");
+                        const newDiv2 = document.createElement("div");
+                        newDiv1.classList.add("atmlevel");
+                        newDiv2.classList.add("atmlevel");
+                        divcolor = "red";
+                        newDiv1.style.backgroundColor = divcolor;
+                        newDiv2.style.backgroundColor = divcolor;
+                
+                        document.getElementById('powerhigh3').appendChild(newDiv1);
+                        document.getElementById('powerhigh4').appendChild(newDiv2);
+                        setTimeout(() => createatmLevels(i + 1,atmValue,k), 200);
+                    }
+
+                }
+                
                 
             }
+            
 
             function fullalldaydata() {
                 $.ajax({
@@ -402,6 +696,7 @@
             fullalldaydata();
 
         </script>
+        <script src="https://kit.fontawesome.com/bc67d18a07.js" crossorigin="anonymous"></script>
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     </body>

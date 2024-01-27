@@ -47,7 +47,7 @@ def valueup(request):
 def day_update(request):
     global totaldate
     newdate = request.GET.get('dates', None)
-    totaldate=newdate
+    totaldate=datetime.strptime(newdate, '%Y-%m-%d')
     return JsonResponse( newdate,safe=False)
 
 def today(request):
