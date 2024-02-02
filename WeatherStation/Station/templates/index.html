@@ -168,12 +168,13 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="soundtitle">
-                                    <b>Sound</b>
-                                    <div class="icon"><b><ion-icon name="volume-high-outline"></ion-icon></b></div>
+                                <div class="raintitle">
+                                    <b >Chance of Rain</b>
+                                    <div class="icon" id="rainicon">
+                                        <b><ion-icon id="rainnew" name="sunny-outline"></ion-icon></b></div>
                                 </div>
-                                <div class="sound">
-                                    <b id="Sound">0%</b>
+                                <div class="rain">
+                                    <b id="rain">0%</b>
                                 </div>
                                 <div class="level">
                                     <div class="limits">
@@ -182,31 +183,12 @@
                                         <div style="justify-content: end;">100%</div>
                                     </div>
                                     <div class="levelbar">
-                                        <div id="Soundbar" ></div>
+                                        <div id="rainbar"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div>
-                            <div>
-                                <div class="co2title">
-                                    <b>CO² Presents</b>
-                                    <div class="icon" id="co2icon"><b><ion-icon id="co2warningicon" name="warning-outline"></ion-icon></b></div>
-                                </div>
-                                <div class="co2">
-                                    <b id="co2">0%</b>
-                                </div>
-                                <div class="level">
-                                    <div class="limits">
-                                        <div style="justify-content: baseline;" >0%</div>
-                                        <div style="justify-content: center;">50%</div>
-                                        <div style="justify-content: end;">100%</div>
-                                    </div>
-                                    <div class="levelbar">
-                                        <div id="co2bar"></div>
-                                    </div>
-                                </div>
-                            </div>
                             <div>
                                 <div class="windtitle">
                                     <b >Wind Speed</b>
@@ -236,45 +218,32 @@
                                     <div class="speedar2" ><b id="winds">0km/h</b></div>
                                 </div>
                             </div>
-                            <div>
-                                <div class="raintitle">
-                                    <b >Chance of Rain</b>
-                                    <div class="icon" id="rainicon">
-                                        <b><ion-icon id="rainnew" name="sunny-outline"></ion-icon></b></div>
+                            <div >
+                                <div class="windirtitle">
+                                    <b>Wind Direction</b>
+                                    <div class="icon"><b><ion-icon name="compass-outline"></ion-icon></b></div>
                                 </div>
-                                <div class="rain">
-                                    <b id="rain">0%</b>
-                                </div>
-                                <div class="level">
-                                    <div class="limits">
-                                        <div style="justify-content: baseline;" >0%</div>
-                                        <div style="justify-content: center;">50%</div>
-                                        <div style="justify-content: end;">100%</div>
+                                <div class="wibr">
+                                    <div class="dirdata"><table style="text-align: center;">
+                                        <tr>
+                                            <td colspan="3" id="Todir">S</td>
+                                        </tr>
+                                        <tr >
+                                            <td></td>
+                                            <td><ion-icon name="arrow-up-outline"></ion-icon></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            
+                                            <td colspan="3" id="Fromdir">N</td>
+                                        </tr>
+                                    </table></div>
+                                    <div class="dircir">
+                                        <div id="dirwbar" class="dirarrow"></div>
                                     </div>
-                                    <div class="levelbar">
-                                        <div id="rainbar"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                        </div>
-                        <div>
-                            <div>
-                                <div class="no2title">
-                                    <b>NO² Presents</b>
-                                    <div class="icon" id="no2icon"><b><ion-icon name="logo-electron"></ion-icon></b></div>
-                                </div>
-                                <div class="no2">
-                                    <b id="no2">0%</b>
-                                </div>
-                                <div class="level">
-                                    <div class="limits">
-                                        <div style="justify-content: baseline;" >0%</div>
-                                        <div style="justify-content: center;">50%</div>
-                                        <div style="justify-content: end;">100%</div>
-                                    </div>
-                                    <div class="levelbar">
-                                        <div id="no2bar"></div>
+                                    <div class="dirdata">
+                                        <div class="valuewind" id="winddeg"></div>
+                                        <div class="valuewind2" id="windsp"></div>
                                     </div>
                                 </div>
                             </div>
@@ -306,10 +275,34 @@
                                     <div class="speedar2" ><b id="atmdata">0hPa</b></div>
                                 </div>
                             </div>
+                            
+                        </div>
+                        <div>
+                            <div>
+                                <div class="no2title">
+                                    <b>NO² Presents</b>
+                                    <div class="icon" id="no2icon"><b><ion-icon name="logo-electron"></ion-icon></b></div>
+                                </div>
+                                <div class="no2">
+                                    <b id="no2">0%</b>
+                                </div>
+                                <div class="level">
+                                    <div class="limits">
+                                        <div style="justify-content: baseline;" >0%</div>
+                                        <div style="justify-content: center;">50%</div>
+                                        <div style="justify-content: end;">100%</div>
+                                    </div>
+                                    <div class="levelbar">
+                                        <div id="no2bar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
                             <div>
                                 <div class="co2title">
-                                    <b>UV Sensor</b>
-                                    <div class="icon" id="co2icon"><b><ion-icon name="warning-outline"></ion-icon></b></div>
+                                    <b>CO² Presents</b>
+                                    <div class="icon" id="co2icon"><b><ion-icon id="co2warningicon" name="warning-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="co2">
                                     <b id="co2">0%</b>
@@ -322,18 +315,38 @@
                                     </div>
                                     <div class="levelbar">
                                         <div id="co2bar"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="uvtitle">
+                                    <b>UV Sensor</b>
+                                    <div class="icon" id="co2icon"><b><ion-icon name="warning-outline"></ion-icon></b></div>
+                                </div>
+                                <div class="uvs">
+                                    <b id="uvs">0%</b>
+                                </div>
+                                <div class="level">
+                                    <div class="limits">
+                                        <div style="justify-content: baseline;" >0%</div>
+                                        <div style="justify-content: center;">50%</div>
+                                        <div style="justify-content: end;">100%</div>
+                                    </div>
+                                    <div class="levelbar">
+                                        <div id="uvsbar"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div>
                             <div>
-                                <div class="co2title">
-                                    <b>Wind Direction</b>
-                                    <div class="icon" id="co2icon"><b><ion-icon name="warning-outline"></ion-icon></b></div>
+                                <div class="soundtitle">
+                                    <b>Sound</b>
+                                    <div class="icon"><b><ion-icon name="volume-high-outline"></ion-icon></b></div>
                                 </div>
-                                <div class="co2">
-                                    <b id="co2">0%</b>
+                                <div class="sound">
+                                    <b id="Sound">0%</b>
                                 </div>
                                 <div class="level">
                                     <div class="limits">
@@ -342,18 +355,19 @@
                                         <div style="justify-content: end;">100%</div>
                                     </div>
                                     <div class="levelbar">
-                                        <div id="co2bar"></div>
+                                        <div id="Soundbar" ></div>
                                     </div>
                                 </div>
                             </div>
+                            
                             <div>
-                                <div class="raintitle">
-                                    <b >Air Quality</b>
-                                    <div class="icon" id="rainicon">
-                                        <b><ion-icon id="rainnew" name="sunny-outline"></ion-icon></b></div>
+                                <div class="airqtitle">
+                                    <b>Air Quality</b>
+                                    <div class="icon">
+                                        <b><ion-icon name="balloon"></ion-icon></b></div>
                                 </div>
-                                <div class="rain">
-                                    <b id="rain">0%</b>
+                                <div class="airq">
+                                    <b id="airq">0%</b>
                                 </div>
                                 <div class="level">
                                     <div class="limits">
@@ -362,11 +376,11 @@
                                         <div style="justify-content: end;">100%</div>
                                     </div>
                                     <div class="levelbar">
-                                        <div id="rainbar"></div>
+                                        <div id="airqbar"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div style="display: flex; flex-direction: row; align-items: center; justify-content: center; font-size: 25px;">More details <ion-icon name="arrow-forward-outline"></ion-icon></div>
+                            <a href=""><div style="display: flex; flex-direction: row; align-items: center; justify-content: center; font-size: 25px;">More details<ion-icon name="arrow-forward-outline"></ion-icon></div></a>
                         </div>
                     </div>
                 </div>
@@ -533,6 +547,42 @@
                     }
                     else{levelbar2.style.borderBottom = offbar2;
                     levelbar2.style.borderRight = offbar2;}}
+
+
+                var uvrays = data[8].device_values;
+                $('#uvs').text(uvrays+"%");
+                document.getElementById('uvsbar').style.width =  uvrays+"%";
+                if(uvrays>=40){
+                    document.getElementById('uvsbar').style.backgroundColor="red";
+                }
+                else{
+                    document.getElementById('uvsbar').style.backgroundColor="rgb(81, 159, 226)";
+                }
+
+
+                var winddir = data[9].device_values;
+                winddir=winddir%360
+                document.getElementById('dirwbar').style.transform =  "rotate("+(winddir+90)+"deg)";
+                if(winddir==0){from="S";to="N";}
+                else if(winddir==90){from="W";to="E";}
+                else if(winddir==180){from="N";to="S";}
+                else if(winddir==270){from="E";to="W";}
+                else{
+                    if(winddir<90){from="SW";to="NE";}
+                    else if(winddir<180){from="NW";to="SE";}
+                    else if(winddir<270){from="NE";to="SW";}
+                    else if(winddir<360){from="SE";to="NW";}
+                }
+                $('#Fromdir').text(from);
+                $('#Todir').text(to);
+                $('#winddeg').text(winddir+"° "+to);
+                $('#windsp').text(windValue+" km/h");
+
+
+                var air = data[10].device_values;
+                $('#airq').text(air+"%");
+                document.getElementById('airqbar').style.width =  air+"%";
+                
             }
 
 
