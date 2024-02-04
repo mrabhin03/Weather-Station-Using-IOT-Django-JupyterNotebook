@@ -18,6 +18,7 @@ body{
     flex-direction: row;
     border-radius: 20px;
     overflow: hidden;
+    border: 3px solid rgb(1, 164, 228);
 }
 .temperature{
     background-color: transparent;
@@ -31,8 +32,8 @@ body{
     width: 100px;
     background-color: rgb(255, 225, 0);
     border-radius: 50%;
-    margin-left: -250px;
-    margin-top: -20px;
+    margin-left: -40px;
+    margin-top: -40px;
     box-shadow: 8px 8px 4px  rgb(255, 225, 0);
 
 }
@@ -41,8 +42,8 @@ body{
     width: 100%;
     height: 10%;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: baseline;
+    align-items: baseline;
     color: white;
     font-size: 30px;
 }
@@ -81,6 +82,10 @@ body{
     justify-content: center;
     flex-direction: column;
 }
+
+.details::-webkit-scrollbar {
+    width: 1px;
+  }
 .details_head{
     height: 8%;
     width: 87.5%;
@@ -121,11 +126,12 @@ body{
     width: 95%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: end;
     padding-right: 10px;
 }
 .barhead{
+    margin-top: 10px;
     height: 30%;
     width: 99%;
     display: flex;
@@ -139,6 +145,11 @@ body{
     border-radius: 4px;
     font-weight: 0;
     height: 90%;
+}
+.canvasdata{
+    width: 96%; 
+    height: 70%;
+    margin-bottom: -2px;
 }
 .barhead >div> button:hover{
     background-color: rgb(47, 155, 197);
@@ -156,6 +167,7 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 35px;
     justify-content: space-between;
     font-weight: 600;
 }
@@ -188,7 +200,6 @@ body{
     height: 90%;
     width: 85%;
     border-radius: 20px;
-    overflow-y: auto;
 }
 .subdetails::-webkit-scrollbar {
     width: 1px;
@@ -422,9 +433,9 @@ body{
     
 }
 @keyframes blink {
-    0% { background-color: red; }
-    50% { background-color: rgb(225, 225, 225); }
-    100% { background-color: red; }
+    0% { opacity: 1; }
+    50% { opacity: 0.2;}
+    100% { opacity: 1; }
   }
 .wibr{
     height:100%;
@@ -440,7 +451,7 @@ body{
     align-items: center;
     justify-content: center;
     background-image: url('winddir.png');
-    background-size: 100% 100%; /* or background-size: cover; */
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     
 }
@@ -473,4 +484,293 @@ body{
 }
 .valuewind2{
     font-size: 10px;
+}
+@media (min-width: 900px){
+    .subdetails{
+        overflow-y: auto;
+    }
+
+}
+@media (min-height: 1200px) and (max-width: 1250px) {
+    .tmep{
+        font-size: 200px;
+        margin-top: 100px;
+        margin-left: 20px;
+    }
+    #todaydate,#todaytime{
+        font-size: 80px;
+    }
+    .sun{
+        height: 200px;
+        width: 200px;
+    }
+    .details_head{
+        height: 4%;
+    }
+    .details_div1{
+        height: 40%;
+    }
+    .barhead{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .barhead>div{
+        height: 100%;
+        width: 50%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .barhead>div:first-child{
+        font-size: 31px;
+        width: 60%;
+    }
+    .barhead>div:last-child{
+        width: 40%;
+    }
+    .barhead>div>button{
+        width: 48%;
+        font-size: 20px;
+    }
+}
+@media (max-width: 1250px){
+    .main{
+        flex-direction: column;
+    }
+    .temperature{
+        height: 20%;
+        width: 100%;
+    }
+    .details{
+        width: 100%;
+        height: 80%;
+    }
+    .subdetails{
+        width: 100%;
+        margin-top: 7px;
+    }
+    .subdetails>div{
+        justify-content: space-around;
+        height: 150px;
+    }
+    .details_div1>div{
+        width: 96%;
+    }
+    .base{
+        display: none;
+    }
+
+}
+@media (max-width: 900px) {
+    .main{
+        flex-direction: column;
+    }
+    .temperature{
+        height: 20%;
+        width: 100%;
+    }
+    .sun{
+        margin-left: -30px;
+        margin-top: -30px;
+        box-shadow: 0px 0px 0px  rgb(255, 225, 0);
+    }
+    .shead{
+        margin-top: 10px;
+    }
+    .base{
+        display: none;
+    }
+    .details{
+        width: 100%;
+        height: 80%;
+    }
+    .details_head{
+        margin-top: 30px;
+    }
+    .details_head> div{
+        width: auto;
+        margin-left: 0px;
+        font-size: 14px;
+    }
+    .details_div1{
+        height: 50%;
+        margin-top: 10px;
+    }
+    .details_div1>div{
+        width: 95%;
+    }
+
+    .barhead{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 50px;
+        margin-bottom: 10px;
+    }
+    .barhead>div>button{
+        width: 49%;
+        height: 80%;
+        font-size: 10px;
+        margin: 0;
+    }
+    .tmep{
+        font-size: 50px;
+    }
+    .barhead>div{
+        height: 100%;
+        width: 50%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .barhead>div:first-child{
+        font-size: 11px;
+        width: 40%;
+    }
+    .barhead>div:last-child{
+        width: 60%;
+    }
+
+    .details{
+        width: 100%;
+        overflow-y: auto;
+    }
+    .graphtitle{
+        height: 30%;
+        width: 95%;
+        padding: 0;
+    }
+    .canvasdata{
+        width: 96%; 
+        height: 70%;
+        margin-bottom: 0px;
+        width: 100%;
+    }
+    .barlabel{
+        font-size: 10px;
+        width: 92%;
+        height: 20%;
+        margin: 0;
+    }
+    .val{
+        height: 100%;
+    }
+    .details_div2{
+        height: 50%;
+    }
+    .subdetails{
+        margin-top: 5px;
+        width: 95%;
+    }
+    .subdetails>div{
+        flex-direction: column;
+        height: 600px;
+        justify-content: space-around;
+    }
+    .subdetails>div>div{
+        height: 30%;
+        width: 90%;
+    }
+}
+
+.viewdetails{
+    background-color: rgba(223, 248, 255, 0.79);
+    border-radius: 20px;
+    height: 100%;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+}
+.details_block{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 45%;
+    width: 95%;
+}
+.details_graph{
+    width: 100%;
+    height: 80%;
+    background-color: white;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.prbarhead{
+    margin-top: 10px;
+    height: 30%;
+    width: 99%;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+.prbarhead >div> button{
+    color:  white;
+    background-color: rgb(75,196,243);
+    border: none;
+    border-radius: 4px;
+    font-weight: 0;
+    height: 90%;
+}
+
+.prbarhead >div> button:hover{
+    background-color: rgb(47, 155, 197);
+}
+.perbarlabel{
+    height: 50%;
+    width: 99%;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+}
+.prgraphtitle{
+    height: 30%;
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: end;
+    padding-right: 0px;
+}
+.deatils_header{
+    width: 100%;
+    height: 14%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    background-color: white;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.otherdetails
+{
+    height: 45%;
+    width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+}
+.theprdetailsbox{
+    height: 320px;
+    width: 320px;
+    background-color: #ffffff;
+    border-radius: 20px;
+}
+.perval{
+    height: 40px;
+    width: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
 }

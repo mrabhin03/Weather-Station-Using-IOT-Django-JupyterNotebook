@@ -2,6 +2,7 @@
     <head>
         {% load static %}
         <title>Weather</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{% static 'style.css' %}">
         <link rel="icon" href="{% static 'rain.png' %}">
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -34,6 +35,7 @@
                 </div>
 
             </div>
+            {% block details %}
             <div class="details">
                 <div class="details_head">
                     <div>
@@ -60,8 +62,8 @@
                                 <div class="val"><ion-icon id="rainic6" name="sunny-outline"></ion-icon><div id="daystem6">0°</div></div>
                             </div>
                         </div>
-                        <div style="width: 96%; height: 70%; margin-bottom: -2px;">
-                            <canvas id="graphdisplay" width="10800" height="2060"></canvas>
+                        <div class="canvasdata">
+                            <canvas id="graphdisplay" ></canvas>
                         </div>
                     </div>
                 </div>
@@ -123,6 +125,42 @@
                         }
                     }
                     
+                    var canvas = document.getElementById('graphdisplay');
+                    var ctx = canvas.getContext('2d');
+                    
+                    function setCanvasSize() {
+                        if(window.innerWidth<700)
+                        {
+                            canvas.width = innerWidth*52;  
+                            canvas.height=innerWidth*20
+                        }
+                        else{
+                            if(window.innerWidth<1250)
+                            {
+                                canvas.width = 18800;  
+                                canvas.height=2660
+                            }
+                            else{
+                                canvas.width = 10800;  
+                                canvas.height=2060
+                            }
+                        }
+                        if(window.innerHeight>1600)
+                        {
+                            canvas.width = innerWidth*52;  
+                            canvas.height=innerWidth*20
+                        }
+                        else{
+                            if(window.innerHeight>1000)
+                            {
+                                canvas.width = innerWidth*62;  
+                                canvas.height=innerWidth*20
+                            }
+                        }
+                        
+                    }
+                    setCanvasSize();
+                    window.addEventListener('resize', setCanvasSize);
                 </script>
                 
                 <div class="details_div2">
@@ -226,16 +264,13 @@
                                 <div class="wibr">
                                     <div class="dirdata"><table style="text-align: center;">
                                         <tr>
-                                            <td colspan="3" id="Todir">S</td>
+                                            <td id="topdir"></td>
                                         </tr>
                                         <tr >
-                                            <td></td>
-                                            <td><ion-icon name="arrow-up-outline"></ion-icon></td>
-                                            <td></td>
+                                            <td><ion-icon  name="arrow-up-outline"></ion-icon></td>
                                         </tr>
                                         <tr>
-                                            
-                                            <td colspan="3" id="Fromdir">N</td>
+                                            <td id="bottomdir"></td>
                                         </tr>
                                     </table></div>
                                     <div class="dircir">
@@ -380,14 +415,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href=""><div style="display: flex; flex-direction: row; align-items: center; justify-content: center; font-size: 25px;">More details<ion-icon name="arrow-forward-outline"></ion-icon></div></a>
+                            <a href="details"><div style="display: flex; flex-direction: row; align-items: center; justify-content: center; font-size: 25px;">More details<ion-icon name="arrow-forward-outline"></ion-icon></div></a>
                         </div>
                     </div>
                 </div>
 
             </div>
+            
         </div>
         <script>
+            widtempdir=-1;
             delays=5000;
             barcount=0;
             barcount2=0;
@@ -561,23 +598,27 @@
 
 
                 var winddir = data[9].device_values;
-                winddir=winddir%360
-                document.getElementById('dirwbar').style.transform =  "rotate("+(winddir+90)+"deg)";
-                if(winddir==0){from="S";to="N";}
-                else if(winddir==90){from="W";to="E";}
-                else if(winddir==180){from="N";to="S";}
-                else if(winddir==270){from="E";to="W";}
-                else{
-                    if(winddir<90){from="SW";to="NE";}
-                    else if(winddir<180){from="NW";to="SE";}
-                    else if(winddir<270){from="NE";to="SW";}
-                    else if(winddir<360){from="SE";to="NW";}
-                }
-                $('#Fromdir').text(from);
-                $('#Todir').text(to);
-                $('#winddeg').text(winddir+"° "+to);
-                $('#windsp').text(windValue+" km/h");
+                if(widtempdir!=winddir)
+                {                
+                    widtempdir=winddir;
+                    winddir=winddir%360;
+                    document.getElementById('dirwbar').style.transform =  "rotate("+(winddir+90)+"deg)";
 
+                    if(winddir==0){from="S";to="N";  }
+                    else if(winddir==90){from="W";to="E"; }
+                    else if(winddir==180){from="N";to="S";}
+                    else if(winddir==270){from="E";to="W";}
+                    else{
+                        if(winddir<90){from="SW";to="NE";}
+                        else if(winddir<180){from="NW";to="SE";}
+                        else if(winddir<270){from="NE";to="SW";}
+                        else if(winddir<360){from="SE";to="NW";}
+                    }
+                    $('#bottomdir').text(from);
+                    $('#topdir').text(to);
+                    $('#winddeg').text(winddir+"° "+to);
+                    $('#windsp').text(windValue+" km/h");
+                }
 
                 var air = data[10].device_values;
                 $('#airq').text(air+"%");
@@ -594,7 +635,8 @@
                     const newDiv2 = document.createElement("div");
                     newDiv1.classList.add("windlevel");
                     newDiv2.classList.add("windlevel");
-            
+                    doc1p=document.getElementById('powerhigh1');
+                    doc2p=document.getElementById('powerhigh2');
                     if (i < 12) {
                         divcolor = "rgb(0, 255, 170)";
                     } else if (i < 18) {
@@ -606,8 +648,8 @@
                     newDiv1.style.backgroundColor = divcolor;
                     newDiv2.style.backgroundColor = divcolor;
             
-                    document.getElementById('powerhigh1').appendChild(newDiv1);
-                    document.getElementById('powerhigh2').appendChild(newDiv2);
+                    doc1p.appendChild(newDiv1);
+                    doc2p.appendChild(newDiv2);
                     setTimeout(() => createWindLevels(i + 3,windValue), 200);
                 }
             }
@@ -674,25 +716,7 @@
                     }
                 });
             }
-            function todaytemper() {
-                $.ajax({
-                    url: '/today_temp/',
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function (data) {
-                        var newdata = data.split(',');
-                        $('#todayTemperature').text(newdata[0]+"°");
-                        $('#todaydate').text("Today "+newdata[1]);
-                        $('#todaytime').text(newdata[2]);
-                    },
-                    error: function (error) {
-                        console.error('Error fetching live data:', error);
-                    },
-                    complete: function () {
-                        setTimeout(todaytemper, delays);
-                    }
-                });
-            }
+            
             function graphupdates() {
                 $.ajax({
                     url: '/graph_data/',
@@ -742,9 +766,32 @@
             }
             
             graphupdates();
-            todaytemper();
+            
             fullalldaydata();
 
+        </script>
+        {% endblock details %}
+        <script>
+            todaytemper();
+            function todaytemper() {
+                $.ajax({
+                    url: '/today_temp/',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        var newdata = data.split(',');
+                        $('#todayTemperature').text(newdata[0]+"°");
+                        $('#todaydate').text("Today "+newdata[1]);
+                        $('#todaytime').text(newdata[2]);
+                    },
+                    error: function (error) {
+                        console.error('Error fetching live data:', error);
+                    },
+                    complete: function () {
+                        setTimeout(todaytemper, 5000);
+                    }
+                });
+            }
         </script>
         <script src="https://kit.fontawesome.com/bc67d18a07.js" crossorigin="anonymous"></script>
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

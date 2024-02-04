@@ -17,6 +17,30 @@ current_date_time_datetime = datetime.now()
 graphdate=timezone.localdate()
 totaldate=timezone.localdate()
 
+device_limits = {
+        'limits': [{
+            'High': 20,
+            'Mid': 10,
+            'low': 5
+        },
+        {
+            'High': 30,
+            'Mid': 0,
+            'Low': 15
+        },
+        {
+            'High': 30,
+            'Mid': 50,
+            'Low': 15
+        },
+        {
+            'High': 30,
+            'Mid': 250,
+            'Low': 15
+        }
+    ]
+}
+device_icon = ["","cloudy","thermometer","volume-high-outline","warning-outline","umbrella-outline","speedometer-outline","logo-electron","contract-outline","warning-outline","compass-outline","balloon"]
 
 def home(request):
     k=1
@@ -25,6 +49,41 @@ def home(request):
     bdata = {'weather_data': result}
     datevalue = totaldate.strftime('%Y-%m-%d')
     return render(request, 'Station/templates/index.html',{'database':bdata,'tdate':datevalue})
+
+
+def viewmoredetails(request):
+    devices_data = Devices_details.objects.values()
+    return render(request,'Station/templates/details.html',{'Devices':devices_data})
+
+def deviceonlydata(request):
+    global graphdate
+    current_date= graphdate
+    device_id = int(request.GET.get('theids', None))
+    High=device_limits['limits'][device_id]['High']
+    mid=device_limits['limits'][device_id]['Mid']
+    low=device_limits['limits'][device_id]['Low']
+    dates=[]
+    device=[]
+    icon=[]
+    icon_data = device_icon[device_id]
+    for i in range(6, -1, -1):
+        day = current_date - timedelta(days=i)
+        dates.append(day)
+        sql1 = Data_store.objects.filter(device_id=device_id, date_time__date=day).order_by('-date_time').first()
+        value1 = int(sql1.device_values if sql1 else 0)
+        device.append(value1)
+
+        if value1 >= High:
+            icon.append("Red")
+        elif value1 >= mid:
+            icon.append("Orange")
+        elif value1 >= low:
+            icon.append("rgb(81, 159, 226)")
+        else:
+            icon.append("rgb(3, 209, 255)")
+    output = [{'date': dates, 'value': device, 'icons': icon_data,'color':icon} for dates, device,icon in zip(dates, device,icon)]
+
+    return JsonResponse( output,safe=False)
 
 def timeupdate(kr):
     if kr == 0:
@@ -165,3 +224,4 @@ def livedatasend(request):
             })
     result.sort(key=lambda x: x['device_id'])
     return JsonResponse(result,safe=False)
+

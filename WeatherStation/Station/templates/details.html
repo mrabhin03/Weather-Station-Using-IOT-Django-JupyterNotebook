@@ -1,0 +1,190 @@
+{% extends 'index.html' %} {% block details %}
+<div class="viewdetails">
+  <div class="details_block">
+    <div class="deatils_header">
+      <div class="back1">
+        <a href="/"><ion-icon name="arrow-back-outline"></ion-icon></a>
+      </div>
+      <select onchange="perdevicedeatils(this)" name="TheDevice" id="deviceid">
+        {% for devicesdatas in Devices %}
+            <option value="{{ devicesdatas.device_id }}">{{ devicesdatas.device_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="details_graph">
+      <div class="prgraphtitle">
+        <div class="prbarhead">
+          <div><b>This week's weather</b></div>
+          <div>
+            <button onclick="dateupdations(1)" id="submitBtn" name="updatedata">
+              Previous week
+            </button>
+            <button onclick="dateupdations(2)" id="submitBtn" name="updatedata">
+              Next week
+            </button>
+          </div>
+        </div>
+
+        <div class="perbarlabel">
+          <div class="perval"><ion-icon id="rainic0" name="sunny-outline"></ion-icon><div id="daystem0">0°</div></div>
+          <div class="perval"><ion-icon id="rainic1" name="sunny-outline"></ion-icon><div id="daystem1">0°</div></div>
+          <div class="perval"><ion-icon id="rainic2" name="sunny-outline"></ion-icon><div id="daystem2">0°</div></div>
+          <div class="perval"><ion-icon id="rainic3" name="sunny-outline"></ion-icon><div id="daystem3">0°</div></div>
+          <div class="perval"><ion-icon id="rainic4" name="sunny-outline"></ion-icon><div id="daystem4">0°</div></div>
+          <div class="perval"><ion-icon id="rainic5" name="sunny-outline"></ion-icon><div id="daystem5">0°</div></div>
+          <div class="perval"><ion-icon id="rainic6" name="sunny-outline"></ion-icon><div id="daystem6">0°</div></div>
+        </div>
+      </div>
+      <div class="canvasdata">
+        <canvas height="4500" width="30000" id="pergraphdisplay"></canvas>
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script>
+        
+        var k = 0;
+        var perchart;
+        function pergraph(gradata) {
+          newlabelarray = [];
+          newitemarray = [];
+          for (i = 0; i < 7; i++) {
+            $("#daystem" + i).text(gradata[i].value + "°");
+            var iconElement = document.getElementById("rainic" + i);
+            iconElement.setAttribute("name", gradata[i].icons);
+            iconElement.style.color=gradata[i].color;
+            newlabelarray[i] =
+              gradata[i].date.split("-")[1] +
+              "/" +
+              gradata[i].date.split("-")[2];
+            newitemarray[i] = gradata[i].value;
+          }
+          let labels = newlabelarray;
+          let itemdata = newitemarray;
+          if (k == 0) {
+            const data = {
+              labels: labels,
+              datasets: [
+                {
+                  data: itemdata,
+                  borderColor: "rgb(100, 180, 280)",
+                  fill: true,
+                  backgroundColor: "rgb(81, 159, 226)",
+                  tension: 0.15,
+                  borderWidth: 3,
+                },
+              ],
+            };
+            const config = {
+              type: "line",
+              data: data,
+              options: {
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                  title: {
+                    display: false,
+                  },
+                },
+              },
+            };
+
+            perchart = new Chart(
+              document.getElementById("pergraphdisplay"),
+              config
+            );
+            k++;
+          } else {
+            perchart.data.labels = labels;
+            perchart.data.datasets[0].data = itemdata;
+            perchart.update();
+          }
+        }
+        perdevicedeatils(1);
+        tempid=1
+        function perdevicedeatils(val) {
+            if(typeof val === 'number')
+            {
+                de_id=val
+                tempid=val
+            }
+            else{
+                de_id=val.value
+                tempid=val.value
+            }
+               $.ajax({
+                   url: '/devicedata/',
+                   method: 'GET',
+                   data: { 'theids': de_id }, 
+                   dataType: 'json',
+                   success: function (data) {
+                       pergraph(data)
+                   },
+                   error: function (error) {
+                       console.error('Error fetching new date:', error);
+                   },
+               });
+               
+           }
+           function dateupdations(val) {
+               para=val
+               $.ajax({
+                   url: '/value_up/',
+                   method: 'GET',
+                   data: { 'way': para }, 
+                   dataType: 'json',
+                   success: function (data) {
+                    perdevicedeatils(tempid);
+                   },
+                   error: function (error) {
+                       console.error('Error fetching new date:', error);
+                   },
+               });
+           }
+
+
+        /*var canvas = document.getElementById('pergraphdisplay');
+                    var ctx = canvas.getContext('2d');
+                    
+                    function setCanvasSize() {
+                        if(window.innerWidth<700)
+                        {
+                            canvas.width = innerWidth*52;  
+                            canvas.height=innerWidth*20
+                        }
+                        else{
+                            if(window.innerWidth<1250)
+                            {
+                                canvas.width = 18800;  
+                                canvas.height=2660
+                            }
+                            else{
+                                canvas.width = 10800;  
+                                canvas.height=2060
+                            }
+                        }
+                        if(window.innerHeight>1600)
+                        {
+                            canvas.width = innerWidth*52;  
+                            canvas.height=innerWidth*20
+                        }
+                        else{
+                            if(window.innerHeight>1000)
+                            {
+                                canvas.width = innerWidth*62;  
+                                canvas.height=innerWidth*20
+                            }
+                        }
+                        
+                    }
+                    setCanvasSize();
+                    window.addEventListener('resize', setCanvasSize);*/
+      </script>
+    </div>
+  </div>
+  <div class="otherdetails">
+    <div class="theprdetailsbox"></div>
+    <div class="theprdetailsbox"></div>
+    <div class="theprdetailsbox"></div>
+  </div>
+</div>
+{% endblock %}
