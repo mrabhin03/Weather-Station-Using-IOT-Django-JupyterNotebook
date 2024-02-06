@@ -13,26 +13,21 @@
     </div>
     <div class="details_graph">
       <div class="prgraphtitle">
+        <div id="mainweekday" class="transfer">Weekly data</div>
         <div class="prbarhead">
-          <div><b>This week's weather</b></div>
+          <div><b><button onclick="pertheweekchange()" id="weekorday">Weekly weather</button></b></div>
           <div>
-            <button onclick="dateupdations(1)" id="submitBtn" name="updatedata">
+            <button onclick="dateupdations(1,0)" id="submitBtnpre" name="updatedata">
               Previous week
             </button>
-            <button onclick="dateupdations(2)" id="submitBtn" name="updatedata">
+            <button onclick="dateupdations(2,0)" id="submitBtnnex" name="updatedata">
               Next week
             </button>
           </div>
         </div>
 
-        <div class="perbarlabel">
-          <div class="perval"><ion-icon id="rainic0" name="sunny-outline"></ion-icon><div id="daystem0">0°</div></div>
-          <div class="perval"><ion-icon id="rainic1" name="sunny-outline"></ion-icon><div id="daystem1">0°</div></div>
-          <div class="perval"><ion-icon id="rainic2" name="sunny-outline"></ion-icon><div id="daystem2">0°</div></div>
-          <div class="perval"><ion-icon id="rainic3" name="sunny-outline"></ion-icon><div id="daystem3">0°</div></div>
-          <div class="perval"><ion-icon id="rainic4" name="sunny-outline"></ion-icon><div id="daystem4">0°</div></div>
-          <div class="perval"><ion-icon id="rainic5" name="sunny-outline"></ion-icon><div id="daystem5">0°</div></div>
-          <div class="perval"><ion-icon id="rainic6" name="sunny-outline"></ion-icon><div id="daystem6">0°</div></div>
+        <div id="prechartdata" class="perbarlabel">
+          
         </div>
       </div>
       <div class="canvasdata">
@@ -40,23 +35,63 @@
       </div>
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <script>
-        
         var k = 0;
         var perchart;
+        function pertheweekchange(){
+          
+          thevalue=document.getElementById("weekorday")
+          previousbutton=document.getElementById("submitBtnpre")
+          nextbutton=document.getElementById("submitBtnnex")
+          if(dorw==1){dorw=0
+            thevalue.textContent="Daily weather "
+            nextbutton.textContent="Next Day"
+            previousbutton.textContent="Previous Day"
+            $('#mainweekday').text(lastdate2);
+          }
+          else{dorw=1
+            thevalue.textContent="Weekly weather"
+            nextbutton.textContent="Next week"
+            previousbutton.textContent="Previous week"
+            $('#mainweekday').text("Weekly data");
+          }
+          perdevicedeatils(tempid,1)
+        }
+        
         function pergraph(gradata) {
+          the_new_div=document.getElementById('prechartdata')
+          the_new_div.innerHTML = '';
           newlabelarray = [];
           newitemarray = [];
-          for (i = 0; i < 7; i++) {
-            $("#daystem" + i).text(gradata[i].value + "°");
+          if(dorw==1)
+            {lastdate2=gradata[6].date;}
+          maxvalue=0;
+          if(dorw==1){li=7}
+          else{li=8}
+          for (i = 0; i < li; i++) {
+
+            const valdata = document.createElement("div");
+            valdata.setAttribute("id", 'pr'+i);
+            valdata.classList.add("perval");
+            const icons = document.createElement("ion-icon");
+            icons.setAttribute("id", 'rainic'+i);
+            const dayst = document.createElement("div");
+            dayst.setAttribute("id", 'daystem'+i);
+            valdata.appendChild(icons);
+            valdata.appendChild(dayst);
+            the_new_div.appendChild(valdata);
+
+
+            if(gradata[i].value>maxvalue){maxvalue=gradata[i].value}
+            $("#daystem" + i).text(gradata[i].value + gradata[i].symbol);
             var iconElement = document.getElementById("rainic" + i);
             iconElement.setAttribute("name", gradata[i].icons);
-            iconElement.style.color=gradata[i].color;
-            newlabelarray[i] =
-              gradata[i].date.split("-")[1] +
-              "/" +
-              gradata[i].date.split("-")[2];
-            newitemarray[i] = gradata[i].value;
+            document.getElementById("pr" + i).style.backgroundColor=gradata[i].color;
+            if(dorw==1)
+            {newlabelarray[i]=gradata[i].date.split('-')[1]+"/"+gradata[i].date.split('-')[2];}
+            else{newlabelarray[i]=gradata[i].date}
+            newitemarray[i]=gradata[i].value;
           }
+          $("#maxvalue").text(maxvalue + "°");
           let labels = newlabelarray;
           let itemdata = newitemarray;
           if (k == 0) {
@@ -99,10 +134,11 @@
             perchart.update();
           }
         }
-        perdevicedeatils(1);
-        tempid=1
-        function perdevicedeatils(val) {
-            if(typeof val === 'number')
+        
+        perdevicedeatils(tempid,1);
+        function perdevicedeatils(val,ar) {
+          
+            if(ar == 1)
             {
                 de_id=val
                 tempid=val
@@ -114,7 +150,7 @@
                $.ajax({
                    url: '/devicedata/',
                    method: 'GET',
-                   data: { 'theids': de_id }, 
+                   data: { 'theids': de_id ,'grdates': lastdate2,'dorw':dorw }, 
                    dataType: 'json',
                    success: function (data) {
                        pergraph(data)
@@ -130,10 +166,13 @@
                $.ajax({
                    url: '/value_up/',
                    method: 'GET',
-                   data: { 'way': para }, 
+                   data: { 'way': para,
+                            'grdates': lastdate2,'dorw':dorw }, 
                    dataType: 'json',
                    success: function (data) {
-                    perdevicedeatils(tempid);
+                    lastdate2=data
+                    if(dorw==0){$('#mainweekday').text(lastdate2);}
+                    perdevicedeatils(tempid,1);
                    },
                    error: function (error) {
                        console.error('Error fetching new date:', error);
@@ -182,7 +221,7 @@
     </div>
   </div>
   <div class="otherdetails">
-    <div class="theprdetailsbox"></div>
+    <div id="maxvalue" class="theprdetailsbox"></div>
     <div class="theprdetailsbox"></div>
     <div class="theprdetailsbox"></div>
   </div>

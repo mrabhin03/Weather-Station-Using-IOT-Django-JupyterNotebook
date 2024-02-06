@@ -146,10 +146,30 @@ body{
     font-weight: 0;
     height: 90%;
 }
+#weekorday{
+    color:  white;
+    background-color: rgb(75,196,243);
+    border: none;
+    border-radius: 4px;
+    font-weight: 0;
+    height: 90%;
+    width: 100%;
+    font-size: 15px;
+    cursor: pointer;
+}
+.transfer{
+    width: 96%;
+    text-align: center;
+    height: 5px;
+    margin-top: 5px;
+}
 .canvasdata{
     width: 96%; 
     height: 70%;
     margin-bottom: -2px;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
 }
 .barhead >div> button:hover{
     background-color: rgb(47, 155, 197);
@@ -157,10 +177,11 @@ body{
 .barlabel
 {
     height: 50%;
-    width: 97.5%;
+    width: 98.5%;
     display: flex;
     align-items: end;
     justify-content: space-between;
+    margin-right: -5px;
 }
 .val{
     height: 40px;
@@ -211,6 +232,9 @@ body{
     font-weight: 0;
     height: 25px;
     width: 150px;
+    background-color: rgb(255, 255, 255);
+    border: none;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 
 }
 .subdetails > div{
@@ -563,6 +587,20 @@ body{
 
 }
 @media (max-width: 900px) {
+    .transfer{
+        font-size: 10px;
+    }
+
+    #weekorday{
+        color:  white;
+        background-color: rgb(75,196,243);
+        border: none;
+        border-radius: 4px;
+        font-weight: 0;
+        height: 90%;
+        width: 100%;
+        font-size: 10px;
+    }
     .main{
         flex-direction: column;
     }
@@ -605,7 +643,7 @@ body{
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 50px;
+        height: 100px;
         margin-bottom: 10px;
     }
     .barhead>div>button{
@@ -642,19 +680,25 @@ body{
         padding: 0;
     }
     .canvasdata{
-        width: 96%; 
-        height: 70%;
+        width: 90%; 
+        height: 80%;
         margin-bottom: 0px;
         width: 100%;
     }
     .barlabel{
         font-size: 10px;
-        width: 92%;
-        height: 20%;
-        margin: 0;
+        width: 100%;
+        height: 30%;
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
     }
     .val{
+
         height: 100%;
+    }
+    .val>ion-icon{
+        font-size: 15px;
     }
     .details_div2{
         height: 50%;
@@ -771,6 +815,12 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     font-weight: 600;
+    background-color: rgb(78, 152, 216);
+    border-radius: 5px;
+    color: white;
+}
+.perbarlabel>div>ion-icon{
+    color: white;
 }

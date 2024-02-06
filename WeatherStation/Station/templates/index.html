@@ -8,6 +8,15 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     </head>
     <body>
+        <script>
+            var today = new Date();
+            var thedatefor = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+            var lastdate1=thedatefor;
+            var lastdate2=thedatefor;
+            var dayvalue=thedatefor
+            var dorw=1;
+            var tempid=1
+        </script>
         <div class="main">
             <div class="temperature">
                 <div class="thead">
@@ -46,20 +55,14 @@
                 <div class="details_div1">
                     <div>
                         <div class="graphtitle">
+                            <div id="mainweekday" class="transfer">Weekly data</div>
                             <div class="barhead">
-                                <div><b>This week's weather</b></div>
-                                <div><button onclick="dateupdations(1)" id='submitBtn' name='updatedata'>Previous week</button>
-                                    <button onclick="dateupdations(2)" id='submitBtn' name='updatedata'>Next week</button></div>
+                                <div><b> <button onclick="theweekchange()" id="weekorday">Weekly weather</button></b></div>
+                                <div><button onclick="dateupdations(1)" id='submitBtnpre' name='updatedata'>Previous week</button>
+                                    <button onclick="dateupdations(2)" id='submitBtnnex' name='updatedata'>Next week</button></div>
                             </div>
-                            
-                            <div class="barlabel">
-                                <div class="val"><ion-icon id="rainic0" name="sunny-outline"></ion-icon><div id="daystem0">0°</div></div>
-                                <div class="val"><ion-icon id="rainic1" name="sunny-outline"></ion-icon><div id="daystem1">0°</div></div>
-                                <div class="val"><ion-icon id="rainic2" name="sunny-outline"></ion-icon><div id="daystem2">0°</div></div>
-                                <div class="val"><ion-icon id="rainic3" name="sunny-outline"></ion-icon><div id="daystem3">0°</div></div>
-                                <div class="val"><ion-icon id="rainic4" name="sunny-outline"></ion-icon><div id="daystem4">0°</div></div>
-                                <div class="val"><ion-icon id="rainic5" name="sunny-outline"></ion-icon><div id="daystem5">0°</div></div>
-                                <div class="val"><ion-icon id="rainic6" name="sunny-outline"></ion-icon><div id="daystem6">0°</div></div>
+                            <div id="thegrlabel" class="barlabel">
+                                
                             </div>
                         </div>
                         <div class="canvasdata">
@@ -73,13 +76,34 @@
                     var chart
                     function graph(gradata)
                     {
+                        themaingraphlabel=document.getElementById('thegrlabel')
+                        themaingraphlabel.innerHTML = '';
                         newlabelarray=[];
                         newitemarray=[];
-                        for(i=0;i<7;i++){
-                            $('#daystem'+i).text(gradata[i].value1+"°");
+                        if(dorw==1)
+                        {lastdate1=gradata[6].date;}
+                        
+                        if(dorw==1){li=7}
+                        else{li=8}
+                        for(i=0;i<li;i++){
+                            const valdata = document.createElement("div");
+                            valdata.classList.add("val");
+                            const icons = document.createElement("ion-icon");
+                            icons.setAttribute("id", 'rainic'+i);
+                            const dayst = document.createElement("div");
+                            dayst.setAttribute("id", 'daystem'+i);
+                            valdata.appendChild(icons);
+                            valdata.appendChild(dayst);
+                            themaingraphlabel.appendChild(valdata);
+                            if(gradata[i].value1==0){$('#daystem'+i).text("---");}
+                            else{$('#daystem'+i).text(gradata[i].value1+"°");}
+                            
                             var iconElement = document.getElementById('rainic'+i);
                             iconElement.setAttribute('name', gradata[i].value2);
-                            newlabelarray[i]=gradata[i].date.split('-')[1]+"/"+gradata[i].date.split('-')[2];
+                            if(dorw==1)
+                            {newlabelarray[i]=gradata[i].date.split('-')[1]+"/"+gradata[i].date.split('-')[2];}
+                            else{newlabelarray[i]=gradata[i].date}
+                            
                             newitemarray[i]=gradata[i].value1;
                         }
                         let labels = newlabelarray
@@ -161,16 +185,34 @@
                     }
                     setCanvasSize();
                     window.addEventListener('resize', setCanvasSize);
+                    function theweekchange(){
+                        thevalue=document.getElementById("weekorday")
+                        previousbutton=document.getElementById("submitBtnpre")
+                        nextbutton=document.getElementById("submitBtnnex")
+                        if(dorw==1){dorw=0
+                            thevalue.textContent="Daily weather "
+                            nextbutton.textContent="Next Day"
+                            previousbutton.textContent="Previous Day"
+                            $('#mainweekday').text(lastdate1);
+                        }
+                        else{dorw=1
+                            thevalue.textContent="Weekly weather"
+                            nextbutton.textContent="Next week"
+                            previousbutton.textContent="Previous week"
+                            $('#mainweekday').text("Weekly data");
+                        }
+                        graphupdates()
+                    }
                 </script>
                 
                 <div class="details_div2">
-                    <input  id="thedatevalue" type="date" onchange="inputdataupdate()" value="{{ tdate }}">
+                    <input  id="thedatevalue" type="date" onchange="inputdataupdate()">
                     <div class="subdetails">
                         <div>
                             <div>
                                 <div class="humditytitle">
                                     <b>Humidity</b>
-                                    <div class="icon"><b><ion-icon name="cloud-outline"></ion-icon></b></div>
+                                    <div class="icon" onclick="nextpagedata(1)"><b><ion-icon name="cloud-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="humdity">
                                     <b id="humidity">0%</b>
@@ -189,7 +231,7 @@
                             <div>
                                 <div class="temperaturetitle">
                                     <b>Temperature</b>
-                                    <div id="ticon" class="icon"><b><ion-icon id="tempwarningicon" name="thermometer-outline"></ion-icon></b></div>
+                                    <div id="ticon" class="icon" onclick="nextpagedata(2)"><b><ion-icon id="tempwarningicon" name="thermometer-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="temperatured">
                                     <b id="Temperature">0°</b>
@@ -428,6 +470,7 @@
             delays=5000;
             barcount=0;
             barcount2=0;
+            document.getElementById('thedatevalue').value=dayvalue;
             var onbar1=onbar2="5px solid rgb(6, 116, 212)"
             var offbar1=offbar2="5px solid rgb(194, 194, 194)"
             function fulldata(data) {
@@ -626,6 +669,12 @@
                 
             }
 
+            function nextpagedata(data){
+                tempid=data
+                window.location.href = "/details";
+
+            }
+
 
             function createWindLevels(i,windValue) {
                 let divcolor;
@@ -701,9 +750,11 @@
             
 
             function fullalldaydata() {
+                
                 $.ajax({
                     url: '/all_data/',
                     method: 'GET',
+                    data: { 'devdates': dayvalue }, 
                     dataType: 'json',
                     success: function (data) {
                         fulldata(data);
@@ -721,6 +772,7 @@
                 $.ajax({
                     url: '/graph_data/',
                     method: 'GET',
+                    data: { 'grdates': lastdate1,'dorw':dorw }, 
                     dataType: 'json',
                     success: function (data) {
                         graph(data)
@@ -734,14 +786,16 @@
                 });
             }
             function dateupdations(val) {
-               
                 para=val
                 $.ajax({
                     url: '/value_up/',
                     method: 'GET',
-                    data: { 'way': para }, 
+                    data: { 'way': para,
+                            'grdates': lastdate1,'dorw':dorw }, 
                     dataType: 'json',
                     success: function (data) {
+                        lastdate1=data;
+                        if(dorw==0){$('#mainweekday').text(lastdate1);}
                         graphupdates();
                     },
                     error: function (error) {
@@ -757,6 +811,7 @@
                     data: { 'dates': inputElement }, 
                     dataType: 'json',
                     success: function (data) {
+                        dayvalue=inputElement
                         fullalldaydata();
                     },
                     error: function (error) {
