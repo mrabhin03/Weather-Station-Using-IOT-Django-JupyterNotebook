@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{% static 'style.css' %}">
         <link rel="icon" href="{% static 'rain.png' %}">
+        <script src="{% static 'newjs.js' %}"></script>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     </head>
     <body>
@@ -15,13 +16,13 @@
             var lastdate2=thedatefor;
             var dayvalue=thedatefor
             var dorw=1;
-            var tempid=1
+            
+            
         </script>
         <div class="main">
             <div class="temperature">
                 <div class="thead">
                     <div class="sun">
-
                     </div>
                 </div>
                 <div class="shead">
@@ -250,7 +251,7 @@
                             <div>
                                 <div class="raintitle">
                                     <b >Chance of Rain</b>
-                                    <div class="icon" id="rainicon">
+                                    <div class="icon" id="rainicon" onclick="nextpagedata(5)">
                                         <b><ion-icon id="rainnew" name="sunny-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="rain">
@@ -272,7 +273,7 @@
                             <div>
                                 <div class="windtitle">
                                     <b >Wind Speed</b>
-                                    <div class="icon" id="windicon">
+                                    <div class="icon" id="windicon" onclick="nextpagedata(6)">
                                         <b><ion-icon name="speedometer-outline"></ion-icon></b>
                                     </div>
                                 </div>
@@ -301,7 +302,7 @@
                             <div >
                                 <div class="windirtitle">
                                     <b>Wind Direction</b>
-                                    <div class="icon"><b><ion-icon name="compass-outline"></ion-icon></b></div>
+                                    <div class="icon" onclick="nextpagedata(10)"><b><ion-icon name="compass-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="wibr">
                                     <div class="dirdata"><table style="text-align: center;">
@@ -327,7 +328,7 @@
                             <div>
                                 <div class="atmtitle">
                                     <b >Atmospheric Pressure</b>
-                                    <div class="icon" id="atmicon">
+                                    <div class="icon" id="atmicon" onclick="nextpagedata(8)">
                                         <b><ion-icon name="contract-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="atm">
@@ -358,7 +359,7 @@
                             <div>
                                 <div class="no2title">
                                     <b>NO² Presents</b>
-                                    <div class="icon" id="no2icon"><b><ion-icon name="logo-electron"></ion-icon></b></div>
+                                    <div class="icon" id="no2icon" onclick="nextpagedata(7)"><b><ion-icon name="logo-electron"></ion-icon></b></div>
                                 </div>
                                 <div class="no2">
                                     <b id="no2">0%</b>
@@ -379,7 +380,7 @@
                             <div>
                                 <div class="co2title">
                                     <b>CO² Presents</b>
-                                    <div class="icon" id="co2icon"><b><ion-icon id="co2warningicon" name="warning-outline"></ion-icon></b></div>
+                                    <div class="icon" id="co2icon" onclick="nextpagedata(4)"><b><ion-icon id="co2warningicon" name="warning-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="co2">
                                     <b id="co2">0%</b>
@@ -399,7 +400,7 @@
                             <div>
                                 <div class="uvtitle">
                                     <b>UV Sensor</b>
-                                    <div class="icon" id="co2icon"><b><ion-icon name="warning-outline"></ion-icon></b></div>
+                                    <div class="icon" id="co2icon" onclick="nextpagedata(9)"><b><ion-icon name="warning-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="uvs">
                                     <b id="uvs">0%</b>
@@ -420,7 +421,7 @@
                             <div>
                                 <div class="soundtitle">
                                     <b>Sound</b>
-                                    <div class="icon"><b><ion-icon name="volume-high-outline"></ion-icon></b></div>
+                                    <div class="icon" onclick="nextpagedata(3)"><b><ion-icon name="volume-high-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="sound">
                                     <b id="Sound">0%</b>
@@ -440,7 +441,7 @@
                             <div>
                                 <div class="airqtitle">
                                     <b>Air Quality</b>
-                                    <div class="icon">
+                                    <div class="icon" onclick="nextpagedata(11)">
                                         <b><ion-icon name="balloon"></ion-icon></b></div>
                                 </div>
                                 <div class="airq">
@@ -669,11 +670,7 @@
                 
             }
 
-            function nextpagedata(data){
-                tempid=data
-                window.location.href = "/details";
-
-            }
+            
 
 
             function createWindLevels(i,windValue) {

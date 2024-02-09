@@ -141,12 +141,14 @@ body{
 .barhead >div> button{
     color:  white;
     background-color: rgb(75,196,243);
+    box-shadow: 2px 2px 3px black;
     border: none;
     border-radius: 4px;
     font-weight: 0;
     height: 90%;
 }
 #weekorday{
+    box-shadow: 2px 2px 3px black;
     color:  white;
     background-color: rgb(75,196,243);
     border: none;
@@ -156,6 +158,9 @@ body{
     width: 100%;
     font-size: 15px;
     cursor: pointer;
+}
+#weekorday:hover,#weekorday:active{
+    background-color: rgb(60, 166, 208);
 }
 .transfer{
     width: 96%;
@@ -271,6 +276,7 @@ body{
     color: rgb(50, 50, 50);
 }
 .icon{
+    cursor: pointer;
     height: 25px; 
     width: 25px; 
     background-color: rgb(81, 159, 226); 
@@ -509,6 +515,177 @@ body{
 .valuewind2{
     font-size: 10px;
 }
+
+
+.viewdetails{
+    background-color: rgba(223, 248, 255, 0.79);
+    border-radius: 20px;
+    height: 100%;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+}
+.details_block{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 60%;
+    width: 95%;
+}
+.details_graph{
+    width: 100%;
+    height: 85%;
+    background-color: white;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.prbarhead{
+    margin-top: 10px;
+    height: 30%;
+    width: 99%;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+.prbarhead >div> button{
+    color:  white;
+    background-color: rgb(75,196,243);
+    border: none;
+    border-radius: 4px;
+    font-weight: 0;
+    height: 90%;
+}
+
+.prbarhead >div> button:hover{
+    background-color: rgb(47, 155, 197);
+}
+.perbarlabel{
+    height: 50%;
+    width: 99%;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+}
+.prgraphtitle{
+    height: 30%;
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: end;
+    padding-right: 0px;
+}
+.deatils_header{
+    width: 100%;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.otherdetails
+{
+    height: 38%;
+    width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+}
+.theprdetailsbox{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    width: 350px;
+    background-color: #ffffff;
+    border-radius: 20px;
+}
+.perval{
+    height: 40px;
+    width: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    font-weight: 600;
+    border-radius: 5px;
+    color: rgb(0, 0, 0);
+}
+.perbarlabel>div>ion-icon{
+    color: rgb(0, 0, 0);
+}
+
+.grdeta{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.colord1{
+    background-color: rgb(0, 157, 255);
+    height: 30px;
+    width: 110px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    border: 2px solid rgb(255, 255, 255);
+    box-shadow: 2px 2px 4px black;
+}
+#submitBtnpre,#submitBtnnex{
+    box-shadow: 2px 2px 4px black;
+}
+#deviceid{
+    border-radius: 5px;
+    text-align: center;
+    height: 30px;
+    background-color: rgb(220, 242, 255);
+    border: 2px solid rgb(120, 120, 120);
+}
+.coloricon{
+    height: 25px;
+    width: 25px;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.colotext{
+    display: flex;
+    align-items: center;
+    justify-content: baseline;
+    height: 100%;
+    width: 77px;
+    font-size: 10px;
+    color: white;
+    cursor: default;
+}
+.canvasdata2{
+    width: 96%; 
+    height: 66%;
+    margin-bottom: -2px;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+}
+
+
 @media (min-width: 900px){
     .subdetails{
         overflow-y: auto;
@@ -559,6 +736,9 @@ body{
     }
 }
 @media (max-width: 1250px){
+    .canvasdata2{
+        padding-top: 100px;
+    }
     .main{
         flex-direction: column;
     }
@@ -583,6 +763,51 @@ body{
     }
     .base{
         display: none;
+    }
+    .viewdetails{
+        width: 100%;
+    }
+    .deatils_header{
+        width: 90%;
+    }
+    #deviceid{
+        height: 20px;
+        width: 140px;
+        font-size: 10px;
+    }
+    .perbarlabel{
+        font-size: 10px;
+        height: 40%;
+        margin-top: 8px;
+    }
+    .perval{
+        height: 30px;
+    }
+    .grdeta{
+        display: grid;
+        justify-content: center; 
+        align-items: center;
+        gap: 30px;
+        margin-top: 20px;
+        grid-template-rows: repeat(3, 0fr);
+        grid-template-columns: repeat(4, 0fr);
+    }
+    .colord1{
+        width: 190px;
+        height: 48px;
+        border: 1px solid rgb(255, 255, 255);
+    }
+    .coloricon{
+        height: 40px;
+        width: 40px;
+        border-radius: 3px;
+    }
+    .colotext{
+        font-size: 22px;
+        width: 130px;
+    }
+    .coloricon>ion-icon{
+        font-size: 18px;
     }
 
 }
@@ -716,111 +941,55 @@ body{
         height: 30%;
         width: 90%;
     }
-}
-
-.viewdetails{
-    background-color: rgba(223, 248, 255, 0.79);
-    border-radius: 20px;
-    height: 100%;
-    width: 80%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    flex-direction: column;
-}
-.details_block{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column;
-    height: 45%;
-    width: 95%;
-}
-.details_graph{
-    width: 100%;
-    height: 80%;
-    background-color: white;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column;
-}
-.prbarhead{
-    margin-top: 10px;
-    height: 30%;
-    width: 99%;
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-}
-.prbarhead >div> button{
-    color:  white;
-    background-color: rgb(75,196,243);
-    border: none;
-    border-radius: 4px;
-    font-weight: 0;
-    height: 90%;
-}
-
-.prbarhead >div> button:hover{
-    background-color: rgb(47, 155, 197);
-}
-.perbarlabel{
-    height: 50%;
-    width: 99%;
-    display: flex;
-    align-items: end;
-    justify-content: space-between;
-}
-.prgraphtitle{
-    height: 30%;
-    width: 95%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: end;
-    padding-right: 0px;
-}
-.deatils_header{
-    width: 100%;
-    height: 14%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: row;
-    background-color: white;
-    border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-.otherdetails
-{
-    height: 45%;
-    width: 95%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: row;
-}
-.theprdetailsbox{
-    height: 320px;
-    width: 320px;
-    background-color: #ffffff;
-    border-radius: 20px;
-}
-.perval{
-    height: 40px;
-    width: 35px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    font-weight: 600;
-    background-color: rgb(78, 152, 216);
-    border-radius: 5px;
-    color: white;
-}
-.perbarlabel>div>ion-icon{
-    color: white;
+    .viewdetails{
+        width: 100%;
+    }
+    .deatils_header{
+        width: 90%;
+    }
+    #deviceid{
+        height: 20px;
+        width: 140px;
+        font-size: 10px;
+    }
+    .perbarlabel{
+        font-size: 10px;
+        height: 40%;
+        margin-top: 8px;
+    }
+    .perval{
+        height: 30px;
+    }
+    .grdeta{
+        display: grid;
+        justify-content: center; 
+        align-items: center;
+        gap: 5px;
+        margin-top: 20px;
+        grid-template-rows: repeat(3, 0fr);
+        grid-template-columns: repeat(4, 0fr);
+    }
+    .colord1{
+        width: 70px;
+        height: 17px;
+        border: 1px solid rgb(255, 255, 255);
+    }
+    .coloricon{
+        margin-left: 5px;
+        height: 15px;
+        width: 15px;
+        border-radius: 3px;
+        margin-right: 3px;
+    }
+    .colotext{
+        font-size: 8px;
+        width: 50px;
+    }
+    .coloricon>ion-icon{
+        font-size: 8px;
+    }
+    .canvasdata2{
+        padding-top: 20px;
+    }
+   
 }

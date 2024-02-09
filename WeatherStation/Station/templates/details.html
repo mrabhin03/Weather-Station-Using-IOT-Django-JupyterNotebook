@@ -1,13 +1,20 @@
-{% extends 'index.html' %} {% block details %}
-<div class="viewdetails">
+
+{% extends 'index.html' %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+{% block details %}
+<div  class="viewdetails">
   <div class="details_block">
     <div class="deatils_header">
       <div class="back1">
         <a href="/"><ion-icon name="arrow-back-outline"></ion-icon></a>
       </div>
       <select onchange="perdevicedeatils(this)" name="TheDevice" id="deviceid">
+        <option value="404">All</option>
         {% for devicesdatas in Devices %}
-            <option value="{{ devicesdatas.device_id }}">{{ devicesdatas.device_name }}</option>
+        <option value="{{ devicesdatas.device_id }}">
+          {{ devicesdatas.device_name }}
+        </option>
         {% endfor %}
       </select>
     </div>
@@ -15,180 +22,397 @@
       <div class="prgraphtitle">
         <div id="mainweekday" class="transfer">Weekly data</div>
         <div class="prbarhead">
-          <div><b><button onclick="pertheweekchange()" id="weekorday">Weekly weather</button></b></div>
           <div>
-            <button onclick="dateupdations(1,0)" id="submitBtnpre" name="updatedata">
+            <b
+              ><button onclick="pertheweekchange()" id="weekorday">
+                Weekly weather
+              </button></b
+            >
+          </div>
+          <div>
+            <button
+              onclick="dateupdations(1,0)"
+              id="submitBtnpre"
+              name="updatedata"
+            >
               Previous week
             </button>
-            <button onclick="dateupdations(2,0)" id="submitBtnnex" name="updatedata">
+            <button
+              onclick="dateupdations(2,0)"
+              id="submitBtnnex"
+              name="updatedata"
+            >
               Next week
             </button>
           </div>
         </div>
 
-        <div id="prechartdata" class="perbarlabel">
-          
-        </div>
+        <div id="prechartdata" class="perbarlabel"></div>
       </div>
-      <div class="canvasdata">
-        <canvas height="4500" width="30000" id="pergraphdisplay"></canvas>
+      <div class="canvasdata2">
+        <canvas height="6500" width="30000" id="pergraphdisplay"></canvas>
       </div>
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <script>
+        delays=5000
         var k = 0;
         var perchart;
-        function pertheweekchange(){
-          
-          thevalue=document.getElementById("weekorday")
-          previousbutton=document.getElementById("submitBtnpre")
-          nextbutton=document.getElementById("submitBtnnex")
-          if(dorw==1){dorw=0
-            thevalue.textContent="Daily weather "
-            nextbutton.textContent="Next Day"
-            previousbutton.textContent="Previous Day"
-            $('#mainweekday').text(lastdate2);
+        device_icon = [
+          "",
+          "cloudy-outline",
+          "thermometer-outline",
+          "volume-high-outline",
+          "warning-outline",
+          "umbrella-outline",
+          "speedometer-outline",
+          "logo-electron",
+          "contract-outline",
+          "warning-outline",
+          "compass-outline",
+          "balloon-outline",
+        ];
+        device_names = [
+          "Humidity",
+          "Temperature",
+          "Sound",
+          "Co2",
+          "Chance of Rain",
+          "Wind Speed",
+          "NO2",
+          "Atmospheric Pressure",
+          "UV",
+          "Wind Direction",
+          "Air Quality",
+        ];
+        function pertheweekchange() {
+          thevalue = document.getElementById("weekorday");
+          previousbutton = document.getElementById("submitBtnpre");
+          nextbutton = document.getElementById("submitBtnnex");
+          if (dorw == 1) {
+            dorw = 0;
+            thevalue.textContent = "Daily weather ";
+            nextbutton.textContent = "Next Day";
+            previousbutton.textContent = "Previous Day";
+            $("#mainweekday").text(lastdate2);
+          } else {
+            dorw = 1;
+            thevalue.textContent = "Weekly weather";
+            nextbutton.textContent = "Next week";
+            previousbutton.textContent = "Previous week";
+            $("#mainweekday").text("Weekly data");
           }
-          else{dorw=1
-            thevalue.textContent="Weekly weather"
-            nextbutton.textContent="Next week"
-            previousbutton.textContent="Previous week"
-            $('#mainweekday').text("Weekly data");
-          }
-          perdevicedeatils(tempid,1)
+          perdevicedeatils(tempid, 1);
         }
-        
-        function pergraph(gradata) {
-          the_new_div=document.getElementById('prechartdata')
-          the_new_div.innerHTML = '';
+        mch = 0;
+        sch = 0;
+        function pergraph(gradata, id) {
+          
+          const datasets = [];
+          var selectElement = document.getElementById("deviceid");
+          localStorage.setItem("tempid", tempid);
+          selectElement.querySelector(
+            "option[value='" + tempid + "']"
+          ).selected = true;
+          the_new_div = document.getElementById("prechartdata");
+          the_new_div.innerHTML = "";
           newlabelarray = [];
           newitemarray = [];
-          if(dorw==1)
-            {lastdate2=gradata[6].date;}
-          maxvalue=0;
-          if(dorw==1){li=7}
-          else{li=8}
-          for (i = 0; i < li; i++) {
-
-            const valdata = document.createElement("div");
-            valdata.setAttribute("id", 'pr'+i);
-            valdata.classList.add("perval");
-            const icons = document.createElement("ion-icon");
-            icons.setAttribute("id", 'rainic'+i);
-            const dayst = document.createElement("div");
-            dayst.setAttribute("id", 'daystem'+i);
-            valdata.appendChild(icons);
-            valdata.appendChild(dayst);
-            the_new_div.appendChild(valdata);
-
-
-            if(gradata[i].value>maxvalue){maxvalue=gradata[i].value}
-            $("#daystem" + i).text(gradata[i].value + gradata[i].symbol);
-            var iconElement = document.getElementById("rainic" + i);
-            iconElement.setAttribute("name", gradata[i].icons);
-            document.getElementById("pr" + i).style.backgroundColor=gradata[i].color;
-            if(dorw==1)
-            {newlabelarray[i]=gradata[i].date.split('-')[1]+"/"+gradata[i].date.split('-')[2];}
-            else{newlabelarray[i]=gradata[i].date}
-            newitemarray[i]=gradata[i].value;
+          if (dorw == 1) {
+            lastdate2 = gradata[6].date;
           }
-          $("#maxvalue").text(maxvalue + "°");
-          let labels = newlabelarray;
-          let itemdata = newitemarray;
-          if (k == 0) {
-            const data = {
-              labels: labels,
-              datasets: [
-                {
-                  data: itemdata,
-                  borderColor: "rgb(100, 180, 280)",
-                  fill: true,
-                  backgroundColor: "rgb(81, 159, 226)",
-                  tension: 0.15,
-                  borderWidth: 3,
-                },
-              ],
-            };
-            const config = {
-              type: "line",
-              data: data,
-              options: {
-                plugins: {
-                  legend: {
-                    display: false,
-                  },
-                  title: {
-                    display: false,
-                  },
-                },
-              },
-            };
+          maxvalue = 0;
+          if (id != 404) {
+            mch = 0;
+            for (i = 0; i < gradata.length; i++) {
+              const valdata = document.createElement("div");
+              valdata.setAttribute("id", "pr" + i);
+              valdata.classList.add("perval");
+              const icons = document.createElement("ion-icon");
+              icons.setAttribute("id", "rainic" + i);
+              const dayst = document.createElement("div");
+              dayst.setAttribute("id", "daystem" + i);
+              valdata.appendChild(icons);
+              valdata.appendChild(dayst);
+              the_new_div.appendChild(valdata);
 
-            perchart = new Chart(
-              document.getElementById("pergraphdisplay"),
-              config
-            );
-            k++;
+              if (gradata[i].value > maxvalue) {
+                maxvalue = gradata[i].value;
+              }
+              $("#daystem" + i).text(gradata[i].value + gradata[i].symbol);
+              var iconElement = document.getElementById("rainic" + i);
+              iconElement.setAttribute("name", gradata[i].icons);
+              if (dorw == 1) {
+                newlabelarray[i] =
+                  gradata[i].date.split("-")[1] +
+                  "/" +
+                  gradata[i].date.split("-")[2];
+              } else {
+                newlabelarray[i] = gradata[i].date;
+              }
+              newitemarray[i] = gradata[i].value;
+            }
+            $("#maxvalue").text(maxvalue + gradata[1].symbol);
+            let labels = newlabelarray;
+            let itemdata = newitemarray;
+            if (sch == 0) {
+              if (perchart) {
+                perchart.destroy();
+              }
+              datasets.push({
+                data: itemdata,
+                borderColor: "rgb(100, 180, 280)",
+                fill: true,
+                backgroundColor: "rgb(81, 159, 226)",
+                tension: 0.15,
+                borderWidth: 3,
+              });
+              const data = {
+                labels: labels,
+                datasets: datasets,
+              };
+              const config = {
+                type: "line",
+                data: data,
+                options: {
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                    title: {
+                      display: false,
+                    },
+                  },
+                },
+              };
+
+              perchart = new Chart(
+                document.getElementById("pergraphdisplay"),
+                config
+              );
+              sch = 1;
+            } else {
+              perchart.data.labels = labels;
+              perchart.data.datasets[0].data = itemdata;
+              perchart.update();
+            }
           } else {
-            perchart.data.labels = labels;
-            perchart.data.datasets[0].data = itemdata;
-            perchart.update();
+            const thealign = document.createElement("div");
+            thealign.classList.add("grdeta");
+            sch = 0;
+            for (let i = 1; i < 12; i++) {
+              thedata = [];
+              if (i != 8 && i != 10 && i != 5 && i != 3) {
+                dedata = "Device" + i;
+                for (dev = 0; dev < gradata.length; dev++) {
+                  thedata[dev] = gradata[dev][dedata];
+                  if (thedata[dev] > maxvalue) {
+                    maxvalue = thedata[dev];
+                    devicenameout = device_names[i - 1];
+                  }
+                }
+                const thebox = document.createElement("div");
+                thebox.classList.add("colord1");
+                const iconbox = document.createElement("div");
+                iconbox.classList.add("coloricon");
+                const icons = document.createElement("ion-icon");
+                icons.setAttribute("id", "coman" + i);
+                const textbox = document.createElement("div");
+                textbox.classList.add("colotext");
+                textbox.setAttribute("id", "textbox" + i);
+                iconbox.appendChild(icons);
+
+                thebox.appendChild(iconbox);
+                thebox.appendChild(textbox);
+                thealign.appendChild(thebox);
+                colors = `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(
+                  Math.random() * 255
+                )}, ${Math.floor(Math.random() * 255)})`;
+                thebox.style.backgroundColor = colors;
+                var color2;
+                if (isLight(colors)) {
+                  color2 = "black";
+                } else {
+                  color2 = "white";
+                }
+                $("#maxvalue").text(maxvalue + devicenameout);
+                textbox.style.color = color2;
+                the_new_div.appendChild(thealign);
+                icons.setAttribute("name", device_icon[i]);
+                $("#textbox" + i).text(device_names[i - 1]);
+                const alldata = thedata;
+                if(i!=2)
+                {
+                  datasets.push({
+                  label: device_names[i - 1],
+                  data: alldata,
+                  tension: 0.15,
+                  borderColor: colors,
+                  fill: false,
+                  pointBackgroundColor: colors,
+                  pointRadius: 3,
+                  pointHoverRadius: 8,
+                });
+                }
+                else{
+                  datasets.push({
+                  label: device_names[i - 1],
+                  data: alldata,
+                  tension: 0.15,
+                  borderColor: colors,
+                  fill: false,
+                  pointBackgroundColor: colors,
+                  pointRadius: 3,
+                  pointHoverRadius: 8,
+                  
+                });
+                }
+                
+              }
+            }
+            for (k = 0; k < gradata.length; k++) {
+              if(dorw==1){newlabelarray[k]=gradata[k].date.split('-')[1]+"/"+gradata[k].date.split('-')[2];}
+                else{newlabelarray[k]=gradata[k].date}
+            }
+            labels = newlabelarray;
+            if (mch == 0) {
+              if (perchart) {
+                perchart.destroy();
+              }
+              const data = {
+                labels: labels,
+                datasets: datasets,
+              };
+              const config = {
+                type: "line",
+                data: data,
+                options: {
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                    title: {
+                      display: false,
+                    },
+                  },
+                },
+              };
+
+              perchart = new Chart(
+                document.getElementById("pergraphdisplay"),
+                config
+              );
+              mch = 1;
+            } else {
+              perchart.data.labels = labels;
+              perchart.data.datasets = datasets;
+              perchart.update();
+            }
           }
         }
-        
-        perdevicedeatils(tempid,1);
-        function perdevicedeatils(val,ar) {
-          
-            if(ar == 1)
-            {
-                de_id=val
-                tempid=val
-            }
-            else{
-                de_id=val.value
-                tempid=val.value
-            }
-               $.ajax({
-                   url: '/devicedata/',
-                   method: 'GET',
-                   data: { 'theids': de_id ,'grdates': lastdate2,'dorw':dorw }, 
-                   dataType: 'json',
-                   success: function (data) {
-                       pergraph(data)
-                   },
-                   error: function (error) {
-                       console.error('Error fetching new date:', error);
-                   },
-               });
-               
-           }
-           function dateupdations(val) {
-               para=val
-               $.ajax({
-                   url: '/value_up/',
-                   method: 'GET',
-                   data: { 'way': para,
-                            'grdates': lastdate2,'dorw':dorw }, 
-                   dataType: 'json',
-                   success: function (data) {
-                    lastdate2=data
-                    if(dorw==0){$('#mainweekday').text(lastdate2);}
-                    perdevicedeatils(tempid,1);
-                   },
-                   error: function (error) {
-                       console.error('Error fetching new date:', error);
-                   },
-               });
-           }
-
-
-        /*var canvas = document.getElementById('pergraphdisplay');
+        function isLight(color) {
+          var match = color.match(/\d+/g);
+          var color = match.map(Number);
+          var luminance =
+            (0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2]) / 255;
+          return luminance > 0.5;
+        }
+        perdevicedeatils(tempid, 1);
+        theajax=0
+        var tempdata
+        var timeoutId;
+        function perdevicedeatils(val, ar) {
+          if (timeoutId) {
+            clearTimeout(timeoutId); 
+          }
+          if (ar == 1) {
+            de_id = val;
+            tempid = val;
+          } else {
+            de_id = val.value;
+            tempid = val.value;
+          }
+          if (de_id == 404) {
+            $.ajax({
+              url: "/alldevicedata/",
+              method: "GET",
+              data: { grdates: lastdate2, dorw: dorw },
+              dataType: "json",
+              success: function (data) {
+                if(theajax==0)
+                {
+                  tempdata=data
+                  theajax=1
+                  pergraph(data, de_id);
+                }
+                else{
+                  var areEqual = JSON.stringify(tempdata) === JSON.stringify(data);
+                  if (!areEqual) {
+                      tempdata=data
+                      pergraph(data, de_id);
+                  }
+                }
+                
+              },
+              error: function (error) {
+                console.error("Error fetching new date:", error);
+              },
+              complete: function () {
+                timeoutId = setTimeout(function() {
+                    perdevicedeatils(de_id, 1);
+                }, 5000);
+              }
+              
+            });
+          } else {
+            $.ajax({
+              url: "/devicedata/",
+              method: "GET",
+              data: { theids: de_id, grdates: lastdate2, dorw: dorw },
+              dataType: "json",
+              success: function (data) {
+                tempdata=data
+                pergraph(data, de_id);
+              },
+              error: function (error) {
+                console.error("Error fetching new date:", error);
+              },
+              complete: function () {
+                timeoutId = setTimeout(function() {
+                    perdevicedeatils(de_id, 1);
+                }, 5000);
+              }
+              
+            });
+          }
+        }
+        function dateupdations(val) {
+          para = val;
+          $.ajax({
+            url: "/value_up/",
+            method: "GET",
+            data: { way: para, grdates: lastdate2, dorw: dorw },
+            dataType: "json",
+            success: function (data) {
+              lastdate2 = data;
+              if (dorw == 0) {
+                $("#mainweekday").text(lastdate2);
+              }
+              perdevicedeatils(tempid, 1);
+            },
+            error: function (error) {
+              console.error("Error fetching new date:", error);
+            },
+            
+          });
+        }
+                  var canvas = document.getElementById('pergraphdisplay');
                     var ctx = canvas.getContext('2d');
                     
-                    function setCanvasSize() {
+                    function setCanvasSize(val) {
                         if(window.innerWidth<700)
                         {
                             canvas.width = innerWidth*52;  
-                            canvas.height=innerWidth*20
+                            canvas.height=innerWidth*28
                         }
                         else{
                             if(window.innerWidth<1250)
@@ -216,7 +440,7 @@
                         
                     }
                     setCanvasSize();
-                    window.addEventListener('resize', setCanvasSize);*/
+                    window.addEventListener('resize', setCanvasSize);
       </script>
     </div>
   </div>

@@ -113,12 +113,62 @@ def deviceonlydata(request):
 
     return JsonResponse( output,safe=False)
 
+def alldeviceonlydata(request):
+    dates1=request.GET.get('grdates', None)
+    current_date=datetime.strptime(dates1, "%Y-%m-%d").date()
+    all_id = Devices_details.objects.aggregate(Max('device_id'))['device_id__max']
+    dates=[]
+    dayorweek = int(request.GET.get('dorw', None))
+    if dayorweek==1:
+        output=alldeviceonlydataweek(current_date,all_id,dates)
+    else:
+        output=alldeviceonlydataday(current_date,all_id,dates)
+    
+    
+    return JsonResponse( output,safe=False)
+
+def alldeviceonlydataday(current_date,all_id,dates):
+    devices = [[] for _ in range(11)]
+    times=[3,6,9,12,15,18,21,24]
+    t=1
+    for j in range(1, all_id + 1):
+        devices_data = Devices_details.objects.filter(device_id__exact=j).values('device_id').first()
+        device_id=devices_data['device_id']
+        per=0
+        tmin=0
+        for time in times:
+            hor=time
+            if time==24:
+                tmin=59
+                hor=23
+            
+            start_time = dt_time(hour=per, minute=0)
+            end_time = dt_time(hour=hor, minute=tmin)
+            per=time
+            sql1 = Data_store.objects.filter(
+            device_id=device_id,
+            date_time__date=current_date,
+            date_time__time__range=(start_time, end_time)
+            ).order_by('-date_time').first()
+            value1 = int(sql1.device_values if sql1 else 0)
+            devices[j - 1].append(value1)
+    output = [{'date': time, **{'Device{}'.format(i + 1): devices[i][j] for i in range(len(devices))}} for j, time in enumerate(times)]
+    return output
+
+
+
+
+
 def device_only_day(current_date,device_id,High,mid,low):
     device=[]
     icon=[]
     icon_data = device_icon[device_id]
-    if device_id==2 or device_id==6:
+    if device_id==2 or device_id==10:
         symbol="°"
+    elif device_id==8:
+        symbol="hPa"
+    elif device_id==6:
+        symbol="km/h"
     else:
         symbol="%"
     times=[3,6,9,12,15,18,21,24]
@@ -152,13 +202,38 @@ def device_only_day(current_date,device_id,High,mid,low):
     return output
 
 
+def alldeviceonlydataweek(current_date,all_id,dates):
+    devices = [[] for _ in range(11)]
+    t=1
+    for j in range(1, all_id + 1):
+        devices_data = Devices_details.objects.filter(device_id__exact=j).values('device_id').first()
+        device_id=devices_data['device_id']
+        for i in range(6, -1, -1):
+            day = current_date - timedelta(days=i)
+            if t==1:
+                dates.append(day)
+            sql1 = Data_store.objects.filter(device_id=device_id, date_time__date=day).order_by('-date_time').first()
+            value1 = int(sql1.device_values if sql1 else 0)
+            devices[j - 1].append(value1)
+        t=0
+    output = [{'date': date, **{'Device{}'.format(i + 1): devices[i][j] for i in range(len(devices))}} for j, date in enumerate(dates)]
+    return output
+
+
+
+
+
 def device_only_week(current_date,device_id,High,mid,low):
     dates=[]
     device=[]
     icon=[]
     icon_data = device_icon[device_id]
-    if device_id==2 or device_id==6:
+    if device_id==2 or device_id==10:
         symbol="°"
+    elif device_id==8:
+        symbol="hPa"
+    elif device_id==6:
+        symbol="km/h"
     else:
         symbol="%"
     for i in range(6, -1, -1):

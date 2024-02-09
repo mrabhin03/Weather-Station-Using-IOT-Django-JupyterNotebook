@@ -26,5 +26,7 @@ urlpatterns = [
     path('value_up/', views.valueup,name='valueup'),
     path('day_update/', views.day_update,name='day_update'),
     path('details/', views.viewmoredetails,name='details'),
-    path('devicedata/',views.deviceonlydata,name='device')
+    path('devicedata/',views.deviceonlydata,name='device'),
+    path('alldevicedata/',views.alldeviceonlydata,name='alldevice')
+    
 ]
