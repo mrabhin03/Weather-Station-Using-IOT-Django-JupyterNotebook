@@ -441,7 +441,7 @@
                             <div>
                                 <div class="airqtitle">
                                     <b>Air Quality</b>
-                                    <div class="icon" onclick="nextpagedata(11)">
+                                    <div id="theaq" class="icon" onclick="nextpagedata(11)">
                                         <b><ion-icon name="balloon"></ion-icon></b></div>
                                 </div>
                                 <div class="airq">
@@ -478,79 +478,56 @@
                 humidityValue = data[0].device_values;
                 $('#humidity').text(humidityValue+"%");
                 document.getElementById('humiditybar').style.width =  humidityValue+"%";
-                if(humidityValue >= "60"){document.getElementById('humiditybar').style.backgroundColor="red";}
-                else if(humidityValue >= "30"){document.getElementById('humiditybar').style.backgroundColor="orange";}
-                else if(humidityValue >= "15"){document.getElementById('humiditybar').style.backgroundColor="rgb(81, 159, 226)";}
-                else {document.getElementById('humiditybar').style.backgroundColor="rgb(3, 209, 255)";}
-                
+                document.getElementById('humiditybar').style.backgroundColor=data[0].Dev_Color;
+
+
 
                 var temperatureValue = data[1].device_values;
                 $('#Temperature').text(temperatureValue+"°");
+                document.getElementById('Temperaturebar').style.width =  temperatureValue+"%";
                 document.getElementById('Temperature').style.color="black";
+                document.getElementById('ticon').style.backgroundColor=data[1].Dev_Color;
+                document.getElementById('Temperaturebar').style.backgroundColor=data[1].Dev_Color;
+                document.getElementById('ticon').style.backgroundColor=data[1].Dev_Color;
                 var tempbarwar = document.getElementById('Temperaturebar');
                 if (tempbarwar.classList.contains('warning')) {
-                    tempbarwar.classList.remove('warning');
-                }
-                document.getElementById('Temperaturebar').style.width =  temperatureValue+"%";
-                if(temperatureValue >= "60"){document.getElementById('Temperaturebar').style.backgroundColor="red";
-                tempbarwar.classList.add("warning");
-                document.getElementById('ticon').style.backgroundColor="red";
-                document.getElementById('Temperature').style.color="red"}
-                else if(temperatureValue >= "30"){document.getElementById('Temperaturebar').style.backgroundColor="orange";
-                document.getElementById('ticon').style.backgroundColor="orange";}
-                else if(temperatureValue >= "15"){document.getElementById('Temperaturebar').style.backgroundColor="rgb(81, 159, 226)";
-                document.getElementById('ticon').style.backgroundColor="rgb(81, 159, 226)";}
-                else {document.getElementById('Temperaturebar').style.backgroundColor="rgb(3, 209, 255)";
-                document.getElementById('ticon').style.backgroundColor="rgb(3, 209, 255)";}
-
+                    tempbarwar.classList.remove('warning');}
+                if(temperatureValue >= "60"){tempbarwar.classList.add("warning");
+                    document.getElementById('Temperature').style.color="red"}
                 
+
+
                 var soundValue = data[2].device_values;
                 $('#Sound').text(soundValue+"%");
                 document.getElementById('Soundbar').style.width =  soundValue+"%";
-                if(soundValue >= "60"){document.getElementById('Soundbar').style.backgroundColor="rgb(255, 53, 53)";}
-                else if(soundValue >= "30"){document.getElementById('Soundbar').style.backgroundColor="orange";}
-                else if(soundValue >= "15"){document.getElementById('Soundbar').style.backgroundColor="rgb(81, 159, 226)";}
-                else {document.getElementById('Soundbar').style.backgroundColor="rgb(3, 209, 255)";}
+                document.getElementById('Soundbar').style.backgroundColor=data[2].Dev_Color;
 
 
                 var co2Value = data[3].device_values;
                 document.getElementById('co2').style.color="black"
                 $('#co2').text(co2Value+"%");
                 document.getElementById('co2bar').style.width =  co2Value+"%";
+                document.getElementById('co2bar').style.backgroundColor=data[3].Dev_Color;
+                document.getElementById('co2icon').style.backgroundColor=data[3].bgicon;
                 var co2WarningIcon = document.getElementById('co2bar');
                 if (co2WarningIcon.classList.contains('warning')) {co2WarningIcon.classList.remove('warning');}
+
                 if(co2Value >= "20"){
                 co2WarningIcon.classList.add('warning');
-                document.getElementById('co2bar').style.backgroundColor="rgb(255, 53, 53)";
-                document.getElementById('co2').style.color="rgb(255, 53, 53)";
-                document.getElementById('co2icon').style.backgroundColor="rgb(255, 53, 53)"}
-                else if(co2Value >= "5"){document.getElementById('co2bar').style.backgroundColor="orange";
-                document.getElementById('co2icon').style.backgroundColor="orange"}
-                else if(co2Value >= "2" && co2Value <= "4"){document.getElementById('co2bar').style.backgroundColor="rgb(81, 159, 226)";
-                document.getElementById('co2icon').style.backgroundColor="rgb(81, 159, 226)"}
-                else {document.getElementById('co2bar').style.backgroundColor="rgb(3, 209, 255)";
-                document.getElementById('co2icon').style.backgroundColor="violet"
-                document.getElementById('co2icon').style.color="white"}
+                document.getElementById('co2').style.color="rgb(255, 53, 53)";}
 
 
                 var rainValue = data[4].device_values;
                 $('#rain').text(rainValue+"%");
                 document.getElementById('rainbar').style.width =  rainValue+"%";
-                if(rainValue > "50"){document.getElementById('rainbar').style.backgroundColor="rgb(0, 255, 174)";
-                document.getElementById('rainicon').style.backgroundColor="rgb(0, 255, 174)";
-                document.getElementById('rainicon').style.color="black"}
-                else if(rainValue < "50"){document.getElementById('rainbar').style.backgroundColor="yellow";
-                document.getElementById('rainicon').style.color="black"
-                document.getElementById('rainicon').style.backgroundColor="yellow"}
-                else {document.getElementById('rainbar').style.backgroundColor="rgb(81, 159, 226)";
-                document.getElementById('rainicon').style.backgroundColor="rgb(81, 159, 226)";
-                document.getElementById('rainicon').style.color="white"}
-                var iconElement = document.getElementById('rainnew');
-                if(rainValue >= "75"){iconElement.setAttribute('name', 'rainy-outline');}
-                else if(rainValue >= "50"){iconElement.setAttribute('name', 'cloudy-outline');}
-                else if(rainValue >= "30"){iconElement.setAttribute('name', 'partly-sunny-outline');}
-                else {iconElement.setAttribute('name', 'sunny-outline');}
+                document.getElementById('rainbar').style.backgroundColor=data[4].Dev_Color;
+                document.getElementById('rainicon').style.backgroundColor=data[4].Dev_Color;
+                document.getElementById('rainicon').style.color=data[4].Icon_color;
+                document.getElementById('rainnew').setAttribute('name', data[4].Icon)
                 
+
+
+
                 var windValue = data[5].device_values;
                 per=(180/30)*windValue;
                 var windarrow = document.getElementById('windbar');
@@ -558,25 +535,14 @@
                 if(per<=0){per=0}
                 else if(per>=180){per=180}
                 $('#winds').text(windValue+"km/h");
-                if(windValue>18){windarrow.classList.add('speedwarning');}
                 document.getElementById('windicon').style.color="white";
                 document.getElementById('windbar').style.transform =  "rotate("+per+"deg)";
                 tr1=per-45
                 var levels1=document.getElementById('ficr')
                 levels1.style.transform =  "rotate("+tr1+"deg)";
                 document.getElementById('scecr').style.transform =  "rotate("+(tr1*-1)+"deg)";
-
-                if(windValue>=25)
-                {document.getElementById('windicon').style.backgroundColor="red";
-                levels1.style.borderBottom = onbar1;
-                levels1.style.borderRight = onbar1;}
-                else if(windValue>12){document.getElementById('windicon').style.backgroundColor="orange";
-                levels1.style.borderBottom = onbar1;
-                levels1.style.borderRight = offbar1;}
-                else{ document.getElementById('windicon').style.backgroundColor="rgb(0, 255, 174)";
-                levels1.style.borderBottom = offbar1;
-                levels1.style.borderRight = offbar1;
-                document.getElementById('windicon').style.color="black";}
+                levels1.style.borderBottom=data[5].barbottom;
+                levels1.style.borderRight = data[5].barrigth;
                 if(barcount!=windValue)
                 {   document.getElementById('powerhigh1').innerHTML = '';
                     document.getElementById('powerhigh2').innerHTML = '';
@@ -587,10 +553,7 @@
                 var no2Value = data[6].device_values;
                 $('#no2').text(no2Value+"%");
                 document.getElementById('no2bar').style.width =  no2Value+"%";
-                if(no2Value >= "20"){document.getElementById('no2bar').style.backgroundColor="rgb(255, 53, 53)";}
-                else if(no2Value >= "10"){document.getElementById('no2bar').style.backgroundColor="orange";}
-                else if(no2Value >= "5"){document.getElementById('no2bar').style.backgroundColor="rgb(81, 159, 226)";}
-                else {document.getElementById('no2bar').style.backgroundColor="rgb(3, 209, 255)";}
+                document.getElementById('no2bar').style.backgroundColor=data[6].Dev_Color;
 
 
                 var atmValue = data[7].device_values;
@@ -610,35 +573,16 @@
                     if(atmValue<900){createatmLevels(0,atmValue,1);}
                     else{createatmLevels(900,atmValue,0);}
                 }
+                levelbar2.style.borderBottom = data[7].barbottom;
+                levelbar2.style.borderRight = data[7].barrigth;
                     
-                if(atmValue>=1013){
-                    levelbar2.style.borderBottom = onbar2;
-                    levelbar2.style.borderRight = onbar2;
-                    
-                }
-                else if(atmValue>=980){
-                    levelbar2.style.borderBottom = onbar2;
-                    levelbar2.style.borderRight = offbar2;
-                }
-                else{
-                    if(atmValue>=1100/2)
-                    {
-                        levelbar2.style.borderBottom = onbar2;
-                        levelbar2.style.borderRight = offbar2;
-                    }
-                    else{levelbar2.style.borderBottom = offbar2;
-                    levelbar2.style.borderRight = offbar2;}}
+                
 
 
                 var uvrays = data[8].device_values;
                 $('#uvs').text(uvrays+"%");
                 document.getElementById('uvsbar').style.width =  uvrays+"%";
-                if(uvrays>=40){
-                    document.getElementById('uvsbar').style.backgroundColor="red";
-                }
-                else{
-                    document.getElementById('uvsbar').style.backgroundColor="rgb(81, 159, 226)";
-                }
+                document.getElementById('uvsbar').style.backgroundColor=data[8].Dev_Color;
 
 
                 var winddir = data[9].device_values;
@@ -667,6 +611,8 @@
                 var air = data[10].device_values;
                 $('#airq').text(air+"%");
                 document.getElementById('airqbar').style.width =  air+"%";
+                document.getElementById('airqbar').style.backgroundColor=document.getElementById('theaq').style.backgroundColor=data[10].Dev_Color;
+                
                 
             }
 

@@ -18,80 +18,126 @@ graphdate=timezone.localdate()
 totaldate=timezone.localdate()
 
 device_limits = {
-        'limits': [{
+        'limits': [{ #0 default
             'High': 20,
             'Mid': 10,
             'Low': 5
         },
         {
-            'High': 30,
-            'Mid': 20,
-            'Low': 15
+            #1 Humidity Sensor
+            'HighColor':"red",
+            'High': 60,
+            'MtoHColor':"orange",
+            'Mid': 30,
+            'LtoMColor':"rgb(81, 159, 226)",
+            'Low': 15,
+            'LowColor':"rgb(3, 209, 255)"
         },
         {
-            'High': 30,
-            'Mid': 50,
-            'Low': 15
+            #2 Temperature Sensor
+            'HighColor':"red",
+            'High': 60,
+            'MtoHColor':"orange",
+            'Mid': 30,
+            'LtoMColor':"rgb(81, 159, 226)",
+            'Low': 15,
+            'LowColor':"rgb(3, 209, 255)"
         },
         {
-            'High': 30,
-            'Mid': 250,
-            'Low': 15
+            #3 Sound Sensor
+            'HighColor':"red",
+            'High': 60, 
+            'MtoHColor':"orange",
+            'Mid': 30,
+            'LtoMColor':"rgb(81, 159, 226)",
+            'Low': 15,
+            'LowColor':"rgb(3, 209, 255)"
         },{
-            'High': 20,
-            'Mid': 10,
-            'Low': 5
+            #4 Co2 Sensor
+            'HighColor':"rgb(255, 53, 53)",
+            'High': 20, 
+            'MtoHColor':"orange",
+            'Mid': 5,
+            'LtoMColor':"rgb(81, 159, 226)",
+            'Low': 2,
+            'LowColor':"rgb(3, 209, 255)"
         },
         {
-            'High': 30,
-            'Mid': 20,
-            'Low': 15
-        },
-        {
-            'High': 30,
+            #5 Chance of Rain
+            'HighColor':"rgb(0, 255, 174)",
+            'High': 75, 
+            'MtoHColor':"orange",
             'Mid': 50,
-            'Low': 15
+            'LtoMColor':"rgb(81, 159, 226)",
+            'Low': 30,
+            'LowColor':"yellow"
         },
         {
-            'High': 30,
-            'Mid': 250,
-            'Low': 15
+            #6 Wind Speed sensor
+            'HighColor':"red",
+            'High': 25, 
+            'MtoHColor':"orange",
+            'Mid': 12,
+            'LtoMColor':"rgb(81, 159, 226)",
+            'Low': 5,
+            'LowColor':"rgb(3, 209, 255)"
         },
         {
-            'High': 30,
-            'Mid': 250,
-            'Low': 15
+            #7 NO2 Sensor
+            'HighColor':"red",
+            'High': 20, 
+            'MtoHColor':"orange",
+            'Mid': 10,
+            'LtoMColor':"rgb(81, 159, 226)",
+            'Low': 5,
+            'LowColor':"rgb(3, 209, 255)"
+        },
+        {
+            #8 Atmospheric Pressure
+            'HighColor':"red",
+            'High': 1013, 
+            'MtoHColor':"orange",
+            'Mid': 980,
+            'LtoMColor':"rgb(81, 159, 226)",
+            'Low': 550,
+            'LowColor':"rgb(3, 209, 255)"
         },{
-            'High': 20,
-            'Mid': 10,
-            'Low': 5
-        },
-        {
-            'High': 30,
+            #9 UV Sensor
+            'HighColor':"red",
+            'High': 40, 
+            'MtoHColor':"orange",
             'Mid': 20,
-            'Low': 15
+            'LtoMColor':"rgb(81, 159, 226)",
+            'Low': 10,
+            'LowColor':"rgb(3, 209, 255)"
         },
         {
-            'High': 30,
-            'Mid': 50,
-            'Low': 15
+            #10 Wind Direction
+            'HighColor':"red",
+            'High': 10000, 
+            'MtoHColor':"orange",
+            'Mid': 10000,
+            'LtoMColor':"rgb(81, 159, 226)",
+            'Low': 10000,
+            'LowColor':"rgb(3, 209, 255)"
         },
         {
-            'High': 30,
-            'Mid': 250,
-            'Low': 15
+            #11 Air Quality
+            'HighColor':"red",
+            'High': 30, 
+            'MtoHColor':"orange",
+            'Mid': 20,
+            'LtoMColor':"rgb(0, 255, 174)",
+            'Low': 15,
+            'LowColor':"rgb(3, 209, 255)"
         }
     ]
 }
-device_icon = ["","cloudy","thermometer","volume-high-outline","warning-outline","umbrella-outline","speedometer-outline","logo-electron","contract-outline","warning-outline","compass-outline","balloon"]
+device_icon = ["","cloudy-outline","thermometer-outline","volume-high-outline","warning-outline","umbrella-outline","speedometer-outline","logo-electron","contract-outline","warning-outline","compass-outline","balloon"]
 
 def home(request):
-    k=1
-    current_date=timeupdate(k)
-    result=datacollection(current_date)
-    bdata = {'weather_data': result}
     datevalue = totaldate.strftime('%Y-%m-%d')
-    return render(request, 'Station/templates/index.html',{'database':bdata,'tdate':datevalue})
+    return render(request, 'Station/templates/index.html',{'tdate':datevalue})
 
 
 def viewmoredetails(request):
@@ -314,35 +360,6 @@ def today(request):
     return JsonResponse( timeandall,safe=False)
 
 
-def datacollection(ar):
-    current_date=ar
-    distinct_devices = Devices_details.objects.values('device_id').distinct()
-
-    result = []
-
-    for device in distinct_devices:
-        device_id = device['device_id']
-        latest_record = Data_store.objects.filter(
-            device_id=device_id,
-            date_time__date=current_date
-        ).order_by('-date_time').first()
-
-        if latest_record:
-            result.append({
-                'device_id': latest_record.device_id,
-                'date_time': latest_record.date_time,
-                'device_values': latest_record.device_values
-            })
-        else:
-            result.append({
-                'device_id': device_id,
-                'date_time': None,
-                'device_values': 0
-            })
-    result.sort(key=lambda x: x['device_id'])
-    return result
-
-
 
 
 def gdatacal(request):
@@ -363,25 +380,97 @@ def livedatasend(request):
     distinct_devices = Devices_details.objects.values('device_id').distinct()
 
     result = []
-
+    
     for device in distinct_devices:
+        barbottom="5px solid rgb(194, 194, 194)"
+        barrigth="5px solid rgb(194, 194, 194)"
+        iconco="white"
+        iconbg="rgb(81, 159, 226)"
+        icon="sunny-outline"
         device_id = device['device_id']
+        color="rgb(81, 159, 226)"
         latest_record = Data_store.objects.filter(
             device_id=device_id,
             date_time__date=current_date
         ).order_by('-date_time').first()
 
         if latest_record:
+            High=device_limits['limits'][device_id]['High']
+            mid=device_limits['limits'][device_id]['Mid']
+            low=device_limits['limits'][device_id]['Low']
+            if device_id==5:
+                if latest_record.device_values>50:
+                    color=device_limits['limits'][device_id]['HighColor']
+                    iconco="black"
+                elif latest_record.device_values<50:
+                    color=color=device_limits['limits'][device_id]['LowColor']
+                    iconco="black"
+                else:
+                    color=color=device_limits['limits'][device_id]['LtoMColor']
+                    iconco="white"
+                if latest_record.device_values>=75:
+                    icon="rainy-outline"
+                elif latest_record.device_values>=50:
+                    icon="cloudy-outline"
+                elif latest_record.device_values>=30:
+                    icon="partly-sunny-outline"
+                else:
+                    icon="sunny-outline"
+            elif device_id==3:
+                if latest_record.device_values >=High:
+                    color=device_limits['limits'][device_id]['HighColor']
+                elif latest_record.device_values >=mid:
+                    color=device_limits['limits'][device_id]['MtoHColor']
+                elif latest_record.device_values >=low:
+                    color=device_limits['limits'][device_id]['LtoMColor']
+                else:
+                    color=device_limits['limits'][device_id]['LowColor']
+
+            else:
+                if latest_record.device_values >=High:
+                    if device_id==4:
+                        iconbg="red"
+                    if device_id==6 or device_id==8:
+                        barbottom="5px solid rgb(6, 116, 212)"
+                        barrigth="5px solid rgb(6, 116, 212)"
+                    color=device_limits['limits'][device_id]['HighColor']
+                elif latest_record.device_values >=mid:
+                    if device_id==6 or device_id==8:
+                        barbottom="5px solid rgb(6, 116, 212)"
+                    color=device_limits['limits'][device_id]['MtoHColor']
+                elif latest_record.device_values >=low:
+                    if device_id==8:
+                        barbottom="5px solid rgb(6, 116, 212)"
+                    color=device_limits['limits'][device_id]['LtoMColor']
+                else:
+                    if device_id==4:
+                        iconbg="violet"
+                    color=device_limits['limits'][device_id]['LowColor']
+
             result.append({
                 'device_id': latest_record.device_id,
                 'date_time': latest_record.date_time,
-                'device_values': latest_record.device_values
+                'device_values': latest_record.device_values,
+                'Dev_Color':color,
+                'Icon_color':iconco,
+                'Icon':icon,
+                'bgicon':iconbg,
+                'barbottom':barbottom,
+                'barrigth':barrigth
+                
             })
         else:
             result.append({
                 'device_id': device_id,
                 'date_time': None,
-                'device_values': 0
+                'device_values': 0,
+                'Dev_Color':color,
+                'Icon_color':iconco,
+                'Icon':icon,
+                'bgicon':iconbg,
+                'barbottom':barbottom,
+                'barrigth':barrigth
+                
             })
     result.sort(key=lambda x: x['device_id'])
     return JsonResponse(result,safe=False)

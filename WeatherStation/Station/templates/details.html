@@ -7,9 +7,9 @@
   <div class="details_block">
     <div class="deatils_header">
       <div class="back1">
-        <a href="/"><ion-icon name="arrow-back-outline"></ion-icon></a>
+        <a style="margin-left: 10px;" href="/"><ion-icon name="arrow-back-outline"></ion-icon></a>
       </div>
-      <select onchange="perdevicedeatils(this)" name="TheDevice" id="deviceid">
+      <select style="margin-right: 10px;" onchange="perdevicedeatils(this)" name="TheDevice" id="deviceid">
         <option value="404">All</option>
         {% for devicesdatas in Devices %}
         <option value="{{ devicesdatas.device_id }}">
@@ -57,6 +57,7 @@
         delays=5000
         var k = 0;
         var perchart;
+        symbols_data=["","%","°","%","%","%","km/h","%","hPa","%","°","%"]
         device_icon = [
           "",
           "cloudy-outline",
@@ -121,6 +122,9 @@
             lastdate2 = gradata[6].date;
           }
           maxvalue = 0;
+          maxvalue_date="";
+          maxvalue_symbol="";
+          maxvalue_device="";
           if (id != 404) {
             mch = 0;
             for (i = 0; i < gradata.length; i++) {
@@ -136,7 +140,11 @@
               the_new_div.appendChild(valdata);
 
               if (gradata[i].value > maxvalue) {
+                maxvalue_date=gradata[i].date;
+                maxvalue_device=id;
+                devicenameout = device_names[id-1];
                 maxvalue = gradata[i].value;
+                maxvalue_symbol=gradata[i].symbol;
               }
               $("#daystem" + i).text(gradata[i].value + gradata[i].symbol);
               var iconElement = document.getElementById("rainic" + i);
@@ -151,7 +159,6 @@
               }
               newitemarray[i] = gradata[i].value;
             }
-            $("#maxvalue").text(maxvalue + gradata[1].symbol);
             let labels = newlabelarray;
             let itemdata = newitemarray;
             if (sch == 0) {
@@ -195,10 +202,37 @@
               perchart.data.datasets[0].data = itemdata;
               perchart.update();
             }
+            topvaluesupdate(dorw,devicenameout,maxvalue,maxvalue_symbol,maxvalue_date,lastdate2)
           } else {
             const thealign = document.createElement("div");
             thealign.classList.add("grdeta");
             sch = 0;
+            maxdata={}
+            maxdata['Name']=[]
+            maxdata['Value']=[]
+            maxdata['Date']=[]
+            maxdata['symbol']=[]
+            for(dr=1;dr<12;dr++)
+            {
+              tempmax=0
+              temparray=[]
+              dedata = "Device" + dr;
+              
+              for(val=0;val<gradata.length;val++)
+              {
+                temparray[val] = gradata[val][dedata];
+                if(temparray[val]>=tempmax)
+                {
+                  tempmax=temparray[val]
+                  maxdata['Name'][dr]=device_names[dr - 1];
+                  maxdata['Value'][dr]=temparray[val];
+                  maxdata['Date'][dr]=gradata[val].date;
+                  maxdata['symbol'][dr]=symbols_data[dr];
+                }
+              }
+            }
+
+
             for (let i = 1; i < 12; i++) {
               thedata = [];
               if (i != 8 && i != 10 && i != 5 && i != 3) {
@@ -208,10 +242,14 @@
                   if (thedata[dev] > maxvalue) {
                     maxvalue = thedata[dev];
                     devicenameout = device_names[i - 1];
+                    maxvalue_date=gradata[dev].date;
+                    maxvalue_device=i;
+                    maxvalue_symbol=symbols_data[dev];
                   }
                 }
                 const thebox = document.createElement("div");
                 thebox.classList.add("colord1");
+                thebox.setAttribute("id", device_names[i - 1]);
                 const iconbox = document.createElement("div");
                 iconbox.classList.add("coloricon");
                 const icons = document.createElement("ion-icon");
@@ -234,7 +272,6 @@
                 } else {
                   color2 = "white";
                 }
-                $("#maxvalue").text(maxvalue + devicenameout);
                 textbox.style.color = color2;
                 the_new_div.appendChild(thealign);
                 icons.setAttribute("name", device_icon[i]);
@@ -307,7 +344,11 @@
               perchart.data.datasets = datasets;
               perchart.update();
             }
+            updatemain(maxdata)
+            topvaluesupdate(dorw,maxdata['Name'][trar],maxdata['Value'][trar],maxdata['symbol'][trar],maxdata['Date'][trar],lastdate2)
           }
+          
+          
         }
         function isLight(color) {
           var match = color.match(/\d+/g);
@@ -445,7 +486,20 @@
     </div>
   </div>
   <div class="otherdetails">
-    <div id="maxvalue" class="theprdetailsbox"></div>
+    <div  class="theprdetailsbox">
+      <div class="t2subhead">
+        <b>Max Value Recorded</b>
+      </div>
+      <div  class="t2body">
+        <div onclick="checkvalue(0,tempid,dorw,lastdate2)"  class="leftmov"><ion-icon id="leftgo"  name="chevron-back-outline"></ion-icon></div>
+        <div class="valuesbo">
+          <div id="de_name" class="bodytitle"></div>
+          <div id="de_value" class="bodybo"></div>
+          <div id="de_date" class="bodyfooter"></div>
+        </div>
+        <div onclick="checkvalue(1,tempid,dorw,lastdate2)"  class="rigthmov"><ion-icon id="rigthgo"  name="chevron-forward-outline"></ion-icon></div>
+      </div>
+    </div>
     <div class="theprdetailsbox"></div>
     <div class="theprdetailsbox"></div>
   </div>
