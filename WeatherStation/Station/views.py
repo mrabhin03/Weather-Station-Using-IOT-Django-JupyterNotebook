@@ -10,12 +10,30 @@ from django.db.models import DateTimeField
 from django.db.models.functions import Coalesce
 from django.db.models import Subquery, OuterRef
 from datetime import datetime
+from joblib import load
+import numpy as np
 from django.http import JsonResponse
 from datetime import time as dt_time
 current_date_time_datetime = datetime.now()
 
 graphdate=timezone.localdate()
 totaldate=timezone.localdate()
+
+device_names = [
+            "",
+          "Humidity",
+          "Temperature",
+          "Sound",
+          "Co2",
+          "Chance of Rain",
+          "Wind Speed",
+          "NO2",
+          "Atmospheric Pressure",
+          "UV",
+          "Wind Direction",
+          "Air Quality",
+        ]
+
 
 device_limits = {
         'limits': [{ #0 default
@@ -135,13 +153,25 @@ device_limits = {
 }
 device_icon = ["","cloudy-outline","thermometer-outline","volume-high-outline","warning-outline","umbrella-outline","speedometer-outline","logo-electron","contract-outline","warning-outline","compass-outline","balloon"]
 
+
+model=load('./TheModel/model.joblib')
+
 def home(request):
+    input=(0.0164,0.0173,0.0347,0.0070,0.0187,0.0671,0.1056,0.0697,0.0962,0.0251,0.0801,0.1056,0.1266,0.0890,0.0198,0.1133,0.2826,0.3234,0.3238,0.4333,0.6068,0.7652,0.9203,0.9719,0.9207,0.7545,0.8289,0.8907,0.7309,0.6896,0.5829,0.4935,0.3101,0.0306,0.0244,0.1108,0.1594,0.1371,0.0696,0.0452,0.0620,0.1421,0.1597,0.1384,0.0372,0.0688,0.0867,0.0513,0.0092,0.0198,0.0118,0.0090,0.0223,0.0179,0.0084,0.0068,0.0032,0.0035,0.0056,0.0040)
+    input_array = np.asarray(input, dtype=float)
+    reshaped_input = input_array.reshape(1, -1)
+    output_data = model.predict(reshaped_input)
+    if(output_data[0]=="R"):
+        thepre="Rock"
+    else:
+        thepre="Mine"
+    print(thepre)
     datevalue = totaldate.strftime('%Y-%m-%d')
     return render(request, 'Station/templates/index.html',{'tdate':datevalue})
 
 
 def viewmoredetails(request):
-    devices_data = Devices_details.objects.values()
+    devices_data = Devices_details.objects.filter(device_id__in=[3,5,8]).values()
     return render(request,'Station/templates/details.html',{'Devices':devices_data})
 
 def deviceonlydata(request):
@@ -209,12 +239,14 @@ def device_only_day(current_date,device_id,High,mid,low):
     device=[]
     icon=[]
     icon_data = device_icon[device_id]
-    if device_id==2 or device_id==10:
+    if device_id==2:
         symbol="°"
     elif device_id==8:
         symbol="hPa"
     elif device_id==6:
         symbol="km/h"
+    elif device_id==11:
+        symbol="AQI"
     else:
         symbol="%"
     times=[3,6,9,12,15,18,21,24]
@@ -244,7 +276,7 @@ def device_only_day(current_date,device_id,High,mid,low):
             icon.append("rgb(81, 159, 226)")
         else:
             icon.append("rgb(3, 209, 255)")
-    output = [{'date': times, 'value': device, 'icons': icon_data,'color':icon,'symbol':symbol} for times, device,icon in zip(times, device,icon)]
+    output = [{'date': times, 'value': device, 'icons': icon_data,'color':icon,'symbol':symbol,'ID':device_id} for times, device,icon in zip(times, device,icon)]
     return output
 
 
@@ -280,8 +312,10 @@ def device_only_week(current_date,device_id,High,mid,low):
         symbol="hPa"
     elif device_id==6:
         symbol="km/h"
+    elif device_id==11:
+        symbol="AQI"
     else:
-        symbol="%"
+        symbol="QW"
     for i in range(6, -1, -1):
         day = current_date - timedelta(days=i)
         dates.append(day)
@@ -297,7 +331,7 @@ def device_only_week(current_date,device_id,High,mid,low):
             icon.append("rgb(81, 159, 226)")
         else:
             icon.append("rgb(3, 209, 255)")
-    output = [{'date': dates, 'value': device, 'icons': icon_data,'color':icon,'symbol':symbol} for dates, device,icon in zip(dates, device,icon)]
+    output = [{'date': dates, 'value': device, 'icons': icon_data,'color':icon,'symbol':symbol,'ID':device_id} for dates, device,icon in zip(dates, device,icon)]
     return output
 
 
@@ -366,10 +400,11 @@ def gdatacal(request):
     newdate = request.GET.get('grdates', None)
     dayorweek = int(request.GET.get('dorw', None))
     current_date= datetime.strptime(newdate, "%Y-%m-%d").date()
+    Did = request.GET.get('Device_id', None)
     if dayorweek==1:
-        output=grweekdata(current_date)
+        output=grweekdata(current_date,Did)
     else:
-        output=grdaydata(current_date)
+        output=grdaydata(current_date,Did)
     
     return JsonResponse( output,safe=False)
 
@@ -478,14 +513,24 @@ def livedatasend(request):
 
 
 
-def grweekdata(current_date):
+def grweekdata(current_date,did):
     dates = []
     device2 = []
     device5 = []
+    deviceid=int(did)
+    if deviceid==2:
+        symbol="°"
+    elif deviceid==8:
+        symbol="hPa"
+    elif deviceid==6:
+        symbol="km/h"
+    else:
+        symbol="%"
+    device_name=device_names[deviceid]
     for i in range(6, -1, -1):
         day = current_date - timedelta(days=i)
         dates.append(day)
-        sql1 = Data_store.objects.filter(device_id=2, date_time__date=day).order_by('-date_time').first()
+        sql1 = Data_store.objects.filter(device_id=did, date_time__date=day).order_by('-date_time').first()
         value1 = sql1.device_values if sql1 else 0
         device2.append(value1)
         sql2 = Data_store.objects.filter(device_id=5, date_time__date=day).order_by('-date_time').first()
@@ -503,12 +548,22 @@ def grweekdata(current_date):
         else:
             rain="sunny-outline"
         ra.append(rain)
-    output = [{'date': dates, 'value1': device2, 'value2': ra} for dates, device2, ra in zip(dates, device2, ra)]
+    output = [{'date': dates, 'value1': device2, 'value2': ra,'Names':device_name,'Symbols':symbol} for dates, device2, ra in zip(dates, device2, ra)]
     return output
 
-def grdaydata(current_date):
+def grdaydata(current_date,did):
     device2 = []
     device5 = []
+    deviceid=int(did)
+    if deviceid==2:
+        symbol="°"
+    elif deviceid==8:
+        symbol="hPa"
+    elif deviceid==6:
+        symbol="km/h"
+    else:
+        symbol="%"
+    device_name=device_names[deviceid]
     times=[3,6,9,12,15,18,21,24]
     per=0
     tmin=0
@@ -522,7 +577,7 @@ def grdaydata(current_date):
         end_time = dt_time(hour=hor, minute=tmin)
         per=time
         sql1 = Data_store.objects.filter(
-        device_id=2,
+        device_id=did,
         date_time__date=current_date,
         date_time__time__range=(start_time, end_time)
         ).order_by('-date_time').first()
@@ -548,5 +603,5 @@ def grdaydata(current_date):
         else:
             rain="sunny-outline"
         ra.append(rain)
-    output = [{'date': times, 'value1': device2, 'value2': ra} for times, device2, ra in zip(times, device2, ra)]
+    output = [{'date': times, 'value1': device2, 'value2': ra,'Names':device_name,'Symbols':symbol} for times, device2, ra in zip(times, device2, ra)]
     return output

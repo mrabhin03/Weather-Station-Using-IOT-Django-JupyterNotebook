@@ -15,14 +15,17 @@
             var lastdate1=thedatefor;
             var lastdate2=thedatefor;
             var dayvalue=thedatefor
-            var dorw=1;
+            var dorw=0;
+            var didval=2;
+            
             
             
         </script>
         <div class="main">
             <div class="temperature">
                 <div class="thead">
-                    <div class="sun">
+                    <div id="sun" class="sun">
+                        
                     </div>
                 </div>
                 <div class="shead">
@@ -49,18 +52,19 @@
             <div class="details">
                 <div class="details_head">
                     <div>
-                        <div><b>Welcome to weather station</b></div>
+                        <div><b>Welcome to weather station {{ predata }}</b></div>
                         <div>Check out Today's weather information</div>
                     </div>
                 </div>
                 <div class="details_div1">
-                    <div>
+                    <div onclick="homegraphdata(0,this)" class="grpoption2"><ion-icon id="homeswitch" name="chevron-back-outline"></ion-icon></div>
+                    <div class="gr">
                         <div class="graphtitle">
-                            <div id="mainweekday" class="transfer">Weekly data</div>
+                            <div id="mainweekday" class="transfer">Today's Temperature</div>
                             <div class="barhead">
-                                <div><b> <button onclick="theweekchange()" id="weekorday">Weekly weather</button></b></div>
-                                <div><button onclick="dateupdations(1)" id='submitBtnpre' name='updatedata'>Previous week</button>
-                                    <button onclick="dateupdations(2)" id='submitBtnnex' name='updatedata'>Next week</button></div>
+                                <div><b> <button onclick="theweekchange()" id="weekorday">Daily weather</button></b></div>
+                                <div><button onclick="dateupdations(1)" id='submitBtnpre' name='updatedata'>Previous Day</button>
+                                    <button onclick="dateupdations(2)" id='submitBtnnex' name='updatedata'>Next Day</button></div>
                             </div>
                             <div id="thegrlabel" class="barlabel">
                                 
@@ -70,13 +74,24 @@
                             <canvas id="graphdisplay" ></canvas>
                         </div>
                     </div>
+                    <div onclick="homegraphdata(1,this)" class="grpoption2"><ion-icon id="homeswitch" name="chevron-forward-outline"></ion-icon></div>
                 </div>
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script>
+                    sunchange()
+                    function sunchange(){
+                        var today = new Date();
+                        const currentHour = today.getHours();
+                        if (currentHour >= 18) {
+                            sun=document.getElementById('sun');
+                        }
+                    }
                     var k=0
                     var chart
+                    newitemarray2=[]
                     function graph(gradata)
                     {
+                        const datasets = [];
                         themaingraphlabel=document.getElementById('thegrlabel')
                         themaingraphlabel.innerHTML = '';
                         newlabelarray=[];
@@ -97,7 +112,7 @@
                             valdata.appendChild(dayst);
                             themaingraphlabel.appendChild(valdata);
                             if(gradata[i].value1==0){$('#daystem'+i).text("---");}
-                            else{$('#daystem'+i).text(gradata[i].value1+"°");}
+                            else{$('#daystem'+i).text(gradata[i].value1+gradata[0].Symbols);}
                             
                             var iconElement = document.getElementById('rainic'+i);
                             iconElement.setAttribute('name', gradata[i].value2);
@@ -106,21 +121,35 @@
                             else{newlabelarray[i]=gradata[i].date}
                             
                             newitemarray[i]=gradata[i].value1;
+                            newitemarray2[i]=gradata[i].value1*2;
                         }
                         let labels = newlabelarray
                         let itemdata = newitemarray
+                        let itemdata2=newitemarray2
+                        datasets.push({
+                                    label:"Main Values",
+                                    data: itemdata,
+                                    borderColor: 'rgba(100, 180, 280,1)',
+                                    fill: false,
+                                    backgroundColor: "rgba(81, 159, 226,0.2)",
+                                    tension: 0.15,
+                                    borderWidth: 3
+                        })
+                        datasets.push({
+                                    label:"Forcast Values",
+                                    data: itemdata2,
+                                    borderColor: 'rgb(180, 180, 280)',
+                                    fill: false,
+                                    backgroundColor: "rgba(81, 159, 226,0.2)",
+                                    tension: 0.15,
+                                    borderDash: [5, 5],
+                                    borderWidth: 3
+                        })
                         if(k==0)
                         {
                             const data = {
                                 labels: labels,
-                                datasets: [{
-                                    data: itemdata,
-                                    borderColor: 'rgb(100, 180, 280)',
-                                    fill: true,
-                                    backgroundColor: "rgb(81, 159, 226)",
-                                    tension: 0.15,
-                                    borderWidth: 3
-                                }]
+                                datasets: datasets
                             };
                             const config = {
                                 type: 'line',
@@ -146,6 +175,7 @@
                         else{
                             chart.data.labels = labels;
                             chart.data.datasets[0].data = itemdata;
+                            chart.data.datasets[1].data = itemdata2;
                             chart.update()
                         }
                     }
@@ -194,15 +224,13 @@
                             thevalue.textContent="Daily weather "
                             nextbutton.textContent="Next Day"
                             previousbutton.textContent="Previous Day"
-                            $('#mainweekday').text(lastdate1);
                         }
                         else{dorw=1
                             thevalue.textContent="Weekly weather"
                             nextbutton.textContent="Next week"
                             previousbutton.textContent="Previous week"
-                            $('#mainweekday').text("Weekly data");
                         }
-                        graphupdates()
+                        graphupdates(didval)
                     }
                 </script>
                 
@@ -213,7 +241,7 @@
                             <div>
                                 <div class="humditytitle">
                                     <b>Humidity</b>
-                                    <div class="icon" onclick="nextpagedata(1)"><b><ion-icon name="cloud-outline"></ion-icon></b></div>
+                                    <div class="icon" onclick="nextpagedata(404,1)"><b><ion-icon name="cloud-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="humdity">
                                     <b id="humidity">0%</b>
@@ -232,7 +260,7 @@
                             <div>
                                 <div class="temperaturetitle">
                                     <b>Temperature</b>
-                                    <div id="ticon" class="icon" onclick="nextpagedata(2)"><b><ion-icon id="tempwarningicon" name="thermometer-outline"></ion-icon></b></div>
+                                    <div id="ticon" class="icon" onclick="nextpagedata(404,2)"><b><ion-icon id="tempwarningicon" name="thermometer-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="temperatured">
                                     <b id="Temperature">0°</b>
@@ -251,7 +279,7 @@
                             <div>
                                 <div class="raintitle">
                                     <b >Chance of Rain</b>
-                                    <div class="icon" id="rainicon" onclick="nextpagedata(5)">
+                                    <div class="icon" id="rainicon" onclick="nextpagedata(5,1)">
                                         <b><ion-icon id="rainnew" name="sunny-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="rain">
@@ -273,7 +301,7 @@
                             <div>
                                 <div class="windtitle">
                                     <b >Wind Speed</b>
-                                    <div class="icon" id="windicon" onclick="nextpagedata(6)">
+                                    <div class="icon" id="windicon" onclick="nextpagedata(404,6)">
                                         <b><ion-icon name="speedometer-outline"></ion-icon></b>
                                     </div>
                                 </div>
@@ -302,7 +330,7 @@
                             <div >
                                 <div class="windirtitle">
                                     <b>Wind Direction</b>
-                                    <div class="icon" onclick="nextpagedata(10)"><b><ion-icon name="compass-outline"></ion-icon></b></div>
+                                    <div class="icon" onclick="nextpagedata(404,1)"><b><ion-icon name="compass-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="wibr">
                                     <div class="dirdata"><table style="text-align: center;">
@@ -316,7 +344,7 @@
                                             <td id="bottomdir"></td>
                                         </tr>
                                     </table></div>
-                                    <div class="dircir">
+                                    <div id="load" class="dircir">
                                         <div id="dirwbar" class="dirarrow"></div>
                                     </div>
                                     <div class="dirdata">
@@ -328,7 +356,7 @@
                             <div>
                                 <div class="atmtitle">
                                     <b >Atmospheric Pressure</b>
-                                    <div class="icon" id="atmicon" onclick="nextpagedata(8)">
+                                    <div class="icon" id="atmicon" onclick="nextpagedata(8,1)">
                                         <b><ion-icon name="contract-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="atm">
@@ -359,7 +387,7 @@
                             <div>
                                 <div class="no2title">
                                     <b>NO² Presents</b>
-                                    <div class="icon" id="no2icon" onclick="nextpagedata(7)"><b><ion-icon name="logo-electron"></ion-icon></b></div>
+                                    <div class="icon" id="no2icon" onclick="nextpagedata(404,7)"><b><ion-icon name="logo-electron"></ion-icon></b></div>
                                 </div>
                                 <div class="no2">
                                     <b id="no2">0%</b>
@@ -380,7 +408,7 @@
                             <div>
                                 <div class="co2title">
                                     <b>CO² Presents</b>
-                                    <div class="icon" id="co2icon" onclick="nextpagedata(4)"><b><ion-icon id="co2warningicon" name="warning-outline"></ion-icon></b></div>
+                                    <div class="icon" id="co2icon" onclick="nextpagedata(404,4)"><b><ion-icon id="co2warningicon" name="warning-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="co2">
                                     <b id="co2">0%</b>
@@ -400,7 +428,7 @@
                             <div>
                                 <div class="uvtitle">
                                     <b>UV Sensor</b>
-                                    <div class="icon" id="co2icon" onclick="nextpagedata(9)"><b><ion-icon name="warning-outline"></ion-icon></b></div>
+                                    <div class="icon" id="co2icon" onclick="nextpagedata(404,9)"><b><ion-icon name="warning-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="uvs">
                                     <b id="uvs">0%</b>
@@ -421,7 +449,7 @@
                             <div>
                                 <div class="soundtitle">
                                     <b>Sound</b>
-                                    <div class="icon" onclick="nextpagedata(3)"><b><ion-icon name="volume-high-outline"></ion-icon></b></div>
+                                    <div class="icon" onclick="nextpagedata(3,1)"><b><ion-icon name="volume-high-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="sound">
                                     <b id="Sound">0%</b>
@@ -441,7 +469,7 @@
                             <div>
                                 <div class="airqtitle">
                                     <b>Air Quality</b>
-                                    <div id="theaq" class="icon" onclick="nextpagedata(11)">
+                                    <div id="theaq" class="icon" onclick="nextpagedata(404,11)">
                                         <b><ion-icon name="balloon"></ion-icon></b></div>
                                 </div>
                                 <div class="airq">
@@ -711,23 +739,37 @@
                 });
             }
             
-            function graphupdates() {
+            var updateTimer;
+
+            function graphupdates(dv_id) {
+                if (updateTimer) {
+                    clearTimeout(updateTimer);
+                }
                 $.ajax({
                     url: '/graph_data/',
                     method: 'GET',
-                    data: { 'grdates': lastdate1,'dorw':dorw }, 
+                    data: { 'grdates': lastdate1, 'dorw': dorw, 'Device_id': dv_id }, 
                     dataType: 'json',
                     success: function (data) {
-                        graph(data)
+                        if(lastdate1==thedatefor && dorw==0){
+                            $('#mainweekday').text("Today's "+data[0].Names+" ");}
+                        else if(dorw==1){$('#mainweekday').text("Weekly "+data[0].Names+" ");}
+                        else if(dorw==0){$('#mainweekday').text(lastdate1+" "+data[0].Names+" ");}
+                        graph(data);
                     },
                     error: function (error) {
                         console.error('Error fetching live data:', error);
                     },
                     complete: function () {
-                        setTimeout(graphupdates, delays);
+                        
+                        updateTimer = setTimeout(function() {
+                            graphupdates(dv_id);
+                        }, 5000);
                     }
                 });
             }
+
+
             function dateupdations(val) {
                 para=val
                 $.ajax({
@@ -738,8 +780,7 @@
                     dataType: 'json',
                     success: function (data) {
                         lastdate1=data;
-                        if(dorw==0){$('#mainweekday').text(lastdate1);}
-                        graphupdates();
+                        graphupdates(didval);
                     },
                     error: function (error) {
                         console.error('Error fetching new date:', error);
@@ -763,7 +804,7 @@
                 });
             }
             
-            graphupdates();
+            graphupdates(didval);
             
             fullalldaydata();
 

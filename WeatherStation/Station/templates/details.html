@@ -1,15 +1,18 @@
-
-{% extends 'index.html' %}
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-{% block details %}
-<div  class="viewdetails">
+{% extends 'index.html' %} {% block details %}
+<div class="viewdetails">
   <div class="details_block">
     <div class="deatils_header">
       <div class="back1">
-        <a style="margin-left: 10px;" href="/"><ion-icon name="arrow-back-outline"></ion-icon></a>
+        <a style="margin-left: 10px" href="/"
+          ><ion-icon name="arrow-back-outline"></ion-icon
+        ></a>
       </div>
-      <select style="margin-right: 10px;" onchange="perdevicedeatils(this)" name="TheDevice" id="deviceid">
+      <select
+        style="margin-right: 10px"
+        onchange="perdevicedeatils(this)"
+        name="TheDevice"
+        id="deviceid"
+      >
         <option value="404">All</option>
         {% for devicesdatas in Devices %}
         <option value="{{ devicesdatas.device_id }}">
@@ -20,12 +23,12 @@
     </div>
     <div class="details_graph">
       <div class="prgraphtitle">
-        <div id="mainweekday" class="transfer">Weekly data</div>
+        <div id="mainweekday" class="transfer">Today's data</div>
         <div class="prbarhead">
           <div>
             <b
               ><button onclick="pertheweekchange()" id="weekorday">
-                Weekly weather
+                Daily weather
               </button></b
             >
           </div>
@@ -35,14 +38,14 @@
               id="submitBtnpre"
               name="updatedata"
             >
-              Previous week
+              Previous Day
             </button>
             <button
               onclick="dateupdations(2,0)"
               id="submitBtnnex"
               name="updatedata"
             >
-              Next week
+              Next Day
             </button>
           </div>
         </div>
@@ -54,10 +57,23 @@
       </div>
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <script>
-        delays=5000
+        delays = 5000;
         var k = 0;
         var perchart;
-        symbols_data=["","%","°","%","%","%","km/h","%","hPa","%","°","%"]
+        symbols_data = [
+          "",
+          "%",
+          "°",
+          "%",
+          "%",
+          "%",
+          "km/h",
+          "%",
+          "hPa",
+          "%",
+          "°",
+          "%",
+        ];
         device_icon = [
           "",
           "cloudy-outline",
@@ -107,7 +123,6 @@
         mch = 0;
         sch = 0;
         function pergraph(gradata, id) {
-          
           const datasets = [];
           var selectElement = document.getElementById("deviceid");
           localStorage.setItem("tempid", tempid);
@@ -122,11 +137,25 @@
             lastdate2 = gradata[6].date;
           }
           maxvalue = 0;
-          maxvalue_date="";
-          maxvalue_symbol="";
-          maxvalue_device="";
+          maxvalue_date = "";
+          maxvalue_symbol = "";
+          maxvalue_device = "";
           if (id != 404) {
             mch = 0;
+            const values = gradata.map((obj) => parseFloat(obj.value));
+            const max = Math.max(...values);
+            const min = Math.min(...values);
+            themaxindex = values.indexOf(max);
+            theminindex = values.indexOf(min);
+            device_is = id;
+            devicenameout = device_names[id - 1];
+            symbol = gradata[themaxindex].symbol;
+            maxvalue = gradata[themaxindex].value;
+            maxvalue_date = gradata[themaxindex].date;
+            //
+            minvalue = gradata[theminindex].value;
+            minvalue_date = gradata[theminindex].date;
+
             for (i = 0; i < gradata.length; i++) {
               const valdata = document.createElement("div");
               valdata.setAttribute("id", "pr" + i);
@@ -138,14 +167,6 @@
               valdata.appendChild(icons);
               valdata.appendChild(dayst);
               the_new_div.appendChild(valdata);
-
-              if (gradata[i].value > maxvalue) {
-                maxvalue_date=gradata[i].date;
-                maxvalue_device=id;
-                devicenameout = device_names[id-1];
-                maxvalue = gradata[i].value;
-                maxvalue_symbol=gradata[i].symbol;
-              }
               $("#daystem" + i).text(gradata[i].value + gradata[i].symbol);
               var iconElement = document.getElementById("rainic" + i);
               iconElement.setAttribute("name", gradata[i].icons);
@@ -202,36 +223,62 @@
               perchart.data.datasets[0].data = itemdata;
               perchart.update();
             }
-            topvaluesupdate(dorw,devicenameout,maxvalue,maxvalue_symbol,maxvalue_date,lastdate2)
+            topvaluesupdate(
+              dorw,
+              devicenameout,
+              maxvalue,
+              symbol,
+              maxvalue_date,
+              lastdate2,
+              1,
+              0,
+              gradata[0].ID
+            );
+            topvaluesupdate(
+              dorw,
+              devicenameout,
+              minvalue,
+              symbol,
+              minvalue_date,
+              lastdate2,
+              0,
+              0,
+              gradata[0].ID
+            );
           } else {
             const thealign = document.createElement("div");
             thealign.classList.add("grdeta");
             sch = 0;
-            maxdata={}
-            maxdata['Name']=[]
-            maxdata['Value']=[]
-            maxdata['Date']=[]
-            maxdata['symbol']=[]
-            for(dr=1;dr<12;dr++)
-            {
-              tempmax=0
-              temparray=[]
-              dedata = "Device" + dr;
-              
-              for(val=0;val<gradata.length;val++)
-              {
-                temparray[val] = gradata[val][dedata];
-                if(temparray[val]>=tempmax)
-                {
-                  tempmax=temparray[val]
-                  maxdata['Name'][dr]=device_names[dr - 1];
-                  maxdata['Value'][dr]=temparray[val];
-                  maxdata['Date'][dr]=gradata[val].date;
-                  maxdata['symbol'][dr]=symbols_data[dr];
-                }
-              }
-            }
+            maxdata = {};
+            maxdata["Name"] = [];
+            maxdata["Value"] = [];
+            maxdata["Date"] = [];
+            maxdata["symbol"] = [];
+            mindata = {};
+            mindata["Name"] = [];
+            mindata["Value"] = [];
+            mindata["Date"] = [];
+            mindata["symbol"] = [];
+            for (dr = 1; dr < 12; dr++) {
+              tempmax = 0;
 
+              temparray = [];
+              dedata = "Device" + dr;
+              const values = gradata.map((obj) => obj[dedata]);
+              const max = Math.max(...values);
+              const min = Math.min(...values);
+              themaxindex = values.indexOf(max);
+              theminindex = values.indexOf(min);
+              maxdata["Name"][dr] = device_names[dr - 1];
+              maxdata["Value"][dr] = gradata[themaxindex][dedata];
+              maxdata["Date"][dr] = gradata[themaxindex].date;
+              maxdata["symbol"][dr] = symbols_data[dr];
+              //
+              mindata["Name"][dr] = device_names[dr - 1];
+              mindata["Value"][dr] = gradata[theminindex][dedata];
+              mindata["Date"][dr] = gradata[theminindex].date;
+              mindata["symbol"][dr] = symbols_data[dr];
+            }
 
             for (let i = 1; i < 12; i++) {
               thedata = [];
@@ -239,13 +286,6 @@
                 dedata = "Device" + i;
                 for (dev = 0; dev < gradata.length; dev++) {
                   thedata[dev] = gradata[dev][dedata];
-                  if (thedata[dev] > maxvalue) {
-                    maxvalue = thedata[dev];
-                    devicenameout = device_names[i - 1];
-                    maxvalue_date=gradata[dev].date;
-                    maxvalue_device=i;
-                    maxvalue_symbol=symbols_data[dev];
-                  }
                 }
                 const thebox = document.createElement("div");
                 thebox.classList.add("colord1");
@@ -277,38 +317,40 @@
                 icons.setAttribute("name", device_icon[i]);
                 $("#textbox" + i).text(device_names[i - 1]);
                 const alldata = thedata;
-                if(i!=2)
-                {
+                if (i != 2) {
                   datasets.push({
-                  label: device_names[i - 1],
-                  data: alldata,
-                  tension: 0.15,
-                  borderColor: colors,
-                  fill: false,
-                  pointBackgroundColor: colors,
-                  pointRadius: 3,
-                  pointHoverRadius: 8,
-                });
-                }
-                else{
+                    label: device_names[i - 1],
+                    data: alldata,
+                    tension: 0.15,
+                    borderColor: colors,
+                    fill: false,
+                    pointBackgroundColor: colors,
+                    pointRadius: 3,
+                    pointHoverRadius: 8,
+                  });
+                } else {
                   datasets.push({
-                  label: device_names[i - 1],
-                  data: alldata,
-                  tension: 0.15,
-                  borderColor: colors,
-                  fill: false,
-                  pointBackgroundColor: colors,
-                  pointRadius: 3,
-                  pointHoverRadius: 8,
-                  
-                });
+                    label: device_names[i - 1],
+                    data: alldata,
+                    tension: 0.15,
+                    borderColor: colors,
+                    fill: false,
+                    pointBackgroundColor: colors,
+                    pointRadius: 3,
+                    pointHoverRadius: 8,
+                  });
                 }
-                
               }
             }
             for (k = 0; k < gradata.length; k++) {
-              if(dorw==1){newlabelarray[k]=gradata[k].date.split('-')[1]+"/"+gradata[k].date.split('-')[2];}
-                else{newlabelarray[k]=gradata[k].date}
+              if (dorw == 1) {
+                newlabelarray[k] =
+                  gradata[k].date.split("-")[1] +
+                  "/" +
+                  gradata[k].date.split("-")[2];
+              } else {
+                newlabelarray[k] = gradata[k].date;
+              }
             }
             labels = newlabelarray;
             if (mch == 0) {
@@ -344,11 +386,30 @@
               perchart.data.datasets = datasets;
               perchart.update();
             }
-            updatemain(maxdata)
-            topvaluesupdate(dorw,maxdata['Name'][trar],maxdata['Value'][trar],maxdata['symbol'][trar],maxdata['Date'][trar],lastdate2)
+            updatemain(maxdata, mindata);
+            topvaluesupdate(
+              dorw,
+              maxdata["Name"][trar],
+              maxdata["Value"][trar],
+              maxdata["symbol"][trar],
+              maxdata["Date"][trar],
+              lastdate2,
+              1,
+              1,
+              1
+            );
+            topvaluesupdate(
+              dorw,
+              mindata["Name"][trar],
+              mindata["Value"][trar],
+              mindata["symbol"][trar],
+              mindata["Date"][trar],
+              lastdate2,
+              0,
+              1,
+              1
+            );
           }
-          
-          
         }
         function isLight(color) {
           var match = color.match(/\d+/g);
@@ -358,12 +419,12 @@
           return luminance > 0.5;
         }
         perdevicedeatils(tempid, 1);
-        theajax=0
-        var tempdata
+        theajax = 0;
+        var tempdata;
         var timeoutId;
         function perdevicedeatils(val, ar) {
           if (timeoutId) {
-            clearTimeout(timeoutId); 
+            clearTimeout(timeoutId);
           }
           if (ar == 1) {
             de_id = val;
@@ -379,30 +440,27 @@
               data: { grdates: lastdate2, dorw: dorw },
               dataType: "json",
               success: function (data) {
-                if(theajax==0)
-                {
-                  tempdata=data
-                  theajax=1
+                if (theajax == 0) {
+                  tempdata = data;
+                  theajax = 1;
                   pergraph(data, de_id);
-                }
-                else{
-                  var areEqual = JSON.stringify(tempdata) === JSON.stringify(data);
+                } else {
+                  var areEqual =
+                    JSON.stringify(tempdata) === JSON.stringify(data);
                   if (!areEqual) {
-                      tempdata=data
-                      pergraph(data, de_id);
+                    tempdata = data;
+                    pergraph(data, de_id);
                   }
                 }
-                
               },
               error: function (error) {
                 console.error("Error fetching new date:", error);
               },
               complete: function () {
-                timeoutId = setTimeout(function() {
-                    perdevicedeatils(de_id, 1);
+                timeoutId = setTimeout(function () {
+                  perdevicedeatils(de_id, 1);
                 }, 5000);
-              }
-              
+              },
             });
           } else {
             $.ajax({
@@ -411,18 +469,17 @@
               data: { theids: de_id, grdates: lastdate2, dorw: dorw },
               dataType: "json",
               success: function (data) {
-                tempdata=data
+                tempdata = data;
                 pergraph(data, de_id);
               },
               error: function (error) {
                 console.error("Error fetching new date:", error);
               },
               complete: function () {
-                timeoutId = setTimeout(function() {
-                    perdevicedeatils(de_id, 1);
+                timeoutId = setTimeout(function () {
+                  perdevicedeatils(de_id, 1);
                 }, 5000);
-              }
-              
+              },
             });
           }
         }
@@ -443,65 +500,170 @@
             error: function (error) {
               console.error("Error fetching new date:", error);
             },
-            
           });
         }
-                  var canvas = document.getElementById('pergraphdisplay');
-                    var ctx = canvas.getContext('2d');
-                    
-                    function setCanvasSize(val) {
-                        if(window.innerWidth<700)
-                        {
-                            canvas.width = innerWidth*52;  
-                            canvas.height=innerWidth*28
-                        }
-                        else{
-                            if(window.innerWidth<1250)
-                            {
-                                canvas.width = 18800;  
-                                canvas.height=2660
-                            }
-                            else{
-                                canvas.width = 10800;  
-                                canvas.height=2060
-                            }
-                        }
-                        if(window.innerHeight>1600)
-                        {
-                            canvas.width = innerWidth*52;  
-                            canvas.height=innerWidth*20
-                        }
-                        else{
-                            if(window.innerHeight>1000)
-                            {
-                                canvas.width = innerWidth*62;  
-                                canvas.height=innerWidth*20
-                            }
-                        }
-                        
-                    }
-                    setCanvasSize();
-                    window.addEventListener('resize', setCanvasSize);
+        var canvas = document.getElementById("pergraphdisplay");
+        var ctx = canvas.getContext("2d");
+
+        function setCanvasSize() {
+          if (window.innerWidth < 700) {
+            canvas.width = innerWidth * 52;
+            canvas.height = innerWidth * 23;
+          } else {
+            if (window.innerWidth < 1250) {
+              canvas.width = 18800;
+              canvas.height = 2660;
+            } else {
+              canvas.width = 10800;
+              canvas.height = 2060;
+            }
+          }
+          if (window.innerHeight > 1600) {
+            canvas.width = innerWidth * 52;
+            canvas.height = innerWidth * 20;
+          } else {
+            if (window.innerHeight > 1000) {
+              canvas.width = innerWidth * 62;
+              canvas.height = innerWidth * 20;
+            }
+          }
+        }
+        setCanvasSize();
+        window.addEventListener("resize", setCanvasSize);
       </script>
     </div>
   </div>
+  
   <div class="otherdetails">
-    <div  class="theprdetailsbox">
+    <div onclick="checkvalue(0,tempid,dorw,lastdate2,this)" class="leftmov">
+      <ion-icon id="arrowint" name="chevron-back-outline"></ion-icon>
+    </div>
+    <div class="theprdetailsbox">
       <div class="t2subhead">
         <b>Max Value Recorded</b>
       </div>
-      <div  class="t2body">
-        <div onclick="checkvalue(0,tempid,dorw,lastdate2)"  class="leftmov"><ion-icon id="leftgo"  name="chevron-back-outline"></ion-icon></div>
-        <div class="valuesbo">
-          <div id="de_name" class="bodytitle"></div>
-          <div id="de_value" class="bodybo"></div>
-          <div id="de_date" class="bodyfooter"></div>
+      <div class="t2body">
+        <div
+          onclick="checkvalue(0,tempid,dorw,lastdate2,this)"
+          class="leftmovtemp"
+        >
+          <ion-icon id="arrowint" name="chevron-back-outline"></ion-icon>
         </div>
-        <div onclick="checkvalue(1,tempid,dorw,lastdate2)"  class="rigthmov"><ion-icon id="rigthgo"  name="chevron-forward-outline"></ion-icon></div>
+        <div class="valuesbo">
+          <div id="max_data_name" class="bodytitle"></div>
+          <div id="max_data_value" class="bodybo"></div>
+          <div id="max_data_date" class="bodyfooter"></div>
+        </div>
+        <div
+          onclick="checkvalue(1,tempid,dorw,lastdate2,this)"
+          class="rigthmovtemp"
+        >
+          <ion-icon id="arrowint" name="chevron-forward-outline"></ion-icon>
+        </div>
       </div>
     </div>
-    <div class="theprdetailsbox"></div>
-    <div class="theprdetailsbox"></div>
+    <div class="theprdetailsbox">
+      <div class="t2subhead">
+        <b>Predicted Value</b>
+      </div>
+      <div class="t2body">
+        <div
+          onclick="checkvalue(0,tempid,dorw,lastdate2,this)"
+          class="leftmovtemp"
+        >
+          <ion-icon id="arrowint" name="chevron-back-outline"></ion-icon>
+        </div>
+        <div class="valuesbo">
+          <div id="pre_name" class="bodytitle"></div>
+          <div id="pre_value" class="bodybo"></div>
+          <div id="pre_date" class="bodyfooter"></div>
+        </div>
+        <div
+          onclick="checkvalue(1,tempid,dorw,lastdate2,this)"
+          class="rigthmovtemp"
+        >
+          <ion-icon id="arrowint" name="chevron-forward-outline"></ion-icon>
+        </div>
+      </div>
+    </div>
+    <div class="theprdetailsbox">
+      <div class="t2subhead">
+        <b>Min Value Recorded</b>
+      </div>
+      <div class="t2body">
+        <div
+          onclick="checkvalue(0,tempid,dorw,lastdate2,this)"
+          class="leftmovtemp"
+        >
+          <ion-icon id="arrowint" name="chevron-back-outline"></ion-icon>
+        </div>
+        <div class="valuesbo">
+          <div id="min_data_name" class="bodytitle"></div>
+          <div id="min_data_value" class="bodybo"></div>
+          <div id="min_data_date" class="bodyfooter"></div>
+        </div>
+        <div
+          onclick="checkvalue(1,tempid,dorw,lastdate2,this)"
+          class="rigthmovtemp"
+        >
+          <ion-icon id="arrowint" name="chevron-forward-outline"></ion-icon>
+        </div>
+      </div>
+    </div>
+    <div onclick="checkvalue(1,tempid,dorw,lastdate2,this)" class="rigthmov">
+      <ion-icon id="arrowint" name="chevron-forward-outline"></ion-icon>
+    </div>
   </div>
+  <div class="limits_details">
+    <div class="limits_data">
+      
+      <div class="limit_body">
+        <div class="limit_header">
+          <h5 id="til">Low</h5>
+          <h6 id="lowdata">10-50</h6>
+        </div>
+        <div class="limit_newbody">
+          <p id="lowtext"></p>
+        </div>
+      </div>
+    </div>
+    <div class="limits_data">
+      
+      <div class="limit_body">
+        <div class="limit_header">
+          <h5 id="tig">Good</h5>
+          <h6 id="gooddata">10-50</h6>
+        </div>
+        <div class="limit_newbody">
+          <p id="goodtext"></p>
+        </div>
+      </div>
+    </div>
+    <div class="limits_data">
+      
+      <div class="limit_body">
+        <div class="limit_header">
+          <h5 id="tim">Moderate</h5>
+          <h6 id="moddata">10-50</h6>
+        </div>
+        <div class="limit_newbody">
+          <p id="modtext"></p>
+        </div>
+      </div>
+    </div>
+    <div class="limits_data">
+      
+      <div class="limit_body">
+        <div class="limit_header">
+          <h5 id="tih">Unhealthy</h5>
+          <h6 id="unhdata">10-50</h6>
+        </div>
+        <div class="limit_newbody">
+          <p id="hightext"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 </div>
 {% endblock %}
