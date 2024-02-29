@@ -1,7 +1,7 @@
 <html>
     <head>
         {% load static %}
-        <title>Weather</title>
+        <title>Acalica</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{% static 'style.css' %}">
         <link rel="icon" href="{% static 'rain.png' %}">
@@ -91,6 +91,7 @@
                     newitemarray2=[]
                     function graph(gradata)
                     {
+                        newitemarray2=[]
                         const datasets = [];
                         themaingraphlabel=document.getElementById('thegrlabel')
                         themaingraphlabel.innerHTML = '';
@@ -119,9 +120,18 @@
                             if(dorw==1)
                             {newlabelarray[i]=gradata[i].date.split('-')[1]+"/"+gradata[i].date.split('-')[2];}
                             else{newlabelarray[i]=gradata[i].date}
+                            if(i+1!=li)
+                            {
+                                newitemarray[i]=gradata[i].value1;
+                                if(i+2==li){
+                                    newitemarray2[i]=gradata[i].value1;
+                                }
+                            }
+                            else{
+                                newitemarray2[i]=gradata[i].value1;
+                            }
                             
-                            newitemarray[i]=gradata[i].value1;
-                            newitemarray2[i]=gradata[i].value1*2;
+                            
                         }
                         let labels = newlabelarray
                         let itemdata = newitemarray

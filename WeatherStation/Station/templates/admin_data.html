@@ -1,0 +1,141 @@
+{% extends 'admin_page.html' %} {% block adminpanel %}
+<section class="dashboard">
+  <script>
+    var todayt = new Date();
+    var today =
+      todayt.getFullYear() +
+      "-" +
+      ("0" + (todayt.getMonth() + 1)).slice(-2) +
+      "-" +
+      ("0" + todayt.getDate()).slice(-2);
+    devid = 1;
+  </script>
+  <div class="dash-content">
+    <div class="overview">
+      <div class="top">
+        <i class="uil"></i>
+
+        <div class="search-box">
+          <input
+            onchange="devicesdataout(devid,this.value)"
+            id="thedateinput"
+            type="date"
+            placeholder="Search here..."
+          />
+        </div>
+      </div>
+      <div class="title">
+        <i class="uil"><ion-icon name="analytics-outline"></ion-icon></i>
+        <span class="text">Data</span>
+      </div>
+
+      <div class="boxes">
+        <div id="boxover" class="box box1">
+          <span class="text">Min Value</span>
+          <span id="minvalue" class="number">10</span>
+          
+        </div>
+        <div class="newbox2">
+          <div class="boxarrows" onclick="swipedevice(0,this)">
+            <ion-icon id="swipearrow" name="chevron-back-outline"></ion-icon>
+          </div>
+          <div class="box2values">
+            <span class="text">Active Devices</span>
+            <span id="device_name" class="number">Humidity</span>
+          </div>
+          <div class="boxarrows" onclick="swipedevice(1,this)">
+            <ion-icon id="swipearrow" name="chevron-forward-outline"></ion-icon>
+          </div>
+        </div>
+        <div id="boxover" class="box box3">
+          <span class="text">Max Value</span>
+          <span id="maxvalue" class="number">55</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity">
+      <div class="title">
+        <i class="uil"><ion-icon name="albums-outline"></ion-icon></i>
+        <span class="text">Avalable Devices</span>
+      </div>
+
+      <div class="activity-data">
+        <table style="overflow: hidden;">
+          <thead>
+            <th>SI</th>
+            <th>Values</th>
+            <th>Date and time</th>
+            <th>Range</th>
+          </thead>
+          <tbody id="TableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  function tablefill(tablevalues) {
+    setTimeout(() => {
+      document.getElementById("device_name").textContent = tablevalues[0].Name;
+      document.getElementById("minvalue").textContent = tablevalues[0].min;
+      document.getElementById("maxvalue").textContent = tablevalues[0].max;
+      if (tablevalues[0].device_id == 5) {
+        document.getElementById("device_name").style.fontSize = "36px";
+      } else if (tablevalues[0].device_id == 8) {
+        document.getElementById("device_name").style.fontSize = "25px";
+      } else {
+        document.getElementById("device_name").style.fontSize = "40px";
+      }
+    
+
+    var tableBody = document.getElementById("TableBody");
+    while (tableBody.firstChild) {
+      tableBody.removeChild(tableBody.firstChild);
+    }
+    if (tablevalues.length != 0 && tablevalues[0].range != "404") {
+      for (i = 0; i < tablevalues.length; i++) {
+        var newRow = document.createElement("tr");
+        var cell1 = document.createElement("td");
+        cell1.textContent = i + 1;
+        var cell2 = document.createElement("td");
+        cell2.textContent = tablevalues[i].device_values;
+        var cell3 = document.createElement("td");
+        cell3.textContent = tablevalues[i].datetime;
+        var cell4 = document.createElement("td");
+        cell4.textContent = tablevalues[i].range;
+        newRow.appendChild(cell1);
+        newRow.appendChild(cell2);
+        newRow.appendChild(cell3);
+        newRow.appendChild(cell4);
+        tableBody.appendChild(newRow);
+      }
+    } else {
+      var newRow = document.createElement("tr");
+      var cell1 = document.createElement("td");
+      cell1.textContent = "No data";
+      cell1.colSpan = 4;
+      newRow.appendChild(cell1);
+      tableBody.appendChild(newRow);
+    }
+  }, 200);
+  }
+
+  function devicesdataout(theid, dateof) {
+    $.ajax({
+      url: "/admin_data_out/",
+      method: "GET",
+      data: { device_id: theid, dates: dateof },
+      dataType: "json",
+      success: function (data) {
+        tablefill(data);
+      },
+      error: function (error) {
+        console.error("Error fetching live data:", error);
+      },
+    });
+  }
+  devicesdataout(devid, today);
+  document.getElementById("thedateinput").value = today;
+</script>
+{% endblock adminpanel %}

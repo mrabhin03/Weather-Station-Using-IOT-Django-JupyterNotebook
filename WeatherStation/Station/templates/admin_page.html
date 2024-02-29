@@ -1,0 +1,166 @@
+<html>
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'admin_details.css' %}" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>Acalica Admin Panel</title>
+  </head>
+  <body>
+    <nav>
+      <div class="logo-name">
+        <div class="logo-image">
+          <img src="" alt="" />
+        </div>
+
+        <span class="logo_name">Acalica</span>
+      </div>
+
+      <div class="menu-items">
+        <ul class="nav-links">
+          <li>
+            <a href="{% url 'admindata' %}">
+              <i class="uil"><ion-icon name="apps-outline"></ion-icon></i>
+              <span class="link-name">Dahsboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="data">
+              <i class="uil"><ion-icon name="analytics-outline"></ion-icon></i>
+              <span class="link-name">Data</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="uil"><ion-icon name="bar-chart-outline"></ion-icon></i>
+              <span class="link-name">Analytics</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="uil"></i>
+              <span class="link-name">Like</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="uil"></i>
+              <span class="link-name">Comment</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="uil"></i>
+              <span class="link-name">Share</span>
+            </a>
+          </li>
+        </ul>
+
+        <ul class="logout-mode">
+          <li>
+            <a href="{% url 'logout' %}">
+              <i class="uil"><ion-icon style="transform: rotate(180deg);" name="exit-outline"></ion-icon></i>
+              <span  class="link-name">Logout</span>
+            </a>
+          </li>
+
+          <li class="mode">
+            <a href="#">
+              <i class="uil"><ion-icon name="sunny-outline"></ion-icon></i>
+              <span class="link-name">Dark Mode</span>
+            </a>
+
+            <div class="mode-toggle">
+              <span class="switch"></span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    {% block adminpanel %}
+    <section class="dashboard">
+      <div class="dash-content">
+        <div class="overview">
+          <div class="title">
+            <i class="uil"><ion-icon name="apps-outline"></ion-icon></i>
+            <span class="text">Dashboard</span>
+          </div>
+
+          <div class="boxes">
+            <div class="box box1">
+              <i class="uil"></i>
+              <span class="text">Total Devices</span>
+              <span class="number">{{Total}}</span>
+            </div>
+            <div class="box box2">
+              <i class="uil"></i>
+              <span class="text">Active Devices</span>
+              <span class="number">{{active}}</span>
+            </div>
+            <div class="box box3">
+              <i class="uil"></i>
+              <span class="text">Inactive Devices</span>
+              <span class="number">{{inactive}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="activity">
+          <div class="title">
+            <i class="uil"><ion-icon name="albums-outline"></ion-icon></i>
+            <span class="text">Avalable Devices</span>
+          </div>
+
+          <div class="activity-data">
+            <table >
+                <thead>
+                    <th>Id</th>
+                    <th>Icons</th>
+                    <th>Name</th>
+                    <th>Details</th>
+                    <th>Last Active</th>
+                    <th>Current Status</th>
+                </thead>
+                <tbody>
+                    {% for i in datat %}
+                    <tr>
+                        <td>
+                          {{ i.device_id }}
+                      </td>
+                        <td>
+                          <ion-icon name="{{ i.icon }}"></ion-icon>
+                            
+                        </td>
+                        <td>
+                            {{ i.name }}
+                        </td>
+                        <td class="detailsval">
+                            {{ i.details }}
+                        </td>
+                        <td>
+                            {{ i.date }}
+                        </td>
+                        <td>
+                            {% if i.status == 1 %}
+                            <span style="color: rgb(24, 204, 24);" >Active</span>
+                            {% else %}
+                            <span style="color: red;">Inactive</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% endblock adminpanel %}
+
+    <script src="{% static 'adminscript.js' %}"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  </body>
+</html>

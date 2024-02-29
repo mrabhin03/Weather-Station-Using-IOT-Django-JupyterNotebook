@@ -1,5 +1,5 @@
 """
-WSGI config for WeatherStation project.
+WSGI config for Acalica project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'WeatherStation.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Acalica.settings')
 
 application = get_wsgi_application()

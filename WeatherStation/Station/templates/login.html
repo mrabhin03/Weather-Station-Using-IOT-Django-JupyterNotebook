@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!-- Created By CodingNepal -->
+<html lang="en" dir="ltr">
+   <head>
+    {% load static %}
+      <meta charset="utf-8">
+      <title>Login</title>
+      <link rel="stylesheet" href="{% static 'login.css' %}">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+   </head>
+   <body>
+      <div class="content">
+        <div class="close"><a href="{% url 'logout' %}"><ion-icon name="close-outline"></ion-icon></a></div>
+         <div class="text">
+            Admin Login
+         </div>
+         <form method="post">
+            {% csrf_token %}
+            <div class="field">
+               <input type="text" name="username" required>
+               <span class="fas fa-user"></span>
+               <label>Email or Phone</label>
+            </div>
+            <div class="field">
+               <input type="password" name="password" required>
+               <span class="fas fa-lock"></span>
+               <label>Password</label>
+            </div>
+            <div class="forgot-pass">
+                <label style="color:red">{{ errormsg }}</label>
+             </div>
+            <button type="submit" >Sign in</button>
+            <div class="sign-up">
+            </div>
+         </form>
+      </div>
+      <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+   </body>
+   
+</html>
