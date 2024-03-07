@@ -23,9 +23,11 @@
         </script>
         <div class="main">
             <div class="temperature">
-                <div class="thead">
-                    <div id="sun" class="sun">
-                        
+                <div class="thead" >
+                    <div class="sun">
+                    </div>
+                    <div class="themeselect">
+                        <p>Dark Mode</p><div onclick="themechange()" class="buttonst"><div id="switchdata" class="switch"></div></div>
                     </div>
                 </div>
                 <div class="shead">
@@ -44,7 +46,7 @@
                     <div id="todayTemperature">0°</div>
                 </div>
                 <div class="base">
-                    <img src="{% static 'Backgroundicon.png' %}" alt="">
+                    <img id="imagedata" src="{% static 'Backgroundicon.png' %}" alt="">
                 </div>
 
             </div>
@@ -78,14 +80,6 @@
                 </div>
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script>
-                    sunchange()
-                    function sunchange(){
-                        var today = new Date();
-                        const currentHour = today.getHours();
-                        if (currentHour >= 18) {
-                            sun=document.getElementById('sun');
-                        }
-                    }
                     var k=0
                     var chart
                     newitemarray2=[]
@@ -188,11 +182,23 @@
                             chart.data.datasets[1].data = itemdata2;
                             chart.update()
                         }
+                        
                     }
                     
                     var canvas = document.getElementById('graphdisplay');
                     var ctx = canvas.getContext('2d');
-                    
+                    function needchart(){
+                        return chart
+                    }
+
+                    function chartcolorchange(){
+                        setTimeout(() => {
+                            chart.options.scales.x.grid.color=chart.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.1)';
+                            chart.options.scales.x.ticks.color=chart.options.scales.y.ticks.color = 'white';
+                            chart.update();
+                        }, 200);
+                    }
+
                     function setCanvasSize() {
                         if(window.innerWidth<700)
                         {
@@ -496,7 +502,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="details"><div style="display: flex; flex-direction: row; align-items: center; justify-content: center; font-size: 25px;">More details<ion-icon name="arrow-forward-outline"></ion-icon></div></a>
+                            <a href="details"><div class="theviewmorebutton" style="display: flex; flex-direction: row; align-items: center; justify-content: center; font-size: 25px;">More details<ion-icon name="arrow-forward-outline"></ion-icon></div></a>
                         </div>
                     </div>
                 </div>
@@ -523,15 +529,15 @@
                 var temperatureValue = data[1].device_values;
                 $('#Temperature').text(temperatureValue+"°");
                 document.getElementById('Temperaturebar').style.width =  temperatureValue+"%";
-                document.getElementById('Temperature').style.color="black";
                 document.getElementById('ticon').style.backgroundColor=data[1].Dev_Color;
                 document.getElementById('Temperaturebar').style.backgroundColor=data[1].Dev_Color;
                 document.getElementById('ticon').style.backgroundColor=data[1].Dev_Color;
                 var tempbarwar = document.getElementById('Temperaturebar');
                 if (tempbarwar.classList.contains('warning')) {
-                    tempbarwar.classList.remove('warning');}
+                    tempbarwar.classList.remove('warning');
+                    document.getElementById('Temperature').classList.remove("colorWarning")}
                 if(temperatureValue >= "60"){tempbarwar.classList.add("warning");
-                    document.getElementById('Temperature').style.color="red"}
+                    document.getElementById('Temperature').classList.add("colorWarning")}
                 
 
 
@@ -542,17 +548,16 @@
 
 
                 var co2Value = data[3].device_values;
-                document.getElementById('co2').style.color="black"
                 $('#co2').text(co2Value+"%");
                 document.getElementById('co2bar').style.width =  co2Value+"%";
                 document.getElementById('co2bar').style.backgroundColor=data[3].Dev_Color;
                 document.getElementById('co2icon').style.backgroundColor=data[3].bgicon;
                 var co2WarningIcon = document.getElementById('co2bar');
-                if (co2WarningIcon.classList.contains('warning')) {co2WarningIcon.classList.remove('warning');}
+                if (co2WarningIcon.classList.contains('warning')) {co2WarningIcon.classList.remove('warning');document.getElementById('co2').classList.remove('colorWarning');}
 
                 if(co2Value >= "20"){
                 co2WarningIcon.classList.add('warning');
-                document.getElementById('co2').style.color="rgb(255, 53, 53)";}
+                document.getElementById('co2').classList.add('colorWarning');}
 
 
                 var rainValue = data[4].device_values;
@@ -817,7 +822,6 @@
             graphupdates(didval);
             
             fullalldaydata();
-
         </script>
         {% endblock details %}
         <script>
@@ -841,6 +845,7 @@
                     }
                 });
             }
+            themecheck()
         </script>
         <script src="https://kit.fontawesome.com/bc67d18a07.js" crossorigin="anonymous"></script>
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

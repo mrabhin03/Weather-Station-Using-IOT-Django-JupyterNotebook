@@ -1,3 +1,69 @@
+:root{
+    --bodycolor: rgb(78, 152, 216);
+    --maindiv_bgcolor:rgb(27, 185, 248);
+    --maindivborder:rgb(1, 164, 228);
+    --sunbgcolor:rgb(255, 225, 0);
+    --detailsbody:rgba(223, 248, 255, 0.79);
+    --blacktext:rgb(33, 33, 33);
+    --graph:aliceblue;
+    --graph_text:black;
+    --button_color:rgb(75,196,243);
+    --button_color_hover:rgb(47, 155, 197);
+    --inputboxcol:black;
+    --inputboxbg:white;
+    --detailsdivbg:white;
+    --detailsdivcolor:rgb(50, 50, 50);
+    --detailsdivbarbg:rgb(225, 225, 225);
+    --speedbarbg:rgba(255, 255, 255, 0);
+    --speedbarcolor:black;
+    --blurdata:3px;
+    --image_color:black;
+    --dirwind:url('winddir.png');
+    --limitdata_border:rgba(255, 255, 255, 0.664);
+    --darktheme:rgba(106, 106, 106, 0.447);
+    --darkthemebutton:rgba(255, 255, 255, 0.662);
+    --darkthemetext:rgb(255, 255, 255);
+
+    --limit_color_low:rgb(0, 234, 255);
+    --limit_color_good:rgb(30, 255, 0);
+    --limit_color_mid:rgb(255, 196, 0);
+    --limit_color_high:rgb(245, 28, 28);
+
+
+    --anime:all .8s ease-in-out;
+}
+body.dark{
+    --bodycolor: rgb(13, 27, 130);
+    --maindiv_bgcolor:rgb(8, 46, 61);
+    --maindivborder:rgb(10, 86, 117);
+    --sunbgcolor:rgb(255, 225, 0);
+    --detailsbody:rgba(3, 53, 83, 0.79);
+    --blacktext:rgb(255, 255, 255);
+    --graph:rgba(0, 0, 0, 0.379);
+    --graph_text:rgb(255, 255, 255);
+    --button_color:rgb(5, 75, 103);
+    --button_color_hover:rgb(47, 155, 197);
+    --inputboxcol:rgb(255, 255, 255);
+    --inputboxbg:rgba(26, 25, 25, 0.629);
+    --detailsdivbg:rgba(0, 0, 0, 0.379);
+    --detailsdivcolor:rgb(182, 234, 255);
+    --detailsdivbarbg:rgba(0, 0, 0, 0.299);
+    --speedbarbg:rgba(0, 98, 255, 0);
+    --speedbarcolor:rgb(255, 255, 255);
+    --blurdata:10px;
+    --image_color:rgba(255, 255, 255, 0.845);
+    --dirwind:url('winddirwhite.png');
+    --limitdata_border:rgb(0, 0, 0);
+    --darktheme:rgba(213, 213, 213, 0.447);
+    --darkthemebutton:rgb(255, 255, 255);
+    --darkthemetext:rgb(255, 255, 255);
+    
+    --limit_color_low:rgb(0, 187, 204);
+    --limit_color_good:rgb(23, 197, 0);
+    --limit_color_mid:rgb(195, 150, 0);
+    --limit_color_high:rgb(184, 22, 22);
+}
+
 body{
     font-family: Arial, Helvetica, sans-serif;
     padding: 0;
@@ -6,10 +72,12 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(78, 152, 216);
+    background-color: var(--bodycolor);
+    transition: var(--anime);
 }
+
 .main{
-    background-color: rgb(27, 185, 248);
+    background-color: var(--maindiv_bgcolor);
     height: 99%;
     width: 96%;
     display: flex;
@@ -18,7 +86,8 @@ body{
     flex-direction: row;
     border-radius: 20px;
     overflow: hidden;
-    border: 3px solid rgb(1, 164, 228);
+    border: 3px solid var(--maindivborder);
+    transition: var(--anime);
 }
 .temperature{
     background-color: transparent;
@@ -30,11 +99,12 @@ body{
 .sun{
     height: 100px;
     width: 100px;
-    background-color: rgb(255, 225, 0);
+    background-color: var(--sunbgcolor);
     border-radius: 50%;
     margin-left: -40px;
     margin-top: -40px;
-    box-shadow: 8px 8px 4px  rgb(255, 225, 0);
+    box-shadow: 8px 8px 4px  var(--sunbgcolor);
+    transition: var(--anime);
 
 }
 .thead
@@ -42,10 +112,48 @@ body{
     width: 100%;
     height: 10%;
     display: flex;
-    justify-content: baseline;
-    align-items: baseline;
+    justify-content: space-between;
+    align-items: center;
     color: white;
     font-size: 30px;
+}
+.themeselect{
+    width: 30%;
+    height: 100%;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.themeselect>p{
+    color: var(--darkthemetext);
+    font-size: 13px;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: var(--anime);
+}
+.buttonst{
+    background-color: var(--darktheme);
+    height: 23px;
+    width: 52px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: var(--anime);
+}
+.switch{
+    transform: translateX(calc(0% + 3px));
+    transition: all .3s ease-in-out;
+    height: 18px;
+    width: 18px;
+    background-color: var(--darkthemebutton);
+    border-radius: 50%;
+    transition: var(--anime);
+}
+.switch.dark{
+    transform: translateX(calc(200% - 5px));
 }
 .shead
 {
@@ -76,7 +184,7 @@ body{
     font-size: 80px;
 }
 .details{
-    background-color: rgba(223, 248, 255, 0.79);
+    background-color: var(--detailsbody);
     border-radius: 20px;
     height: 100%;
     width: 80%;
@@ -84,6 +192,7 @@ body{
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    transition: var(--anime);
 }
 
 .details::-webkit-scrollbar {
@@ -103,8 +212,9 @@ body{
     flex-direction: column;
     margin-left: 20px;
     height: 76%;
-    color: rgb(33, 33, 33);
+    color: var(--blacktext);
     width: 50%;
+    transition: var(--anime);
 }
 
 .details_div1{
@@ -120,11 +230,13 @@ body{
     justify-content: center;
     font-size: 30px;
     cursor: pointer;
-    background-color: aliceblue;
+    color: var(--graph_text);
+    background-color: var(--graph);
     margin: 2px;
     height: 90%;
     width: 50px;
     border-radius: 5px;
+    transition: var(--anime);
 }
 .grpoption2:first-child{
     border-bottom-left-radius: 20px;
@@ -141,8 +253,9 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: aliceblue;
+    background-color: var(--graph);
     flex-direction: column;
+    transition: var(--anime);
 }
 .graphtitle{
     height: 40%;
@@ -163,17 +276,18 @@ body{
 }
 .barhead >div> button{
     color:  white;
-    background-color: rgb(75,196,243);
+    background-color: var(--button_color);
     box-shadow: 2px 2px 3px black;
     border: none;
     border-radius: 4px;
     font-weight: 0;
     height: 90%;
+    transition: var(--anime);
 }
 #weekorday{
     box-shadow: 2px 2px 3px black;
     color:  white;
-    background-color: rgb(75,196,243);
+    background-color: var(--button_color);
     border: none;
     border-radius: 4px;
     font-weight: 0;
@@ -181,15 +295,19 @@ body{
     width: 100%;
     font-size: 15px;
     cursor: pointer;
+    transition: var(--anime);
 }
 #weekorday:hover,#weekorday:active{
-    background-color: rgb(60, 166, 208);
+    background-color: var(--button_color_hover);
+    transition: all .2s ease-in-out;
 }
 .transfer{
     width: 100%;
     text-align: center;
     height: 5px;
     margin-top: 5px;
+    color: var(--graph_text);
+    transition: var(--anime);
 }
 .canvasdata{
     width: 96%; 
@@ -200,16 +318,20 @@ body{
     justify-content: center;
 }
 .barhead >div> button:hover{
-    background-color: rgb(47, 155, 197);
+    background-color: var(--button_color_hover);
+    transition: all .2s ease-in-out;
 }
+
 .barlabel
 {
+    color: var(--graph_text);
     height: 50%;
     width: 99%;
     display: flex;
     align-items: end;
     justify-content: space-between;
     margin-right: -5px;
+    transition: var(--anime);
 }
 .val{
     height: 40px;
@@ -230,12 +352,12 @@ body{
 .base > img{
     width: 292px;
     height: 302px;
-    filter: drop-shadow(2px 2px 3px rgb(37, 37, 37));
+    filter: drop-shadow(2px 2px var(--blurdata) var(--image_color));
+    transition: var(--anime);
 }
 .graph{
     height: 60%;
     width: 95%;
-    background-color: rgb(255, 255, 255);
 }
 .details_div2{
     height: 48%;
@@ -256,16 +378,16 @@ body{
   }
 .details_div2 > input{
     margin-bottom: 5px;
-    color:  black;
+    color:  var(--inputboxcol);
     text-align: center;
     border-radius: 4px;
     font-weight: 0;
     height: 25px;
     width: 150px;
-    background-color: rgb(255, 255, 255);
+    background-color: var(--inputboxbg);
     border: none;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-
+    transition: var(--anime);
 }
 .subdetails > div{
     width: 100%;
@@ -281,7 +403,7 @@ body{
     color: black;
 }
 .subdetails > div > div,.subdetails > div >a> div{
-    background-color: white;
+    background-color: var(--detailsdivbg);
     height: 150px;
     width: 270px;
     border-radius: 30px;
@@ -290,6 +412,7 @@ body{
     flex-direction: column;
     justify-content: baseline;
     align-items: center;
+    transition: var(--anime);
 }
 .humditytitle,.temperaturetitle,.soundtitle,.co2title,.raintitle,.windtitle,.no2title,.atmtitle,.uvtitle,.windirtitle,.airqtitle{
     height: 30%;
@@ -298,7 +421,8 @@ body{
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    color: rgb(50, 50, 50);
+    color: var(--detailsdivcolor);
+    transition: var(--anime);
 }
 .icon{
     cursor: pointer;
@@ -319,7 +443,8 @@ body{
     justify-content: center;
     align-items: center;
     font-size: 45px;
-    color: rgb(50, 50, 50);
+    color: var(--detailsdivcolor);
+    transition: var(--anime);
 }
 .wind,.atm{
     height: 70%;
@@ -335,6 +460,7 @@ body{
     flex-direction: column;
 }
 .limits{
+    color: var(--detailsdivcolor);
     width: 84%;
     height: 50%;
     font-size: 10px;
@@ -342,22 +468,23 @@ body{
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+    transition: var(--anime);
 }
 .limits > div{
     width: 30px;
     display: flex;
-    color: rgb(30, 30, 30);
     align-items: center;
 }
 .levelbar{
     width: 80%;
     height: 50%;
-    background-color: rgb(225, 225, 225);
+    background-color: var(--detailsdivbarbg);
     border-radius: 20px;
     display: flex;
     justify-content: baseline;
     overflow: hidden;
     align-items: center;
+    transition: var(--anime);
 }
 .levelbar > div{
     background-color: rgb(81, 159, 226);
@@ -376,10 +503,12 @@ body{
 }
 .speedar2{
     height: 30px;
-    background-color: rgb(255, 255, 255);
+    background-color: var(--speedbarbg);
     width: 136px;
+    color: var(--detailsdivcolor);
     text-align: center;
     font-size: 15px;
+    transition: var(--anime);
 }
 .speedarcir{
     margin-top: 60px;
@@ -395,10 +524,10 @@ body{
     border-top: 5px solid rgb(194, 194, 194);
     background-position: center;
     background-size: cover;
-    color: aliceblue;
+    color: var(--detailsdivcolor);
     transform: rotate(-45deg);
     transition: all 1s ease-in-out;
-    background: radial-gradient(circle, #ffffff, #dfdfdf);
+    background: radial-gradient(circle, transparent, transparent);
 }
 .seccirlcle,.seccirlcle2{
     transition: all 1s ease-in-out;
@@ -410,7 +539,6 @@ body{
     justify-content: baseline;
     background-position: center;
     background-size: cover;
-    color: aliceblue;
     background-image:  url(meter.png);
     transform: rotate(45deg);
 }
@@ -493,11 +621,13 @@ body{
     100% { opacity: 1; }
   }
 .wibr{
+    color: var(--detailsdivcolor) ;
     height:100%;
     width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
+    transition: var(--anime);
 }
 .dircir{
     height: 115px;
@@ -505,10 +635,14 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url('winddir.png');
+    background-image: var(--dirwind);
     background-size: 100% 100%;
     background-repeat: no-repeat;
+    transition: var(--anime);
     
+}
+.colorWarning{
+    color: red !important;
 }
 .dirarrow{
     background: linear-gradient(to right, red 50%, white 50%);
@@ -523,12 +657,18 @@ body{
     transition: all 1s ease-in-out;
 }
 .dirdata{
+    color: var(--detailsdivcolor);
     height: 100%;
     width: 70px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    transition: var(--anime);
+}
+.dirdata table tbody{
+    color: var(--detailsdivcolor);
+    transition: var(--anime);
 }
 
 .valuewind,.valuewind2{
@@ -543,7 +683,7 @@ body{
 
 
 .viewdetails{
-    background-color: rgba(223, 248, 255, 0.79);
+    background-color: var(--detailsbody);
     border-radius: 20px;
     height: 100%;
     width: 80%;
@@ -551,6 +691,7 @@ body{
     align-items: center;
     justify-content: space-around;
     flex-direction: column;
+    transition: var(--anime);
 }
 .details_block{
     display: flex;
@@ -563,12 +704,13 @@ body{
 .details_graph{
     width: 100%;
     height: 85%;
-    background-color: white;
+    background-color: var(--graph);
     border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-direction: column;
+    transition: var(--anime);
 }
 .prbarhead{
     margin-top: 10px;
@@ -580,17 +722,20 @@ body{
 }
 .prbarhead >div> button{
     color:  white;
-    background-color: rgb(75,196,243);
+    background-color: var(--button_color);
     border: none;
     border-radius: 4px;
     font-weight: 0;
     height: 90%;
+    transition: var(--anime);
 }
 
 .prbarhead >div> button:hover{
-    background-color: rgb(47, 155, 197);
+    background-color: var(--button_color_hover);
+    transition: all .2s ease-in-out;
 }
 .perbarlabel{
+    color: var(--graph_text) !important;
     height: 50%;
     width: 99%;
     display: flex;
@@ -613,9 +758,14 @@ body{
     align-items: center;
     justify-content: space-between;
     flex-direction: row;
-    background-color: white;
+    background-color:  var(--detailsdivbg);
     border-radius: 10px;
     margin-top: 10px;
+    transition: var(--anime);
+}
+.back1>a{
+    color: var(--graph_text);
+    transition: var(--anime);
 }
 .otherdetails
 {
@@ -652,8 +802,11 @@ body{
     flex-direction: column;
     height: 170px;
     width: 320px;
-    background-color: #ffffff;
+    background-color: var(--detailsdivbg);
     border-radius: 20px;
+    overflow: hidden;
+    color: var(--graph_text);
+    transition: var(--anime);
 }
 .perval{
     height: 40px;
@@ -664,10 +817,12 @@ body{
     justify-content: space-around;
     font-weight: 600;
     border-radius: 5px;
-    color: rgb(0, 0, 0);
+    color: var(--graph_text) !important;
+    transition: var(--anime);
 }
 .perbarlabel>div>ion-icon{
-    color: rgb(0, 0, 0);
+    color: var(--graph_text) !important;
+    transition: var(--anime);
 }
 
 .grdeta{
@@ -707,6 +862,7 @@ body{
     border: 2px solid rgb(120, 120, 120);
 }
 .coloricon{
+    color: black;
     height: 25px;
     width: 25px;
     background-color: white;
@@ -780,6 +936,7 @@ body{
 
 }
 .rigthmov,.leftmov{
+    color: var(--graph_text);
     height: 60%;
     width: 30px;
     font-size: 30px;
@@ -788,6 +945,7 @@ body{
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.082);
     cursor: pointer;
+    transition: var(--anime);
 }
 .rigthmovtemp,.leftmovtemp{
     height: 60%;
@@ -848,26 +1006,31 @@ body{
 .limits_data{
     height: 75%;
     width: 230px;
-    background-color: rgb(255, 255, 255);
-    border: 3px solid rgba(255, 255, 255, 0.664);
+    background-color: var(--detailsdivbg);
+    border: 3px solid var(--limitdata_border);
     border-radius: 9px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
     overflow: hidden;
+    transition: var(--anime);
 }
 .limits_data:nth-child(1) .limit_header{
-    background-color: rgb(0, 234, 255);
+    background-color: var(--limit_color_low);
+    transition: var(--anime);
 }
 .limits_data:nth-child(2) .limit_header{
-    background-color: rgb(30, 255, 0);
+    background-color: var(--limit_color_good);
+    transition: var(--anime);
 }
 .limits_data:nth-child(3) .limit_header{
-    background-color: rgb(255, 196, 0);
+    background-color: var(--limit_color_mid);
+    transition: var(--anime);
 }
 .limits_data:nth-child(4) .limit_header{
-    background-color: rgb(245, 28, 28);
+    background-color: var(--limit_color_high);
+    transition: var(--anime);
 }
 
 .limit_color{
@@ -881,7 +1044,6 @@ body{
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background-color: rgb(244, 244, 244);
 }
 .limit_header{
     border-bottom: 3px solid white;
@@ -907,8 +1069,9 @@ body{
     align-items: center;
     justify-self: center;
     font-size: 13px;
-    color: rgb(30, 30, 30);
+    color: var(--graph_text);
     line-height: 17px;
+    transition: var(--anime);
 }
 .limit_newbody>p{
     display: flex;
@@ -916,6 +1079,78 @@ body{
     justify-self: center;
     height: 100%;
 }
+
+
+
+.theviewmorebutton{
+    color: var(--graph_text);
+    transition: var(--anime);
+}
+
+
+
+.textleftout{
+    transform: translateX(0px);
+    animation: introL .3s ease-in-out 1;
+  }
+@keyframes introL{
+    0%{
+        transform: translateX(0px);
+    }
+    100%{
+        transform: translateX(calc(100% + 300px));
+    }
+}
+
+
+
+.textleftin{
+    transform: translateX(0px);
+    animation: outtroL .3s ease-in-out 1;
+}
+@keyframes outtroL{
+    0%{
+        transform: translateX(calc(0% - 300px));
+    }
+    100%{
+        transform: translateX(0px);
+    }
+}
+
+
+
+.textrigthin{
+    transform: translateX(0px);
+    animation: introR .3s ease-in-out 1;
+}
+@keyframes introR{
+    0%{
+        transform: translateX(calc(100% + 300px));
+    }
+    100%{
+        transform: translateX(0px);
+    }
+}
+
+
+
+.textrigthout{
+    transform: translateX(0px);
+    animation: outtroR .3s ease-in-out 1;
+}
+@keyframes outtroR{
+    0%{
+        transform: translateX(0px);
+    }
+    100%{
+        transform: translateX(calc(0% - 300px));
+    }
+}
+
+
+
+
+
 
 
 @media (min-width: 900px){

@@ -556,28 +556,6 @@ def admindata(request):
             status=Devices_details.objects.filter(device_id=device_id).values('device_status','device_name','device_details').first()
             symbol=symbols_data[device_id]
             if latest_record:
-                if device_id==10:
-                    winddir=latest_record.device_values
-                    if winddir == 0:
-                        wind_dir = "N"
-                    elif winddir == 90:
-                        wind_dir = "E"
-                    elif winddir == 180:
-                        wind_dir = "S"
-                    elif winddir == 270:
-                        wind_dir = "W"
-                    else:
-                        if winddir < 90:
-                            wind_dir = "NE"
-                        elif winddir < 180:
-                            wind_dir = "SE"
-                        elif winddir < 270:
-                            wind_dir = "SW"
-                        elif winddir < 360:
-                            wind_dir = "NW"
-                    data_value=str(latest_record.device_values)+str(symbol)+wind_dir
-                else:
-                    data_value=str(latest_record.device_values)+str(symbol)
                 datetm = latest_record.date_time.date()
                 timetm = latest_record.date_time.time()
                 if current_date==datetm:
@@ -654,31 +632,89 @@ def admin_lastdata(request):
         minval = min(data.device_values for data in fulldata)
     
     for device in fulldata:
-            datetm = device.date_time.date()
             timetm = device.date_time.time()
-            datetm=str(datetm)+" at "+timetm.strftime("%I:%M %p")
-            range_data=therangecheck(device.device_values,device.device_id)
+            timetm=timetm.strftime("%I:%M %p")
+            if device_id!=10:
+                range_data=therangecheck(device.device_values,device.device_id)
+                values_data=str(device.device_values)+str(symbol)
+                max_data=str(maxval)+str(symbol)
+                min_data=str(minval)+str(symbol)
+            else:
+                range_datat=therangecheck(device.device_values,device.device_id)
+                range_data=range_datat[0]['From']+" To "+range_datat[0]['To']
+                values_data=str(device.device_values)+str(symbol)+range_datat[0]['To']
+                max_symbol_data=therangecheck(maxval,device_id)
+                max_data=str(maxval)+str(symbol)+max_symbol_data[0]['To']
+                min_symbol_data=therangecheck(minval,device_id)
+                min_data=str(minval)+str(symbol)+min_symbol_data[0]['To']
             result.append({
                 'device_id': device.device_id,
-                'datetime': datetm,
+                'datetime': timetm,
                 'range': range_data,
-                'device_values': str(device.device_values)+str(symbol),
+                'device_values': values_data,
                 'Name':names_d,
-                'max':str(maxval)+str(symbol),
-                'min':str(minval)+str(symbol)})
+                'max':max_data,
+                'min':min_data})
     return JsonResponse(result,safe=False)
 
 
 def therangecheck(values,device_id):
-    High=device_limits['limits'][device_id]['High']
-    mid=device_limits['limits'][device_id]['Mid']
-    low=device_limits['limits'][device_id]['Low']
-    if values >=High:
-        rangeval="Unhealthy"
-    elif values >=mid:
-        rangeval="Moderate"
-    elif values >=low:
-        rangeval="Good"
+    winddirval=[]
+    if device_id!=10:
+        High=device_limits['limits'][device_id]['High']
+        mid=device_limits['limits'][device_id]['Mid']
+        low=device_limits['limits'][device_id]['Low']
+        if values >=High:
+            rangeval="Unhealthy"
+        elif values >=mid:
+            rangeval="Moderate"
+        elif values >=low:
+            rangeval="Good"
+        else:
+            rangeval="Low"
+        return rangeval
     else:
-        rangeval="Low"
-    return rangeval
+        winddir=values
+        if winddir == 0:
+            winddirval.append({
+                'From': 'S',
+                'To': 'N',
+                })
+        elif winddir == 90:
+            winddirval.append({
+                'From': 'W',
+                'To': 'E',
+                })
+        elif winddir == 180:
+            winddirval.append({
+                'From': 'N',
+                'To': 'S',
+                })
+        elif winddir == 270:
+            winddirval.append({
+                'From': 'E',
+                'To': 'W',
+                })
+        else:
+            if winddir < 90:
+                winddirval.append({
+                'From': 'SW',
+                'To': 'NE',
+                })
+            elif winddir < 180:
+                winddirval.append({
+                'From': 'SE',
+                'To': 'NW',
+                })
+            elif winddir < 270:
+                winddirval.append({
+                'From': 'NE',
+                'To': 'SW',
+                })
+            elif winddir < 360:
+                winddirval.append({
+                'From': 'NW',
+                'To': 'SE',
+                })
+        return winddirval
+    

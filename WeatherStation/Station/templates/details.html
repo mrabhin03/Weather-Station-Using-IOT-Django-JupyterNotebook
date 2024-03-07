@@ -410,7 +410,9 @@
               1
             );
           }
+          themecheck()
         }
+        
         function isLight(color) {
           var match = color.match(/\d+/g);
           var color = match.map(Number);
@@ -444,6 +446,7 @@
                   tempdata = data;
                   theajax = 1;
                   pergraph(data, de_id);
+                  
                 } else {
                   var areEqual =
                     JSON.stringify(tempdata) === JSON.stringify(data);
@@ -504,7 +507,16 @@
         }
         var canvas = document.getElementById("pergraphdisplay");
         var ctx = canvas.getContext("2d");
-
+        function needchart(){
+            return perchart
+        }
+        function chartcolorchange(){
+          setTimeout(() => {
+            perchart.options.scales.x.grid.color=perchart.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.1)';
+            perchart.options.scales.x.ticks.color=perchart.options.scales.y.ticks.color = 'white';
+            perchart.update();
+          }, 200);
+        }
         function setCanvasSize() {
           if (window.innerWidth < 700) {
             canvas.width = innerWidth * 52;
@@ -664,6 +676,5 @@
       </div>
     </div>
   </div>
-  
 </div>
 {% endblock %}
