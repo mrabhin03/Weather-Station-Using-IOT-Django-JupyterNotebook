@@ -486,6 +486,43 @@ nav.close ~ .dashboard .top{
     }
 }
 
+#status_td{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+}
+.active_main{
+    cursor: pointer;
+    height: 25px;
+    width: 55px;
+    background-color: rgb(179, 4, 4);
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: baseline;
+    transition: all .4s ease-in-out;
+}
+.active_main.on{
+    background-color: rgb(4, 179, 42);
+}
+
+.buttonchange{
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: white;
+    transform: translateX(calc(0% + 3px));
+    transition: all .4s ease-in-out;
+}
+.buttonchange.on{
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: white;
+    transform: translateX(calc(200% - 8px));
+}
+
 @media (max-width: 1000px) {
     nav{
         width: 73px;
@@ -528,6 +565,7 @@ nav.close ~ .dashboard .top{
     .activity .activity-data{
         overflow-X: scroll;
     }
+    
 }
 
 @media (max-width: 780px) {
@@ -535,6 +573,7 @@ nav.close ~ .dashboard .top{
         width: calc(100% / 2 - 15px);
         margin-top: 15px;
     }
+    
 }
 @media (max-width: 560px) {
     .dash-content .boxes .box{
@@ -542,42 +581,14 @@ nav.close ~ .dashboard .top{
     }
 }
 @media (max-width: 400px) {
-    nav{
-        width: 0px;
+    
+    .activity-data>table>thead{
+        font-size: 12px;
+        font-weight: 0;
     }
-    nav.close{
-        width: 73px;
+    .activity-data>table>tbody>tr,.activity-data>table>tbody>tr>td{
+        font-size: 8px;
+        font-weight: 0;
     }
-    nav .logo_name{
-        opacity: 0;
-        pointer-events: none;
-    }
-    nav.close .logo_name{
-        opacity: 0;
-        pointer-events: none;
-    }
-    nav li a .link-name{
-        opacity: 0;
-        pointer-events: none;
-    }
-    nav.close li a .link-name{
-        opacity: 0;
-        pointer-events: none;
-    }
-    nav ~ .dashboard{
-        left: 0;
-        width: 100%;
-    }
-    nav.close ~ .dashboard{
-        left: 73px;
-        width: calc(100% - 73px);
-    }
-    nav ~ .dashboard .top{
-        left: 0;
-        width: 100%;
-    }
-    nav.close ~ .dashboard .top{
-        left: 0;
-        width: 100%;
-    }
+
 }

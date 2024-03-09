@@ -23,11 +23,11 @@
         </script>
         <div class="main">
             <div class="temperature">
-                <div class="thead" >
+                <div  class="thead" >
                     <div class="sun">
                     </div>
-                    <div class="themeselect">
-                        <p>Dark Mode</p><div onclick="themechange()" class="buttonst"><div id="switchdata" class="switch"></div></div>
+                    <div  onclick="themechange()" class="themeselect">
+                        <p>Dark Mode</p><div class="buttonst"><div  id="switchdata" class="switch"></div></div>
                     </div>
                 </div>
                 <div class="shead">
@@ -71,6 +71,7 @@
                             <div id="thegrlabel" class="barlabel">
                                 
                             </div>
+
                         </div>
                         <div class="canvasdata">
                             <canvas id="graphdisplay" ></canvas>
@@ -202,8 +203,8 @@
                     function setCanvasSize() {
                         if(window.innerWidth<700)
                         {
-                            canvas.width = innerWidth*52;  
-                            canvas.height=innerWidth*20
+                            canvas.width = innerWidth*45;  
+                            canvas.height=innerWidth*17
                         }
                         else{
                             if(window.innerWidth<1250)

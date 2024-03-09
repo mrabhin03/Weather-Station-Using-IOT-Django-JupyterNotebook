@@ -387,12 +387,16 @@
               perchart.update();
             }
             updatemain(maxdata, mindata);
+            alldevs = [0, 1, 2, 4, 6, 7, 9, 11];
+            trar=parseInt(trar)
+            if(trar>alldevs.length){trar=alldevs.indexOf(trar);}
+            datanew=alldevs[trar]
             topvaluesupdate(
               dorw,
-              maxdata["Name"][trar],
-              maxdata["Value"][trar],
-              maxdata["symbol"][trar],
-              maxdata["Date"][trar],
+              maxdata["Name"][datanew],
+              maxdata["Value"][datanew],
+              maxdata["symbol"][datanew],
+              maxdata["Date"][datanew],
               lastdate2,
               1,
               1,
@@ -400,10 +404,10 @@
             );
             topvaluesupdate(
               dorw,
-              mindata["Name"][trar],
-              mindata["Value"][trar],
-              mindata["symbol"][trar],
-              mindata["Date"][trar],
+              mindata["Name"][datanew],
+              mindata["Value"][datanew],
+              mindata["symbol"][datanew],
+              mindata["Date"][datanew],
               lastdate2,
               0,
               1,

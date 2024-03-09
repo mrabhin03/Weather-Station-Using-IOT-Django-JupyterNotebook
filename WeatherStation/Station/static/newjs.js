@@ -3,7 +3,7 @@ var tempid = localStorage.getItem("tempid") || 404;
 var trar = localStorage.getItem("trar") || 1;
 var ar = 1;
 selcteddv = [3, 5, 8];
-
+timeout_t1=0
 var device_limits = {
   limits: [
     {
@@ -160,6 +160,9 @@ var themovesobject = [];
 alldevs = [0, 1, 2, 4, 6, 7, 9, 11];
 
 function checkvalue(n, id, dorw, lastdate2, themainelemantdata) {
+  timeout_t1=300
+  trar=parseInt(trar)
+  if(trar>alldevs.length){trar=alldevs.indexOf(trar);}
   theelemantdata = themainelemantdata.querySelector("#arrowint");
   themovesobject[0] = document.getElementById("max_data_name");
   themovesobject[1] = document.getElementById("max_data_value");
@@ -192,7 +195,7 @@ function checkvalue(n, id, dorw, lastdate2, themainelemantdata) {
         }, 200);
       }
     } else {
-      if (trar == alldevs.length-1) {
+      if (trar >= alldevs.length-1) {
         theelemantdata.classList.add("invalidmove");
       } else {
         trar++;
@@ -309,7 +312,12 @@ function topvaluesupdate(
 ) {
   setTimeout(() => {
     if (thar == 1) {
-      idv = trar;
+      
+      trar=parseInt(trar)
+      if(trar>alldevs.length){trar=alldevs.indexOf(trar);}
+      idv=alldevs[trar]
+      
+      
     } else {
       idv = id;
     }
@@ -358,7 +366,6 @@ function topvaluesupdate(
       $("#tim").text("Moderate");
       $("#tih").text("Unhealthy");
     }
-
     $("#lowtext").text(device_limits.limits[idv].Lowtx);
     $("#goodtext").text(device_limits.limits[idv].GoodTx);
     $("#modtext").text(device_limits.limits[idv].Modertx);
@@ -370,7 +377,7 @@ function topvaluesupdate(
     $("#unhdata").text(device_limits.limits[idv].High);
     $("#" + dedate).text(predate);
     $("#pre_date").text(predate);
-  }, 300);
+  }, timeout_t1);
 }
 var perdevice = [0, 1, 2, 5, 11];
 function homegraphdata(nav, obj) {

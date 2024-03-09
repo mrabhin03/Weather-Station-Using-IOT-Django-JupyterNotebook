@@ -80,12 +80,12 @@
             <div class="box box2">
               <i class="uil"></i>
               <span class="text">Active Devices</span>
-              <span class="number">{{active}}</span>
+              <span id="actives" class="number">{{active}}</span>
             </div>
             <div class="box box3">
               <i class="uil"></i>
               <span class="text">Inactive Devices</span>
-              <span class="number">{{inactive}}</span>
+              <span id="inactives" class="number">{{inactive}}</span>
             </div>
           </div>
         </div>
@@ -125,11 +125,11 @@
                         <td>
                             {{ i.date }}
                         </td>
-                        <td>
+                        <td id="status_td">
                             {% if i.status == 1 %}
-                            <span style="color: rgb(24, 204, 24);" >Active</span>
+                            <div onclick="statuschange(this,'{{ i.device_id }}')" class="active_main on"><div id="changebutton" class="buttonchange on"></div></div>
                             {% else %}
-                            <span style="color: red;">Inactive</span>
+                            <div onclick="statuschange(this,'{{ i.device_id }}')" class="active_main"><div id="changebutton" class="buttonchange"></div></div>
                             {% endif %}
                         </td>
                     </tr>

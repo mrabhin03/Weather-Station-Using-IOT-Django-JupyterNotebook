@@ -68,3 +68,30 @@ function swipedevice(nav, obj) {
       }
   }, 500);
 }
+
+
+function statuschange(elemant,id){
+  sub_elemant = elemant.querySelector("#changebutton");
+  var count = document.querySelectorAll('#changebutton').length;
+  if(elemant.classList.contains("on"))
+  {elemant.classList.remove("on");sub_elemant.classList.remove("on");statusto=0;}
+  else{elemant.classList.add("on");sub_elemant.classList.add("on");statusto=1;}
+  updatestatusback(id,statusto)
+  var avcount = document.querySelectorAll('.on').length/2;
+  $("#actives").text(avcount);
+  $("#inactives").text(count-avcount);
+}
+
+function updatestatusback(val,statusto) {
+  $.ajax({
+      url: '/statuschange/',
+      method: 'GET',
+      data: { 'id': val,'status':statusto}, 
+      dataType: 'json',
+      success: function (data) {
+      },
+      error: function (error) {
+          console.error('Error fetching new date:', error);
+      },
+  });
+}

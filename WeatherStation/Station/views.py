@@ -9,133 +9,12 @@ from datetime import datetime
 from joblib import load
 from django.http import JsonResponse
 from datetime import time as dt_time
-current_date_time_datetime = datetime.now()
+from .Commons import *
 
+current_date_time_datetime = datetime.now()
 graphdate=timezone.localdate()
 totaldate=timezone.localdate()
 todays=timezone.localdate()
-
-device_names = ["","Humidity","Temperature","Sound","Co2","Chance of Rain","Wind Speed","NO2","Atmospheric Pressure","UV","Wind Direction","Air Quality"]
-symbols_data = ["","%","°","%","%","%","km/h","%","hPa","%","°"," AQI"]
-
-device_limits = {
-        'limits': [{ #0 default
-            'High': 20,
-            'Mid': 10,
-            'Low': 5
-        },
-        {
-            #1 Humidity Sensor
-            'HighColor':"red",
-            'High': 60,
-            'MtoHColor':"orange",
-            'Mid': 30,
-            'LtoMColor':"rgb(81, 159, 226)",
-            'Low': 15,
-            'LowColor':"rgb(3, 209, 255)"
-        },
-        {
-            #2 Temperature Sensor
-            'HighColor':"red",
-            'High': 60,
-            'MtoHColor':"orange",
-            'Mid': 30,
-            'LtoMColor':"rgb(81, 159, 226)",
-            'Low': 15,
-            'LowColor':"rgb(3, 209, 255)"
-        },
-        {
-            #3 Sound Sensor
-            'HighColor':"red",
-            'High': 60, 
-            'MtoHColor':"orange",
-            'Mid': 30,
-            'LtoMColor':"rgb(81, 159, 226)",
-            'Low': 15,
-            'LowColor':"rgb(3, 209, 255)"
-        },{
-            #4 Co2 Sensor
-            'HighColor':"rgb(255, 53, 53)",
-            'High': 20, 
-            'MtoHColor':"orange",
-            'Mid': 5,
-            'LtoMColor':"rgb(81, 159, 226)",
-            'Low': 2,
-            'LowColor':"rgb(3, 209, 255)"
-        },
-        {
-            #5 Chance of Rain
-            'HighColor':"rgb(0, 255, 174)",
-            'High': 75, 
-            'MtoHColor':"orange",
-            'Mid': 50,
-            'LtoMColor':"rgb(81, 159, 226)",
-            'Low': 30,
-            'LowColor':"yellow"
-        },
-        {
-            #6 Wind Speed sensor
-            'HighColor':"red",
-            'High': 25, 
-            'MtoHColor':"orange",
-            'Mid': 12,
-            'LtoMColor':"rgb(81, 159, 226)",
-            'Low': 5,
-            'LowColor':"rgb(3, 209, 255)"
-        },
-        {
-            #7 NO2 Sensor
-            'HighColor':"red",
-            'High': 20, 
-            'MtoHColor':"orange",
-            'Mid': 10,
-            'LtoMColor':"rgb(81, 159, 226)",
-            'Low': 5,
-            'LowColor':"rgb(3, 209, 255)"
-        },
-        {
-            #8 Atmospheric Pressure
-            'HighColor':"red",
-            'High': 1013, 
-            'MtoHColor':"orange",
-            'Mid': 980,
-            'LtoMColor':"rgb(81, 159, 226)",
-            'Low': 550,
-            'LowColor':"rgb(3, 209, 255)"
-        },{
-            #9 UV Sensor
-            'HighColor':"red",
-            'High': 40, 
-            'MtoHColor':"orange",
-            'Mid': 20,
-            'LtoMColor':"rgb(81, 159, 226)",
-            'Low': 10,
-            'LowColor':"rgb(3, 209, 255)"
-        },
-        {
-            #10 Wind Direction
-            'HighColor':"red",
-            'High': 10000, 
-            'MtoHColor':"orange",
-            'Mid': 10000,
-            'LtoMColor':"rgb(81, 159, 226)",
-            'Low': 10000,
-            'LowColor':"rgb(3, 209, 255)"
-        },
-        {
-            #11 Air Quality
-            'HighColor':"red",
-            'High': 30, 
-            'MtoHColor':"orange",
-            'Mid': 20,
-            'LtoMColor':"rgb(0, 255, 174)",
-            'Low': 15,
-            'LowColor':"rgb(3, 209, 255)"
-        }
-    ]
-}
-device_icon = ["","cloudy-outline","thermometer-outline","volume-high-outline","warning-outline","umbrella-outline","speedometer-outline","logo-electron","contract-outline","warning-outline","compass-outline","balloon"]
-
 
 model=load('./TheModel/model.joblib')
 
@@ -150,140 +29,6 @@ def home(request):
 def viewmoredetails(request):
     devices_data = Devices_details.objects.filter(device_id__in=[3,5,8]).values()
     return render(request,'details.html',{'Devices':devices_data})
-
-
-def deviceonlydata(request):
-    dates1=request.GET.get('grdates', None)
-    current_date=datetime.strptime(dates1, "%Y-%m-%d").date()
-    device_id = int(request.GET.get('theids', None))
-    High=device_limits['limits'][device_id]['High']
-    mid=device_limits['limits'][device_id]['Mid']
-    low=device_limits['limits'][device_id]['Low']
-    dayorweek = int(request.GET.get('dorw', None))
-    if dayorweek==1:
-        output=device_only_week(current_date,device_id,High,mid,low)
-    else:
-        output=device_only_day(current_date,device_id,High,mid,low)
-    return JsonResponse( output,safe=False)
-
-
-def alldeviceonlydata(request):
-    dates1=request.GET.get('grdates', None)
-    current_date=datetime.strptime(dates1, "%Y-%m-%d").date()
-    all_id = Devices_details.objects.aggregate(Max('device_id'))['device_id__max']
-    dates=[]
-    dayorweek = int(request.GET.get('dorw', None))
-    if dayorweek==1:
-        output=alldeviceonlydataweek(current_date,all_id,dates)
-    else:
-        output=alldeviceonlydataday(current_date,all_id,dates)
-    return JsonResponse( output,safe=False)
-
-
-def alldeviceonlydataday(current_date,all_id,dates):
-    devices = [[] for _ in range(11)]
-    times=[3,6,9,12,15,18,21,24]
-    t=1
-    for j in range(1, all_id + 1):
-        devices_data = Devices_details.objects.filter(device_id__exact=j).values('device_id').first()
-        device_id=devices_data['device_id']
-        per=0
-        tmin=0
-        for time in times:
-            hor=time
-            if time==24:
-                tmin=59
-                hor=23
-            start_time = dt_time(hour=per, minute=0)
-            end_time = dt_time(hour=hor, minute=tmin)
-            per=time
-            sql1 = Data_store.objects.filter(
-            device_id=device_id,
-            date_time__date=current_date,
-            date_time__time__range=(start_time, end_time)
-            ).order_by('-date_time').first()
-            value1 = int(sql1.device_values if sql1 else 0)
-            devices[j - 1].append(value1)
-    output = [{'date': time, **{'Device{}'.format(i + 1): devices[i][j] for i in range(len(devices))}} for j, time in enumerate(times)]
-    return output
-
-
-def device_only_day(current_date,device_id,High,mid,low):
-    device=[]
-    icon=[]
-    icon_data = device_icon[device_id]
-    
-    symbol=symbols_data[device_id]
-    times=[3,6,9,12,15,18,21,24]
-    per=0
-    tmin=0
-    for time in times:
-        hor=time
-        if time==24:
-            tmin=59
-            hor=23
-        start_time = dt_time(hour=per, minute=0)
-        end_time = dt_time(hour=hor, minute=tmin)
-        per=time
-        sql1 = Data_store.objects.filter(
-        device_id=device_id,
-        date_time__date=current_date,
-        date_time__time__range=(start_time, end_time)
-        ).order_by('-date_time').first()
-        value1 = sql1.device_values if sql1 else 0
-        device.append(value1)
-        if value1 >= High:
-            icon.append("Red")
-        elif value1 >= mid:
-            icon.append("Orange")
-        elif value1 >= low:
-            icon.append("rgb(81, 159, 226)")
-        else:
-            icon.append("rgb(3, 209, 255)")
-    output = [{'date': times, 'value': device, 'icons': icon_data,'color':icon,'symbol':symbol,'ID':device_id} for times, device,icon in zip(times, device,icon)]
-    return output
-
-
-def alldeviceonlydataweek(current_date,all_id,dates):
-    devices = [[] for _ in range(11)]
-    t=1
-    for j in range(1, all_id + 1):
-        devices_data = Devices_details.objects.filter(device_id__exact=j).values('device_id').first()
-        device_id=devices_data['device_id']
-        for i in range(6, -1, -1):
-            day = current_date - timedelta(days=i)
-            if t==1:
-                dates.append(day)
-            sql1 = Data_store.objects.filter(device_id=device_id, date_time__date=day).order_by('-date_time').first()
-            value1 = int(sql1.device_values if sql1 else 0)
-            devices[j - 1].append(value1)
-        t=0
-    output = [{'date': date, **{'Device{}'.format(i + 1): devices[i][j] for i in range(len(devices))}} for j, date in enumerate(dates)]
-    return output
-
-
-def device_only_week(current_date,device_id,High,mid,low):
-    dates=[]
-    device=[]
-    icon=[]
-    icon_data = device_icon[device_id]
-    symbol=symbols_data[device_id]
-    for i in range(6, -1, -1):
-        day = current_date - timedelta(days=i)
-        dates.append(day)
-        sql1 = Data_store.objects.filter(device_id=device_id, date_time__date=day).order_by('-date_time').first()
-        value1 = int(sql1.device_values if sql1 else 0)
-        device.append(value1)
-        if value1 >= High:
-            icon.append("Red")
-        elif value1 >= mid:
-            icon.append("Orange")
-        elif value1 >= low:
-            icon.append("rgb(81, 159, 226)")
-        else:
-            icon.append("rgb(3, 209, 255)")
-    output = [{'date': dates, 'value': device, 'icons': icon_data,'color':icon,'symbol':symbol,'ID':device_id} for dates, device,icon in zip(dates, device,icon)]
-    return output
 
 
 def timeupdate(kr):
@@ -358,6 +103,7 @@ def gdatacal(request):
 
 
 def livedatasend(request):
+    device_limits=device_limitsdata()
     newdate = request.GET.get('devdates', None)
     current_date= datetime.strptime(newdate, "%Y-%m-%d").date()
     distinct_devices = Devices_details.objects.values('device_id').distinct()
@@ -453,6 +199,8 @@ def livedatasend(request):
 
 
 def grweekdata(current_date,did):
+    symbols_data=icon_get()
+    device_names=device_names_get()
     dates = []
     device2 = []
     device5 = []
@@ -488,6 +236,8 @@ def grweekdata(current_date,did):
 
 
 def grdaydata(current_date,did):
+    symbols_data=icon_get()
+    device_names=device_names_get()
     device2 = []
     device5 = []
     deviceid=int(did)
@@ -537,184 +287,3 @@ def grdaydata(current_date,did):
     return output
 
 
-
-def admindata(request):
-    data=[1,2,3,4,5,6,7,8,9]
-    if 'admin' in request.session:
-        current_date= todays
-        distinct_devices = Devices_details.objects.values('device_id').distinct()
-        Active = Devices_details.objects.filter(device_status=1).count()
-        result = []
-        count=0
-        for device in distinct_devices:
-            count+=1
-            device_id = device['device_id']
-            names_d=device_names[device_id]
-            latest_record = Data_store.objects.filter(
-                device_id=device_id
-            ).order_by('-date_time').first()
-            status=Devices_details.objects.filter(device_id=device_id).values('device_status','device_name','device_details').first()
-            symbol=symbols_data[device_id]
-            if latest_record:
-                datetm = latest_record.date_time.date()
-                timetm = latest_record.date_time.time()
-                if current_date==datetm:
-                    datetm="Today at "+timetm.strftime("%I:%M %p")
-                else:
-                    datetm=str(datetm)+" at "+timetm.strftime("%I:%M %p")
-                result.append({
-                    'device_id': latest_record.device_id,
-                    'icon': device_icon[device_id],
-                    'name':status['device_name'],
-                    'date': datetm,
-                    'details':status['device_details'],
-                    'status':status['device_status']
-                })
-            else:
-                result.append({
-                    'device_id': device_id,
-                    'icon': device_icon[device_id],
-                    'name':status['device_name'],
-                    'date':"No data",
-                    'details':status['device_details'],
-                    'status':status['device_status']
-                })
-        result.sort(key=lambda x: x['device_id'])
-        return render(request,'admin_page.html',{'datat':result,'Total':count,'active':Active,'inactive':count-Active})
-    else:
-        return redirect('login')
-        
-def login(request):
-    
-    
-    if request.method == 'POST':
-        requsername=request.POST.get('username', None)
-        reqpassword=request.POST.get('password', None)
-        datauser=Admin_details.objects.filter(
-        username=requsername).first()
-        if datauser is not None:
-            if reqpassword==datauser.password:
-                request.session['admin'] = 1
-                return redirect('admindata')
-            else:
-                return render(request, 'login.html', {'errormsg': "Wrong Password"})
-        else:
-            return render(request, 'login.html', {'errormsg': "User not found"})
-            
-    return render(request,'login.html',{'errormsg': ""})
-
-def logout(request):
-    if 'admin' in request.session:
-        del request.session['admin']
-    return redirect('home')
-
-def dataview(request):
-    return render(request,'admin_data.html')
-
-def admin_lastdata(request):
-    result=[]
-    device_id=int(request.GET.get('device_id',None))
-    date=request.GET.get('dates',None)
-    fulldata = Data_store.objects.filter(device_id=device_id, date_time__date=date).order_by('-date_time')
-    symbol=symbols_data[device_id]
-    names_d=device_names[device_id]
-    if len(fulldata) == 0:
-        result.append({
-            'device_id': device_id,
-            'datetime': "No data",
-            'range': "404",
-            'device_values': "No data"+str(symbol),
-            'Name':names_d,
-            'max':"--",
-            'min':"--"})
-    else:
-        maxval = max(data.device_values for data in fulldata)
-        minval = min(data.device_values for data in fulldata)
-    
-    for device in fulldata:
-            timetm = device.date_time.time()
-            timetm=timetm.strftime("%I:%M %p")
-            if device_id!=10:
-                range_data=therangecheck(device.device_values,device.device_id)
-                values_data=str(device.device_values)+str(symbol)
-                max_data=str(maxval)+str(symbol)
-                min_data=str(minval)+str(symbol)
-            else:
-                range_datat=therangecheck(device.device_values,device.device_id)
-                range_data=range_datat[0]['From']+" To "+range_datat[0]['To']
-                values_data=str(device.device_values)+str(symbol)+range_datat[0]['To']
-                max_symbol_data=therangecheck(maxval,device_id)
-                max_data=str(maxval)+str(symbol)+max_symbol_data[0]['To']
-                min_symbol_data=therangecheck(minval,device_id)
-                min_data=str(minval)+str(symbol)+min_symbol_data[0]['To']
-            result.append({
-                'device_id': device.device_id,
-                'datetime': timetm,
-                'range': range_data,
-                'device_values': values_data,
-                'Name':names_d,
-                'max':max_data,
-                'min':min_data})
-    return JsonResponse(result,safe=False)
-
-
-def therangecheck(values,device_id):
-    winddirval=[]
-    if device_id!=10:
-        High=device_limits['limits'][device_id]['High']
-        mid=device_limits['limits'][device_id]['Mid']
-        low=device_limits['limits'][device_id]['Low']
-        if values >=High:
-            rangeval="Unhealthy"
-        elif values >=mid:
-            rangeval="Moderate"
-        elif values >=low:
-            rangeval="Good"
-        else:
-            rangeval="Low"
-        return rangeval
-    else:
-        winddir=values
-        if winddir == 0:
-            winddirval.append({
-                'From': 'S',
-                'To': 'N',
-                })
-        elif winddir == 90:
-            winddirval.append({
-                'From': 'W',
-                'To': 'E',
-                })
-        elif winddir == 180:
-            winddirval.append({
-                'From': 'N',
-                'To': 'S',
-                })
-        elif winddir == 270:
-            winddirval.append({
-                'From': 'E',
-                'To': 'W',
-                })
-        else:
-            if winddir < 90:
-                winddirval.append({
-                'From': 'SW',
-                'To': 'NE',
-                })
-            elif winddir < 180:
-                winddirval.append({
-                'From': 'SE',
-                'To': 'NW',
-                })
-            elif winddir < 270:
-                winddirval.append({
-                'From': 'NE',
-                'To': 'SW',
-                })
-            elif winddir < 360:
-                winddirval.append({
-                'From': 'NW',
-                'To': 'SE',
-                })
-        return winddirval
-    

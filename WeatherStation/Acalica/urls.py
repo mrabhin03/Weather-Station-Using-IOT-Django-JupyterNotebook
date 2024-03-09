@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from Station import views as station
+from Station import Details as Page2
+from Station import Admin_page as Admins
 urlpatterns = [
     path('adminlog/', admin.site.urls),
     path('', station.home,name='home'),
@@ -26,12 +28,13 @@ urlpatterns = [
     path('value_up/', station.valueup,name='valueup'),
     path('day_update/', station.day_update,name='day_update'),
     path('details/', station.viewmoredetails,name='details'),
-    path('devicedata/',station.deviceonlydata,name='device'),
-    path('alldevicedata/',station.alldeviceonlydata,name='alldevice'),
-    path('admin/',station.admindata,name='admindata'),
-    path('login/',station.login,name='login'),
-    path('logout/',station.logout,name='logout'),
-    path('admin/data/',station.dataview,name='dataview'),
-    path('admin_data_out/',station.admin_lastdata,name='admin_lastdata')
+    path('devicedata/',Page2.deviceonlydata,name='device'),
+    path('alldevicedata/',Page2.alldeviceonlydata,name='alldevice'),
+    path('admin/',Admins.admindata,name='admindata'),
+    path('login/',Admins.login,name='login'),
+    path('logout/',Admins.logout,name='logout'),
+    path('admin/data/',Admins.dataview,name='dataview'),
+    path('admin_data_out/',Admins.admin_lastdata,name='admin_lastdata'),
+    path('statuschange/',Admins.thestatuschange,name='changestatus')
     
 ]
