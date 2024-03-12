@@ -27,9 +27,12 @@ urlpatterns = [
     path('graph_data/', station.gdatacal,name='graph'),
     path('value_up/', station.valueup,name='valueup'),
     path('day_update/', station.day_update,name='day_update'),
+    path('loadercall/',station.loadernew,name='loadernew'),
+
     path('details/', station.viewmoredetails,name='details'),
     path('devicedata/',Page2.deviceonlydata,name='device'),
     path('alldevicedata/',Page2.alldeviceonlydata,name='alldevice'),
+    
     path('admin/',Admins.admindata,name='admindata'),
     path('login/',Admins.login,name='login'),
     path('logout/',Admins.logout,name='logout'),

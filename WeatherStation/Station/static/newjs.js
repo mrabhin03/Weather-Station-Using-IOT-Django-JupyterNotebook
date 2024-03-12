@@ -143,6 +143,7 @@ var device_limits = {
 
 maxdatabase = {};
 mindatabase = {};
+averagebase={};
 
 function nextpagedata(data, trar) {
   tempid = data;
@@ -150,9 +151,10 @@ function nextpagedata(data, trar) {
   localStorage.setItem("trar", trar);
   window.location.href = "/details";
 }
-function updatemain(maxdata, mindata) {
+function updatemain(maxdata, mindata,average) {
   maxdatabase = maxdata;
   mindatabase = mindata;
+  averagebase=average
   prevbox = document.getElementById("Humidity");
 }
 
@@ -308,7 +310,8 @@ function topvaluesupdate(
   lastdate2,
   nav,
   thar,
-  id
+  id,
+  avg
 ) {
   setTimeout(() => {
     if (thar == 1) {
@@ -316,10 +319,12 @@ function topvaluesupdate(
       trar=parseInt(trar)
       if(trar>alldevs.length){trar=alldevs.indexOf(trar);}
       idv=alldevs[trar]
+      average_data=averagebase["value"][idv]
       
       
     } else {
       idv = id;
+      average_data=avg
     }
     if (prevbox) {
       prevbox.style.transform = "scale(1)";
@@ -341,20 +346,26 @@ function topvaluesupdate(
     $("#pre_name").text(devicenameout);
     $("#" + dename).text(devicenameout);
     $("#" + devalue).text(value + symbol);
-    $("#pre_value").text("35" + symbol);
+    $("#pre_value").text(average_data + symbol);
     if (dorw == 0) {
       if (value_date) {
         predate = lastdate2 + " " + value_date + ":00";
+        Predates=lastdate2
       } else {
-        predate = "No Data";
+        Predates=predate = "No Data";
       }
     } else {
       if (value_date) {
         predate = value_date;
+        Predates="This Week"
       } else {
-        predate = "No Data";
+        Predates=predate = "No Data";
       }
     }
+    $("#" + dedate).text(predate);
+    $("#pre_date").text(Predates);
+
+
     if (id == 5) {
       $("#til").text("Very Low Chance");
       $("#tig").text("Low Chance");
@@ -375,35 +386,36 @@ function topvaluesupdate(
     $("#gooddata").text(device_limits.limits[idv].Good);
     $("#moddata").text(device_limits.limits[idv].Moder);
     $("#unhdata").text(device_limits.limits[idv].High);
-    $("#" + dedate).text(predate);
-    $("#pre_date").text(predate);
+    
   }, timeout_t1);
 }
 var perdevice = [0, 1, 2, 5, 11];
+var iva=2
 function homegraphdata(nav, obj) {
   arrowdata = obj.querySelector("#homeswitch");
   if (nav == 0) {
-    if (didval == 1) {
+    if (iva == 1) {
       arrowdata.classList.add("invalidmove");
     } else {
       arrowdata.classList.add("validmoveL");
-      didval--;
-      if (didval == 10) {
-        didval--;
+      iva--;
+      if (iva == 10) {
+        iva--;
       }
     }
   } else {
-    if (didval == 4) {
+    if (iva == 4) {
       arrowdata.classList.add("invalidmove");
     } else {
       arrowdata.classList.add("validmoveR");
-      didval++;
-      if (didval == 10) {
-        didval++;
+      iva++;
+      if (iva == 10) {
+        iva++;
       }
     }
   }
-  graphupdates(perdevice[didval]);
+  didval=perdevice[iva]
+  graphupdates(didval);
   setTimeout(() => {
     if (arrowdata.classList.contains("validmoveL")) {
       arrowdata.classList.remove("validmoveL");

@@ -9,7 +9,31 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     </head>
     <body>
+        
+        {% if Load == "0" %}
+        <div class="loader"><h2>Loading</h2><div class="loader_sub"><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
+        {% endif %}
         <script>
+            var tab_data=0
+
+             function checkTabLoad() {
+                if (!sessionStorage.getItem('alertShown')) 
+                {
+                    tab_data=1
+                    switch (window.performance.navigation.type) {
+                        case 0:
+                        fetch('/loadercall')
+                        .then(response => {location.reload();});
+                    break;
+                }
+                sessionStorage.setItem('alertShown', true);
+                
+            }
+        }
+        checkTabLoad();
+            var perdevice = [0, 1, 2, 5, 11];
+            var count = document.querySelectorAll('.loader').length;
+            if(count>0){setTimeout(function() {location.reload();}, 5000);}
             var today = new Date();
             var thedatefor = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
             var lastdate1=thedatefor;

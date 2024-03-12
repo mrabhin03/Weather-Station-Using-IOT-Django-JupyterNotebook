@@ -7,6 +7,8 @@ todays=timezone.localdate()
 
 
 def admindata(request):
+    if 'load' in request.session:
+        del request.session['load']
     device_names=device_names_get()
     symbols_data=icon_get()
     device_icon=device_icon_name_get()

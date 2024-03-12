@@ -155,6 +155,12 @@
             //
             minvalue = gradata[theminindex].value;
             minvalue_date = gradata[theminindex].date;
+            //
+            sum=0
+            for(k=0;k<values.length;k++){
+                sum=sum+values[k]
+              }
+              avg=parseInt(sum/values.length);
 
             for (i = 0; i < gradata.length; i++) {
               const valdata = document.createElement("div");
@@ -232,7 +238,8 @@
               lastdate2,
               1,
               0,
-              gradata[0].ID
+              gradata[0].ID,
+              avg
             );
             topvaluesupdate(
               dorw,
@@ -243,7 +250,8 @@
               lastdate2,
               0,
               0,
-              gradata[0].ID
+              gradata[0].ID,
+              avg
             );
           } else {
             const thealign = document.createElement("div");
@@ -259,6 +267,9 @@
             mindata["Value"] = [];
             mindata["Date"] = [];
             mindata["symbol"] = [];
+
+            average={}
+            average["value"]=[]
             for (dr = 1; dr < 12; dr++) {
               tempmax = 0;
 
@@ -278,6 +289,12 @@
               mindata["Value"][dr] = gradata[theminindex][dedata];
               mindata["Date"][dr] = gradata[theminindex].date;
               mindata["symbol"][dr] = symbols_data[dr];
+              //
+              sum=0
+              for(k=0;k<values.length;k++){
+                sum=sum+values[k]
+              }
+              average["value"][dr]=parseInt(sum/values.length);
             }
 
             for (let i = 1; i < 12; i++) {
@@ -386,7 +403,7 @@
               perchart.data.datasets = datasets;
               perchart.update();
             }
-            updatemain(maxdata, mindata);
+            updatemain(maxdata, mindata,average);
             alldevs = [0, 1, 2, 4, 6, 7, 9, 11];
             trar=parseInt(trar)
             if(trar>alldevs.length){trar=alldevs.indexOf(trar);}
@@ -428,6 +445,7 @@
         theajax = 0;
         var tempdata;
         var timeoutId;
+        var temp_date;
         function perdevicedeatils(val, ar) {
           if (timeoutId) {
             clearTimeout(timeoutId);
@@ -448,14 +466,16 @@
               success: function (data) {
                 if (theajax == 0) {
                   tempdata = data;
+                  temp_date=lastdate2
                   theajax = 1;
                   pergraph(data, de_id);
                   
                 } else {
                   var areEqual =
                     JSON.stringify(tempdata) === JSON.stringify(data);
-                  if (!areEqual) {
+                  if (!areEqual || temp_date!=lastdate2) {
                     tempdata = data;
+                    temp_date=lastdate2;
                     pergraph(data, de_id);
                   }
                 }
@@ -580,7 +600,7 @@
     </div>
     <div class="theprdetailsbox">
       <div class="t2subhead">
-        <b>Predicted Value</b>
+        <b>Average Value Recorded</b>
       </div>
       <div class="t2body">
         <div
