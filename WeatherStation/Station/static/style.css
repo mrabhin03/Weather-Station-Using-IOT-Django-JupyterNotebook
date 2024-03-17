@@ -1,4 +1,4 @@
-:root{
+body.ligth{
     --bodycolor: rgb(78, 152, 216);
     --maindiv_bgcolor:rgb(27, 185, 248);
     --maindivborder:rgb(1, 164, 228);
@@ -23,19 +23,21 @@
     --darktheme:rgba(106, 106, 106, 0.447);
     --darkthemebutton:rgba(255, 255, 255, 0.662);
     --darkthemetext:rgb(255, 255, 255);
+    --speedborderorg:rgb(194, 194, 194);
+    --speedborderblue:rgb(6, 116, 212);
+    --barlevelborder:white;
+    
 
-    --limit_color_low:rgb(0, 234, 255);
-    --limit_color_good:rgb(30, 255, 0);
-    --limit_color_mid:rgb(255, 196, 0);
-    --limit_color_high:rgb(245, 28, 28);
+
+
 
     --loadcolor:white;
 
 
-    --anime:all .8s ease-in-out;
+    
 }
-body.dark{
-    --bodycolor: rgb(13, 27, 130);
+:root{
+    --bodycolor: rgb(10, 21, 100);
     --maindiv_bgcolor:rgb(8, 46, 61);
     --maindivborder:rgb(10, 86, 117);
     --sunbgcolor:rgb(255, 225, 0);
@@ -59,13 +61,23 @@ body.dark{
     --darktheme:rgba(213, 213, 213, 0.447);
     --darkthemebutton:rgb(255, 255, 255);
     --darkthemetext:rgb(255, 255, 255);
+    --speedborderorg:rgb(182, 234, 255);
+    --speedborderblue:rgb(18, 113, 197);
+    --barlevelborder:rgb(0, 0, 0);
     
     --limit_color_low:rgb(0, 187, 204);
     --limit_color_good:rgb(23, 197, 0);
     --limit_color_mid:rgb(195, 150, 0);
     --limit_color_high:rgb(184, 22, 22);
 
+    --barlevelgreen:rgb(0, 255, 170);
+    --barlevelorange:orange;
+    --barlevelred:red;
+
     --loadcolor:rgba(0, 0, 0, 0.4);
+
+    --anime:all .5s ease-in-out;
+    
 }
 
 body{
@@ -147,17 +159,18 @@ body{
     margin-top: 5px;
     transition: var(--anime);
 }
-.switch{
+.switch.ligth{
     transform: translateX(calc(0% + 3px));
+    
+}
+.switch{
+    transform: translateX(calc(200% - 5px));
     transition: all .3s ease-in-out;
     height: 18px;
     width: 18px;
     background-color: var(--darkthemebutton);
     border-radius: 50%;
     transition: var(--anime);
-}
-.switch.dark{
-    transform: translateX(calc(200% - 5px));
 }
 .shead
 {
@@ -420,6 +433,7 @@ body{
 }
 .humditytitle,.temperaturetitle,.soundtitle,.co2title,.raintitle,.windtitle,.no2title,.atmtitle,.uvtitle,.windirtitle,.airqtitle{
     height: 30%;
+    cursor: default;
     width: 80%;
     display: flex;
     flex-direction: row;
@@ -447,6 +461,7 @@ body{
     justify-content: center;
     align-items: center;
     font-size: 45px;
+    cursor: default;
     color: var(--detailsdivcolor);
     transition: var(--anime);
 }
@@ -514,7 +529,7 @@ body{
     font-size: 15px;
     transition: var(--anime);
 }
-.speedarcir{
+.speedarcir,.speedarcir2{
     margin-top: 60px;
     border-radius: 50%;
     height: 130px;
@@ -522,16 +537,26 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    border-left: 5px solid rgb(6, 116, 212);
-    border-bottom: 5px solid rgb(194, 194, 194);
-    border-right: 5px solid rgb(194, 194, 194);
-    border-top: 5px solid rgb(194, 194, 194);
+    border-left: 5px solid var(--speedborderblue);
+    border-bottom: 5px solid var(--speedborderorg);
+    border-right: 5px solid var(--speedborderorg);
+    border-top: 5px solid var(--speedborderorg);
     background-position: center;
     background-size: cover;
     color: var(--detailsdivcolor);
     transform: rotate(-45deg);
     transition: all 1s ease-in-out;
     background: radial-gradient(circle, transparent, transparent);
+}
+.speedarcir.mid,.speedarcir2.mid{
+    border-left: 5px solid var(--speedborderblue);
+    border-bottom: 5px solid var(--speedborderblue);
+    border-right: 5px solid var(--speedborderorg);
+}
+.speedarcir.high,.speedarcir2.high{
+    border-left: 5px solid var(--speedborderblue);
+    border-bottom: 5px solid var(--speedborderblue);
+    border-right: 5px solid var(--speedborderblue);
 }
 .seccirlcle,.seccirlcle2{
     transition: all 1s ease-in-out;
@@ -605,15 +630,36 @@ body{
     height: 10%;
     width: 100%;
     border-radius: 2px;
-    border: 1px solid white;
+    border: 1px solid var(--barlevelborder);
     box-sizing: border-box;
+    transition: var(--anime);
 }
+.windlevel.green{
+    background-color: var(--barlevelgreen);
+}
+.windlevel.orange{
+    background-color: var(--barlevelorange);
+}
+.windlevel.red{
+    background-color: var(--barlevelred);
+}
+
 .atmlevel{
     height: 10%;
     width: 100%;
     border-radius: 2px;
-    border: 1px solid white;
+    border: 1px solid var(--barlevelborder);
     box-sizing: border-box;
+    transition: var(--anime);
+}
+.atmlevel.green{
+    background-color: var(--barlevelgreen);
+}
+.atmlevel.orange{
+    background-color: var(--barlevelorange);
+}
+.atmlevel.red{
+    background-color: var(--barlevelred);
 }
 .warning{
     animation: blink .5s infinite;
@@ -849,7 +895,26 @@ body{
     justify-content: space-around;
     border: 2px solid rgb(255, 255, 255);
     box-shadow: 2px 2px 4px black;
-    transition: all .3s ease-in-out;
+    transition: all .5s ease-in-out;
+}
+.colord1.sel{
+    transform: scale(1.2);
+    animation: hovering 2s ease-in-out infinite;
+    animation-delay: .6s;
+}
+@keyframes hovering{
+    0%{
+        transform: scale(1.2);
+        box-shadow: 2px 2px 4px black;
+    }
+    50%{
+        transform: scale(1.25);
+        box-shadow: 1px 1px 2px rgb(255, 255, 255);
+    }
+    100%{
+        transform: scale(1.2);
+        box-shadow: 2px 2px 4px black;
+    }
 }
 .colord1:hover{
     transform: scale(1.2);
@@ -902,6 +967,7 @@ body{
     align-items: center;
     justify-content: space-around;
 }
+
 .t2body{
     display: flex;
     align-items: center;

@@ -127,6 +127,7 @@ def livedatasend(request):
     for device in distinct_devices:
         barbottom="5px solid rgb(194, 194, 194)"
         barrigth="5px solid rgb(194, 194, 194)"
+        barclass="low"
         iconco="white"
         iconbg="rgb(81, 159, 226)"
         icon="sunny-outline"
@@ -172,16 +173,15 @@ def livedatasend(request):
                     if device_id==4:
                         iconbg="red"
                     if device_id==6 or device_id==8:
-                        barbottom="5px solid rgb(6, 116, 212)"
-                        barrigth="5px solid rgb(6, 116, 212)"
+                        barclass="high"
                     color=device_limits['limits'][device_id]['HighColor']
                 elif latest_record.device_values >=mid:
                     if device_id==6 or device_id==8:
-                        barbottom="5px solid rgb(6, 116, 212)"
+                        barclass="mid"
                     color=device_limits['limits'][device_id]['MtoHColor']
                 elif latest_record.device_values >=low:
                     if device_id==8:
-                        barbottom="5px solid rgb(6, 116, 212)"
+                        barclass="mid"
                     color=device_limits['limits'][device_id]['LtoMColor']
                 else:
                     if device_id==4:
@@ -195,8 +195,7 @@ def livedatasend(request):
                 'Icon_color':iconco,
                 'Icon':icon,
                 'bgicon':iconbg,
-                'barbottom':barbottom,
-                'barrigth':barrigth
+                'barclass':barclass
             })
         else:
             result.append({
@@ -207,8 +206,7 @@ def livedatasend(request):
                 'Icon_color':iconco,
                 'Icon':icon,
                 'bgicon':iconbg,
-                'barbottom':barbottom,
-                'barrigth':barrigth
+                'barclass':barclass
             })
     result.sort(key=lambda x: x['device_id'])
     return JsonResponse(result,safe=False)

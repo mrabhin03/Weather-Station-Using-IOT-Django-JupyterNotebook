@@ -110,7 +110,11 @@
             thevalue.textContent = "Daily weather ";
             nextbutton.textContent = "Next Day";
             previousbutton.textContent = "Previous Day";
-            $("#mainweekday").text(lastdate2);
+            if (thedatefor == lastdate2) {
+              $("#mainweekday").text("Todays data");
+            } else {
+              $("#mainweekday").text(lastdate2);
+            }
           } else {
             dorw = 1;
             thevalue.textContent = "Weekly weather";
@@ -156,11 +160,11 @@
             minvalue = gradata[theminindex].value;
             minvalue_date = gradata[theminindex].date;
             //
-            sum=0
-            for(k=0;k<values.length;k++){
-                sum=sum+values[k]
-              }
-              avg=parseInt(sum/values.length);
+            sum = 0;
+            for (k = 0; k < values.length; k++) {
+              sum = sum + values[k];
+            }
+            avg = parseInt(sum / values.length);
 
             for (i = 0; i < gradata.length; i++) {
               const valdata = document.createElement("div");
@@ -208,6 +212,24 @@
                 type: "line",
                 data: data,
                 options: {
+                  scales: {
+                    y: {
+                      grid: {
+                        color: "rgba(255, 255, 255, 0.1)",
+                      },
+                      ticks: {
+                        color: "white",
+                      },
+                    },
+                    x: {
+                      grid: {
+                        color: "rgba(255, 255, 255, 0.1)",
+                      },
+                      ticks: {
+                        color: "white",
+                      },
+                    },
+                  },
                   plugins: {
                     legend: {
                       display: false,
@@ -268,8 +290,9 @@
             mindata["Date"] = [];
             mindata["symbol"] = [];
 
-            average={}
-            average["value"]=[]
+            average = {};
+            average["value"] = [];
+            color_data = [];
             for (dr = 1; dr < 12; dr++) {
               tempmax = 0;
 
@@ -290,11 +313,11 @@
               mindata["Date"][dr] = gradata[theminindex].date;
               mindata["symbol"][dr] = symbols_data[dr];
               //
-              sum=0
-              for(k=0;k<values.length;k++){
-                sum=sum+values[k]
+              sum = 0;
+              for (k = 0; k < values.length; k++) {
+                sum = sum + values[k];
               }
-              average["value"][dr]=parseInt(sum/values.length);
+              average["value"][dr] = parseInt(sum / values.length);
             }
 
             for (let i = 1; i < 12; i++) {
@@ -319,10 +342,10 @@
                 thebox.appendChild(iconbox);
                 thebox.appendChild(textbox);
                 thealign.appendChild(thebox);
-                colors = `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(
-                  Math.random() * 255
-                )}, ${Math.floor(Math.random() * 255)})`;
+                var colors = `rgb(${Math.floor(Math.random() * 200) + 50}, ${Math.floor(Math.random() * 200) + 50}, ${Math.floor(Math.random() * 200) + 50})`;
+
                 thebox.style.backgroundColor = colors;
+                color_data[i] = colors;
                 var color2;
                 if (isLight(colors)) {
                   color2 = "black";
@@ -382,6 +405,24 @@
                 type: "line",
                 data: data,
                 options: {
+                  scales: {
+                    y: {
+                      grid: {
+                        color: "rgba(255, 255, 255, 0.1)",
+                      },
+                      ticks: {
+                        color: "white",
+                      },
+                    },
+                    x: {
+                      grid: {
+                        color: "rgba(255, 255, 255, 0.1)",
+                      },
+                      ticks: {
+                        color: "white",
+                      },
+                    },
+                  },
                   plugins: {
                     legend: {
                       display: false,
@@ -403,11 +444,13 @@
               perchart.data.datasets = datasets;
               perchart.update();
             }
-            updatemain(maxdata, mindata,average);
+            updatemain(maxdata, mindata, average, color_data);
             alldevs = [0, 1, 2, 4, 6, 7, 9, 11];
-            trar=parseInt(trar)
-            if(trar>alldevs.length){trar=alldevs.indexOf(trar);}
-            datanew=alldevs[trar]
+            trar = parseInt(trar);
+            if (trar > alldevs.length) {
+              trar = alldevs.indexOf(trar);
+            }
+            datanew = alldevs[trar];
             topvaluesupdate(
               dorw,
               maxdata["Name"][datanew],
@@ -431,9 +474,9 @@
               1
             );
           }
-          themecheck()
+          themecheck();
         }
-        
+
         function isLight(color) {
           var match = color.match(/\d+/g);
           var color = match.map(Number);
@@ -466,16 +509,15 @@
               success: function (data) {
                 if (theajax == 0) {
                   tempdata = data;
-                  temp_date=lastdate2
+                  temp_date = lastdate2;
                   theajax = 1;
                   pergraph(data, de_id);
-                  
                 } else {
                   var areEqual =
                     JSON.stringify(tempdata) === JSON.stringify(data);
-                  if (!areEqual || temp_date!=lastdate2) {
+                  if (!areEqual || temp_date != lastdate2) {
                     tempdata = data;
-                    temp_date=lastdate2;
+                    temp_date = lastdate2;
                     pergraph(data, de_id);
                   }
                 }
@@ -520,7 +562,11 @@
             success: function (data) {
               lastdate2 = data;
               if (dorw == 0) {
-                $("#mainweekday").text(lastdate2);
+                if (thedatefor == lastdate2) {
+                  $("#mainweekday").text("Todays data");
+                } else {
+                  $("#mainweekday").text(lastdate2);
+                }
               }
               perdevicedeatils(tempid, 1);
             },
@@ -531,15 +577,15 @@
         }
         var canvas = document.getElementById("pergraphdisplay");
         var ctx = canvas.getContext("2d");
-        function needchart(){
-            return perchart
+        function needchart() {
+          return perchart;
         }
-        function chartcolorchange(){
-          setTimeout(() => {
-            perchart.options.scales.x.grid.color=perchart.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.1)';
-            perchart.options.scales.x.ticks.color=perchart.options.scales.y.ticks.color = 'white';
+        function chartcolorchange() {
+            perchart.options.scales.x.grid.color =
+              perchart.options.scales.y.grid.color = "rgba(0, 0, 0, 0.07)";
+            perchart.options.scales.x.ticks.color =
+              perchart.options.scales.y.ticks.color = "black";
             perchart.update();
-          }, 200);
         }
         function setCanvasSize() {
           if (window.innerWidth < 700) {
@@ -569,7 +615,7 @@
       </script>
     </div>
   </div>
-  
+
   <div class="otherdetails">
     <div onclick="checkvalue(0,tempid,dorw,lastdate2,this)" class="leftmov">
       <ion-icon id="arrowint" name="chevron-back-outline"></ion-icon>
@@ -652,7 +698,6 @@
   </div>
   <div class="limits_details">
     <div class="limits_data">
-      
       <div class="limit_body">
         <div class="limit_header">
           <h5 id="til">Low</h5>
@@ -664,7 +709,6 @@
       </div>
     </div>
     <div class="limits_data">
-      
       <div class="limit_body">
         <div class="limit_header">
           <h5 id="tig">Good</h5>
@@ -676,7 +720,6 @@
       </div>
     </div>
     <div class="limits_data">
-      
       <div class="limit_body">
         <div class="limit_header">
           <h5 id="tim">Moderate</h5>
@@ -688,7 +731,6 @@
       </div>
     </div>
     <div class="limits_data">
-      
       <div class="limit_body">
         <div class="limit_header">
           <h5 id="tih">Unhealthy</h5>

@@ -151,10 +151,11 @@ function nextpagedata(data, trar) {
   localStorage.setItem("trar", trar);
   window.location.href = "/details";
 }
-function updatemain(maxdata, mindata,average) {
+function updatemain(maxdata, mindata,average,color_data) {
   maxdatabase = maxdata;
   mindatabase = mindata;
-  averagebase=average
+  averagebase=average;
+  colorbase=color_data;
   prevbox = document.getElementById("Humidity");
 }
 
@@ -327,11 +328,11 @@ function topvaluesupdate(
       average_data=avg
     }
     if (prevbox) {
-      prevbox.style.transform = "scale(1)";
+      prevbox.classList.remove("sel")
     }
     Databox = document.getElementById(devicenameout);
     if (Databox) {
-      Databox.style.transform = "scale(1.2)";
+      Databox.classList.add("sel")
       prevbox = Databox;
     }
     if (nav == 1) {
@@ -364,7 +365,6 @@ function topvaluesupdate(
     }
     $("#" + dedate).text(predate);
     $("#pre_date").text(Predates);
-
 
     if (id == 5) {
       $("#til").text("Very Low Chance");
@@ -433,39 +433,45 @@ function themecheck()
 {
     let getMode = localStorage.getItem("mode");
     const body = document.querySelector("body")
-    if (getMode && getMode === "dark") {
-        body.classList.add("dark");
+    if (getMode && getMode === "ligth") {
+        body.classList.add("ligth");
         switchval=document.getElementById("switchdata");
-        switchval.classList.add("dark");
+        switchval.classList.add("ligth");
         imagedata=document.getElementById("imagedata")
-        imagedata.src="/Main/Backgroundicondark.png";
+        imagedata.src="/Main/Backgroundicon.png";
         chartcolorchange();
+      }
+      else{
+        imagedata.src="/Main/Backgroundicondark.png";
+        
       }
 }
 
 
 function themechange()
 {
+  
     chartdata=needchart();
     switchval=document.getElementById("switchdata");
     body_data=document.querySelector("body");
     imagedata=document.getElementById("imagedata")
-    if(body_data.classList.contains("dark"))
+  
+    if(body_data.classList.contains("ligth"))
     {
-        imagedata.src="/Main/Backgroundicon.png";
-        body_data.classList.remove("dark")
-        switchval.classList.remove("dark");
-        chartdata.options.scales.x.grid.color=chartdata.options.scales.y.grid.color = 'rgba(0, 0, 0, 0.07)';
-        chartdata.options.scales.x.ticks.color=chartdata.options.scales.y.ticks.color = 'black';
+        imagedata.src="/Main/Backgroundicondark.png";
+        body_data.classList.remove("ligth")
+        switchval.classList.remove("ligth");
+        chartdata.options.scales.x.grid.color=chartdata.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.1)';
+        chartdata.options.scales.x.ticks.color=chartdata.options.scales.y.ticks.color = 'white';
         localStorage.setItem("mode", "light");
     }
     else{
-        imagedata.src="/Main/Backgroundicondark.png";
-        chartdata.options.scales.x.grid.color=chartdata.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.1)';
-        chartdata.options.scales.x.ticks.color=chartdata.options.scales.y.ticks.color = 'white';
-        body_data.classList.add("dark")
-        switchval.classList.add("dark");
-        localStorage.setItem("mode", "dark");
+        imagedata.src="/Main/Backgroundicon.png";
+        chartdata.options.scales.x.grid.color=chartdata.options.scales.y.grid.color = 'rgba(0, 0, 0, 0.07)';
+        chartdata.options.scales.x.ticks.color=chartdata.options.scales.y.ticks.color = 'black';
+        body_data.classList.add("ligth")
+        switchval.classList.add("ligth");
+        localStorage.setItem("mode", "ligth");
     }
     chartdata.update();
 }

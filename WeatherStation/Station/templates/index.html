@@ -184,6 +184,7 @@
                                 type: 'line',
                                 data: data,
                                 options: {
+
                                     plugins: {
                                         legend: {
                                             display: false
@@ -191,6 +192,24 @@
                                         title: {
                                             display: false,
                                         }
+                                    },
+                                    scales: {
+                                        y: {
+                                            grid: {
+                                                color: 'rgba(255, 255, 255, 0.1)'
+                                            },
+                                            ticks:{
+                                                color:'white'
+                                            }
+                                        },
+                                        x: {
+                                            grid: {
+                                                color: 'rgba(255, 255, 255, 0.1)'
+                                            },
+                                            ticks:{
+                                                color:'white'
+                                            }
+                                        },
                                     }
                                 }
                             };
@@ -217,11 +236,9 @@
                     }
 
                     function chartcolorchange(){
-                        setTimeout(() => {
-                            chart.options.scales.x.grid.color=chart.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.1)';
-                            chart.options.scales.x.ticks.color=chart.options.scales.y.ticks.color = 'white';
+                            chart.options.scales.x.grid.color=chart.options.scales.y.grid.color = 'rgba(0, 0, 0, 0.07)';
+                            chart.options.scales.x.ticks.color=chart.options.scales.y.ticks.color = 'black';
                             chart.update();
-                        }, 200);
                     }
 
                     function setCanvasSize() {
@@ -342,7 +359,7 @@
                             <div>
                                 <div class="windtitle">
                                     <b >Wind Speed</b>
-                                    <div class="icon" id="windicon" onclick="nextpagedata(404,6)">
+                                    <div class="icon" id="windicon" onclick="nextpagedata(404,4)">
                                         <b><ion-icon name="speedometer-outline"></ion-icon></b>
                                     </div>
                                 </div>
@@ -406,7 +423,7 @@
                                             <div id="powerhigh3" class="windpowersub">
                                             </div>
                                         </div>
-                                        <div id="ficr2" class="speedarcir">
+                                        <div id="ficr2" class="speedarcir2">
                                             <div  id="scecr2" class="seccirlcle2">
                                                 <div  class="speedararrowco" id="atmbar">
                                                     <div class="speed1"></div>
@@ -428,7 +445,7 @@
                             <div>
                                 <div class="no2title">
                                     <b>NO² Presents</b>
-                                    <div class="icon" id="no2icon" onclick="nextpagedata(404,7)"><b><ion-icon name="logo-electron"></ion-icon></b></div>
+                                    <div class="icon" id="no2icon" onclick="nextpagedata(404,5)"><b><ion-icon name="logo-electron"></ion-icon></b></div>
                                 </div>
                                 <div class="no2">
                                     <b id="no2">0%</b>
@@ -449,7 +466,7 @@
                             <div>
                                 <div class="co2title">
                                     <b>CO² Presents</b>
-                                    <div class="icon" id="co2icon" onclick="nextpagedata(404,4)"><b><ion-icon id="co2warningicon" name="warning-outline"></ion-icon></b></div>
+                                    <div class="icon" id="co2icon" onclick="nextpagedata(404,3)"><b><ion-icon id="co2warningicon" name="warning-outline"></ion-icon></b></div>
                                 </div>
                                 <div class="co2">
                                     <b id="co2">0%</b>
@@ -540,6 +557,7 @@
             delays=5000;
             barcount=0;
             barcount2=0;
+            prvclass2=prvclass1="low"
             document.getElementById('thedatevalue').value=dayvalue;
             var onbar1=onbar2="5px solid rgb(6, 116, 212)"
             var offbar1=offbar2="5px solid rgb(194, 194, 194)"
@@ -609,13 +627,22 @@
                 var levels1=document.getElementById('ficr')
                 levels1.style.transform =  "rotate("+tr1+"deg)";
                 document.getElementById('scecr').style.transform =  "rotate("+(tr1*-1)+"deg)";
-                levels1.style.borderBottom=data[5].barbottom;
-                levels1.style.borderRight = data[5].barrigth;
+                if(prvclass1!=data[5].barclass)
+                    {
+                        if(levels1.classList.contains(prvclass1)){
+                        levels1.classList.remove(prvclass1)
+                        levels1.classList.add(data[5].barclass)
+                        prvclass1=data[5].barclass
+                    }
+                    else{levels1.classList.add(data[5].barclass);prvclass1=data[5].barclass}
+                }
+                
                 if(barcount!=windValue)
                 {   document.getElementById('powerhigh1').innerHTML = '';
                     document.getElementById('powerhigh2').innerHTML = '';
                     barcount = windValue;
-                    createWindLevels(0,windValue);}
+                    createWindLevels(0,windValue);
+                }
 
 
                 var no2Value = data[6].device_values;
@@ -632,6 +659,18 @@
                 document.getElementById('atmbar').style.transform =  "rotate("+thepsvalue+"deg)";
                 tr2=thepsvalue-45;
                 var levelbar2=document.getElementById('ficr2')
+
+                if(prvclass2!=data[7].barclass)
+                    {
+                        if(levelbar2.classList.contains(prvclass2)){
+                        levelbar2.classList.remove(prvclass2)
+                        levelbar2.classList.add(data[7].barclass)
+                        prvclass2=data[7].barclass
+                    }
+                    else{levelbar2.classList.add(data[7].barclass);prvclass2=data[7].barclass}
+                }
+
+
                 levelbar2.style.transform =  "rotate("+tr2+"deg)";
                 document.getElementById('scecr2').style.transform =  "rotate("+(tr2*-1)+"deg)";
                 if(barcount2!=atmValue)
@@ -698,11 +737,14 @@
                     doc1p=document.getElementById('powerhigh1');
                     doc2p=document.getElementById('powerhigh2');
                     if (i < 12) {
-                        divcolor = "rgb(0, 255, 170)";
+                        newDiv1.classList.add("green");
+                        newDiv2.classList.add("green");
                     } else if (i < 18) {
-                        divcolor = "orange";
+                        newDiv1.classList.add("orange");
+                        newDiv2.classList.add("orange");
                     } else {
-                        divcolor = "red";
+                        newDiv1.classList.add("red");
+                        newDiv2.classList.add("red");
                     }
             
                     newDiv1.style.backgroundColor = divcolor;
@@ -724,11 +766,14 @@
                         newDiv2.classList.add("atmlevel");
                 
                         if (i <= 940) {
-                            divcolor = "orange";
+                            newDiv1.classList.add("orange");
+                            newDiv2.classList.add("orange");
                         } else if (i < 1013) {
-                            divcolor = "rgb(0, 255, 170)";
+                            newDiv1.classList.add("green");
+                            newDiv2.classList.add("green");
                         } else {
-                            divcolor = "red";
+                            newDiv1.classList.add("red");
+                            newDiv2.classList.add("red");
                         }
                 
                         newDiv1.style.backgroundColor = divcolor;
