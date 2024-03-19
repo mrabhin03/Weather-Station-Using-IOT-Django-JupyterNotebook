@@ -443,7 +443,6 @@ function themecheck()
       else{
         body.classList.remove("dark");
         imagedata.src="/Main/Backgroundicon.png";
-        
       }
 }
 
