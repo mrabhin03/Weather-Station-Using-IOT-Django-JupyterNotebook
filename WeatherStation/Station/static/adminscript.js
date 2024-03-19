@@ -3,7 +3,9 @@ const body = document.querySelector("body"),
 didval = 1;
 let getMode = localStorage.getItem("mode");
 if (getMode && getMode === "dark") {
-  body.classList.toggle("dark");
+}
+else{
+  body.classList.remove("dark");
 }
 
 

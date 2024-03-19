@@ -8,7 +8,7 @@
         <script src="{% static 'newjs.js' %}"></script>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     </head>
-    <body>
+    <body class="dark">
         
         {% if Load == "0" %}
         <div class="loader"><h2>Loading</h2><div class="loader_sub"><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
@@ -58,10 +58,10 @@
                     <table>
                         <tr>
                             <td id="todaydate">
-                                Today 
+                                She 
                             </td>
                             <td id="todaytime">
-                               0
+                               10 Jun 2003
                             </td>
                         </tr>
                     </table>
@@ -196,18 +196,18 @@
                                     scales: {
                                         y: {
                                             grid: {
-                                                color: 'rgba(255, 255, 255, 0.1)'
+                                                color: 'rgba(0, 0, 0, 0.07)'
                                             },
                                             ticks:{
-                                                color:'white'
+                                                color:'black'
                                             }
                                         },
                                         x: {
                                             grid: {
-                                                color: 'rgba(255, 255, 255, 0.1)'
+                                                color: 'rgba(0, 0, 0, 0.07)'
                                             },
                                             ticks:{
-                                                color:'white'
+                                                color:'black'
                                             }
                                         },
                                     }
@@ -236,8 +236,8 @@
                     }
 
                     function chartcolorchange(){
-                            chart.options.scales.x.grid.color=chart.options.scales.y.grid.color = 'rgba(0, 0, 0, 0.07)';
-                            chart.options.scales.x.ticks.color=chart.options.scales.y.ticks.color = 'black';
+                            chart.options.scales.x.grid.color=chart.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.1)';
+                            chart.options.scales.x.ticks.color=chart.options.scales.y.ticks.color = 'white';
                             chart.update();
                     }
 
@@ -556,7 +556,7 @@
             widtempdir=-1;
             delays=5000;
             barcount=0;
-            barcount2=0;
+            barcount2=-1;
             prvclass2=prvclass1="low"
             document.getElementById('thedatevalue').value=dayvalue;
             var onbar1=onbar2="5px solid rgb(6, 116, 212)"

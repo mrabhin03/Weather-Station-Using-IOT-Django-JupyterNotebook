@@ -215,18 +215,18 @@
                   scales: {
                     y: {
                       grid: {
-                        color: "rgba(255, 255, 255, 0.1)",
+                        color: "rgba(0, 0, 0, 0.07)",
                       },
                       ticks: {
-                        color: "white",
+                        color: "black",
                       },
                     },
                     x: {
                       grid: {
-                        color: "rgba(255, 255, 255, 0.1)",
+                        color: "rgba(0, 0, 0, 0.07)",
                       },
                       ticks: {
-                        color: "white",
+                        color: "black",
                       },
                     },
                   },
@@ -408,18 +408,18 @@
                   scales: {
                     y: {
                       grid: {
-                        color: "rgba(255, 255, 255, 0.1)",
+                        color: "rgba(0, 0, 0, 0.07)",
                       },
                       ticks: {
-                        color: "white",
+                        color: "black",
                       },
                     },
                     x: {
                       grid: {
-                        color: "rgba(255, 255, 255, 0.1)",
+                        color: "rgba(0, 0, 0, 0.07)",
                       },
                       ticks: {
-                        color: "white",
+                        color: "black",
                       },
                     },
                   },
@@ -582,9 +582,9 @@
         }
         function chartcolorchange() {
             perchart.options.scales.x.grid.color =
-              perchart.options.scales.y.grid.color = "rgba(0, 0, 0, 0.07)";
+              perchart.options.scales.y.grid.color = "rgba(255, 255, 255, 0.1)";
             perchart.options.scales.x.ticks.color =
-              perchart.options.scales.y.ticks.color = "black";
+              perchart.options.scales.y.ticks.color = "white";
             perchart.update();
         }
         function setCanvasSize() {

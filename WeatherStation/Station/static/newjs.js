@@ -433,16 +433,16 @@ function themecheck()
 {
     let getMode = localStorage.getItem("mode");
     const body = document.querySelector("body")
-    if (getMode && getMode === "ligth") {
-        body.classList.add("ligth");
+    if (getMode && getMode === "dark") {
         switchval=document.getElementById("switchdata");
-        switchval.classList.add("ligth");
+        switchval.classList.add("dark");
         imagedata=document.getElementById("imagedata")
-        imagedata.src="/Main/Backgroundicon.png";
-        chartcolorchange();
+        imagedata.src="/Main/Backgroundicondark.png";
+        setTimeout(() => {chartcolorchange();}, 200);
       }
       else{
-        imagedata.src="/Main/Backgroundicondark.png";
+        body.classList.remove("dark");
+        imagedata.src="/Main/Backgroundicon.png";
         
       }
 }
@@ -456,22 +456,22 @@ function themechange()
     body_data=document.querySelector("body");
     imagedata=document.getElementById("imagedata")
   
-    if(body_data.classList.contains("ligth"))
+    if(body_data.classList.contains("dark"))
     {
-        imagedata.src="/Main/Backgroundicondark.png";
-        body_data.classList.remove("ligth")
-        switchval.classList.remove("ligth");
-        chartdata.options.scales.x.grid.color=chartdata.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.1)';
-        chartdata.options.scales.x.ticks.color=chartdata.options.scales.y.ticks.color = 'white';
+        imagedata.src="/Main/Backgroundicon.png";
+        body_data.classList.remove("dark")
+        switchval.classList.remove("dark");
+        chartdata.options.scales.x.grid.color=chartdata.options.scales.y.grid.color = 'rgba(0, 0, 0, 0.07)';
+        chartdata.options.scales.x.ticks.color=chartdata.options.scales.y.ticks.color = 'black';
         localStorage.setItem("mode", "light");
     }
     else{
-        imagedata.src="/Main/Backgroundicon.png";
-        chartdata.options.scales.x.grid.color=chartdata.options.scales.y.grid.color = 'rgba(0, 0, 0, 0.07)';
-        chartdata.options.scales.x.ticks.color=chartdata.options.scales.y.ticks.color = 'black';
-        body_data.classList.add("ligth")
-        switchval.classList.add("ligth");
-        localStorage.setItem("mode", "ligth");
+        imagedata.src="/Main/Backgroundicondark.png";
+        chartdata.options.scales.x.grid.color=chartdata.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.1)';
+        chartdata.options.scales.x.ticks.color=chartdata.options.scales.y.ticks.color = 'white';
+        body_data.classList.add("dark")
+        switchval.classList.add("dark");
+        localStorage.setItem("mode", "dark");
     }
     chartdata.update();
 }
