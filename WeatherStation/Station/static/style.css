@@ -34,14 +34,15 @@
     --limit_color_mid:rgb(255, 196, 0);
     --limit_color_high:rgb(245, 28, 28);
 
+
     --barlevelgreen:rgb(0, 255, 170);
     --barlevelorange:orange;
     --barlevelred:red;
 
+
     --loadcolor:white;
     --anime:all .5s ease-in-out;
-    
-    
+
 }
 body.dark{
     --bodycolor: rgb(10, 21, 100);
@@ -73,11 +74,13 @@ body.dark{
     --barlevelborder:rgb(0, 0, 0);
     --animationhover:rgb(255, 255, 255);
     
+
     --limit_color_low:rgb(0, 187, 204);
     --limit_color_good:rgb(23, 197, 0);
     --limit_color_mid:rgb(195, 150, 0);
     --limit_color_high:rgb(184, 22, 22);
 
+    
     --loadcolor:rgba(0, 0, 0, 0.4);
 }
 

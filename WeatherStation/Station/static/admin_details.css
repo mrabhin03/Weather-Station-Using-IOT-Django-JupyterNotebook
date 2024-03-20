@@ -6,6 +6,8 @@
     font-family: sans-serif;
 }
 
+
+
 :root{
     --primary-color: #0E4BF1;
     --panel-color: #FFF;
@@ -27,10 +29,12 @@
     --tran-03: all 0.2s ease;
 }
 
+
 body{
     min-height: 100vh;
     background-color: var(--primary-color);
 }
+
 body.dark{
     --primary-color: #3A3B3C;
     --panel-color: #242526;

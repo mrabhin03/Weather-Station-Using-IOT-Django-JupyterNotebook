@@ -141,9 +141,11 @@ var device_limits = {
   ],
 };
 
+
 maxdatabase = {};
 mindatabase = {};
 averagebase={};
+
 
 function nextpagedata(data, trar) {
   tempid = data;

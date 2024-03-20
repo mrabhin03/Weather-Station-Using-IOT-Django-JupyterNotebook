@@ -8,7 +8,6 @@ else{
   body.classList.remove("dark");
 }
 
-
 modeToggle.addEventListener("click", () => {
   body.classList.toggle("dark");
   if (body.classList.contains("dark")) {
@@ -17,6 +16,7 @@ modeToggle.addEventListener("click", () => {
     localStorage.setItem("mode", "light");
   }
 });
+
 perdevice = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 var themovesobject=[]
 function swipedevice(nav, obj) {
