@@ -300,4 +300,25 @@ def grdaydata(current_date,did):
     output = [{'date': times, 'value1': device2, 'value2': ra,'Names':device_name,'Symbols':symbol} for times, device2, ra in zip(times, device2, ra)]
     return output
 
+def insertvalues(request):
+    dataarray=[None]*11
+    dataarray[0]=int(request.GET.get('hum', None))              # Humidity
+    dataarray[1]=int(request.GET.get('temp', None))             # Temperature
+    dataarray[2]=int(request.GET.get('sou', None))              # Sound
+    dataarray[3]=int(request.GET.get('carbon', None))           # Co2
+    dataarray[4]=0                                              # Chance of Rain
+    dataarray[5]=int(request.GET.get('windspeed', None))        # Wind Speed
+    dataarray[6]=int(request.GET.get('no2', None))              # NO2
+    dataarray[7]=int(request.GET.get('press', None))            # Atmospheric Pressure
+    dataarray[8]=int(request.GET.get('uv', None))               # UV
+    dataarray[9]=152                                            # Wind Direction
+    dataarray[10]=int(request.GET.get('pm25', None))            # Air Quality
+    i=1
+    for value in dataarray:
+        insert_data = Data_store(device_values=value, device_id=i)
+        insert_data.save()
+        i+=1
+
+    return JsonResponse("DONE",safe=False) 
+
 

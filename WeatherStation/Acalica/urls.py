@@ -32,6 +32,7 @@ urlpatterns = [
     path('details/', station.viewmoredetails,name='details'),
     path('devicedata/',Page2.deviceonlydata,name='device'),
     path('alldevicedata/',Page2.alldeviceonlydata,name='alldevice'),
+    path('datainsert/',station.insertvalues,name='insert'),
     
     path('admin/',Admins.admindata,name='admindata'),
     path('login/',Admins.login,name='login'),
