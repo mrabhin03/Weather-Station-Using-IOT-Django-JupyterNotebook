@@ -63,16 +63,16 @@
         symbols_data = [
           "",
           "%",
-          "°",
+          "°C",
           "%",
           "%",
           "%",
           "km/h",
-          "%",
+          "µg/m³",
           "hPa",
           "%",
           "°",
-          " AQI",
+          "µg/m³",
         ];
         device_icon = [
           "",
@@ -99,7 +99,7 @@
           "Atmospheric Pressure",
           "UV",
           "Wind Direction",
-          "Air Quality",
+          "PM 2.5",
         ];
         function pertheweekchange() {
           thevalue = document.getElementById("weekorday");
@@ -215,18 +215,18 @@
                   scales: {
                     y: {
                       grid: {
-                        color: "rgba(0, 0, 0, 0.07)",
+                        color: "rgba(255, 255, 255, 0.1)",
                       },
                       ticks: {
-                        color: "black",
+                        color: "white",
                       },
                     },
                     x: {
                       grid: {
-                        color: "rgba(0, 0, 0, 0.07)",
+                        color: "rgba(255, 255, 255, 0.1)",
                       },
                       ticks: {
-                        color: "black",
+                        color: "white",
                       },
                     },
                   },
@@ -408,18 +408,18 @@
                   scales: {
                     y: {
                       grid: {
-                        color: "rgba(0, 0, 0, 0.07)",
+                        color: "rgba(255, 255, 255, 0.1)",
                       },
                       ticks: {
-                        color: "black",
+                        color: "white",
                       },
                     },
                     x: {
                       grid: {
-                        color: "rgba(0, 0, 0, 0.07)",
+                        color: "rgba(255, 255, 255, 0.1)",
                       },
                       ticks: {
-                        color: "black",
+                        color: "white",
                       },
                     },
                   },
@@ -581,10 +581,8 @@
           return perchart;
         }
         function chartcolorchange() {
-            perchart.options.scales.x.grid.color =
-              perchart.options.scales.y.grid.color = "rgba(255, 255, 255, 0.1)";
-            perchart.options.scales.x.ticks.color =
-              perchart.options.scales.y.ticks.color = "white";
+            perchart.options.scales.x.grid.color =perchart.options.scales.y.grid.color = "rgba(0, 0, 0, 0.07)";
+            perchart.options.scales.x.ticks.color =perchart.options.scales.y.ticks.color = "black";
             perchart.update();
         }
         function setCanvasSize() {
@@ -633,7 +631,7 @@
         </div>
         <div class="valuesbo">
           <div id="max_data_name" class="bodytitle"></div>
-          <div id="max_data_value" class="bodybo"></div>
+          <div  class="bodybo"><p id="max_data_value"></p><p style="font-size: 24px; margin-left: 1px;" id="max_data_value_sy"></p></div>
           <div id="max_data_date" class="bodyfooter"></div>
         </div>
         <div
@@ -657,7 +655,7 @@
         </div>
         <div class="valuesbo">
           <div id="pre_name" class="bodytitle"></div>
-          <div id="pre_value" class="bodybo"></div>
+          <div class="bodybo"><p id="pre_value"></p><p style="font-size: 24px; margin-left: 1px;" id="pre_value_sy"></p></div>
           <div id="pre_date" class="bodyfooter"></div>
         </div>
         <div
@@ -681,7 +679,7 @@
         </div>
         <div class="valuesbo">
           <div id="min_data_name" class="bodytitle"></div>
-          <div id="min_data_value" class="bodybo"></div>
+          <div class="bodybo"><p id="min_data_value"></p><p style="font-size: 24px; margin-left: 1px;" id="min_data_value_sy"></p></div>
           <div id="min_data_date" class="bodyfooter"></div>
         </div>
         <div

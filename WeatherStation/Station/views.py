@@ -4,19 +4,24 @@ from .models import Devices_details,Data_store,Admin_details
 import time
 from django.core.serializers import serialize
 from datetime import timedelta, date
-from django.db.models import Max
+from django.db.models import Max,Min
 from datetime import datetime
 from joblib import load
 from django.http import JsonResponse
 from datetime import time as dt_time
 from .Commons import *
+import numpy as np
+import pandas as pd
+from sklearn.metrics import accuracy_score
+
 
 current_date_time_datetime = datetime.now()
 graphdate=timezone.localdate()
 totaldate=timezone.localdate()
 todays=timezone.localdate()
 
-model=load('./TheModel/model.joblib')
+model=load('./TheModel/Temperature_Model.joblib')
+Rain_model=load('./TheModel/Rain_Prediction.joblib')
 sessions=0
 
 def home(request):
@@ -118,12 +123,115 @@ def gdatacal(request):
     return JsonResponse( output,safe=False)
 
 
+def grweekdata(current_date,did):
+
+    symbols_data=icon_get()
+    device_names=device_names_get()
+    dates = []
+    device2 = []
+    device5 = []
+    deviceid=int(did)
+    if deviceid!=11:
+        symbol=symbols_data[deviceid]
+    else:
+        symbol=""
+    device_name=device_names[deviceid]
+    for i in range(6, -1, -1):
+        day = current_date - timedelta(days=i)
+        dates.append(day)
+        sql1 = Data_store.objects.filter(device_id=did, date_time__date=day).order_by('-date_time').first()
+        value1 = sql1.device_values if sql1 else 0
+        device2.append(value1)
+        sql2 = Data_store.objects.filter(device_id=5, date_time__date=day).order_by('-date_time').first()
+        value2 = sql2.device_values if sql2 else 0
+        device5.append(value2)
+    ra=[]
+    for data in device5:
+        rain=rain_icon_convertion(data)
+        ra.append(rain)
+
+    art=[]
+    if current_date==todays:
+        for yadata in device2:
+            inval=yadata
+            if yadata==0:
+                filtered_arr = [x for x in device2 if x != 0]
+                inval = min(filtered_arr)
+            art.append(inval)
+        new_data = np.array([art])
+        predicted_temp = model.predict(new_data.reshape(1, 7))
+        predata=int(predicted_temp) 
+        device2.append(predata) 
+        rain=rain_icon_convertion(predata)
+        ra.append(rain)
+        dates.append(current_date + timedelta(days=1))
+
+    output = [{'date': dates, 'value1': device2, 'value2': ra,'Names':device_name,'Symbols':symbol} for dates, device2, ra in zip(dates, device2, ra)]
+    return output
+
+
+def grdaydata(current_date,did):
+    
+
+    symbols_data=icon_get()
+    device_names=device_names_get()
+    device2 = []
+    device5 = []
+    deviceid=int(did)
+    if deviceid!=11:
+        symbol=symbols_data[deviceid]
+    else:
+        symbol=""
+    device_name=device_names[deviceid]
+    times=[3,6,9,12,15,18,21,24]
+    per=0
+    tmin=0
+    for time in times:
+        hor=time
+        if time==24:
+            tmin=59
+            hor=23
+        start_time = dt_time(hour=per, minute=0)
+        end_time = dt_time(hour=hor, minute=tmin)
+        per=time
+        sql1 = Data_store.objects.filter(
+        device_id=did,
+        date_time__date=current_date,
+        date_time__time__range=(start_time, end_time)
+        ).order_by('-date_time').first()
+        value1 = sql1.device_values if sql1 else 0
+        device2.append(value1)
+        sql2 = Data_store.objects.filter(
+        device_id=5,
+        date_time__date=current_date,
+        date_time__time__range=(start_time, end_time)
+        ).order_by('-date_time').first()
+        value2 = sql2.device_values if sql2 else 0
+        device5.append(value2)
+    ra=[]
+    for data in device5:
+        data2_value = int(data)
+        if data2_value >=75:
+            rain="rainy-outline"
+        elif data2_value >=50:
+            rain="cloudy-outline"
+        elif data2_value >=30:
+            rain="partly-sunny-outline"
+        else:
+            rain="sunny-outline"
+        ra.append(rain)
+    output = [{'date': times, 'value1': device2, 'value2': ra,'Names':device_name,'Symbols':symbol} for times, device2, ra in zip(times, device2, ra)]
+    return output
+
+
+
 def livedatasend(request):
     device_limits=device_limitsdata()
     newdate = request.GET.get('devdates', None)
     current_date= datetime.strptime(newdate, "%Y-%m-%d").date()
     distinct_devices = Devices_details.objects.values('device_id').distinct()
     result = []
+    device_icon=icon_get()
     for device in distinct_devices:
         barbottom="5px solid rgb(194, 194, 194)"
         barrigth="5px solid rgb(194, 194, 194)"
@@ -137,6 +245,7 @@ def livedatasend(request):
             device_id=device_id,
             date_time__date=current_date
         ).order_by('-date_time').first()
+        symboles=device_icon[device_id]
         if latest_record:
             High=device_limits['limits'][device_id]['High']
             mid=device_limits['limits'][device_id]['Mid']
@@ -195,7 +304,8 @@ def livedatasend(request):
                 'Icon_color':iconco,
                 'Icon':icon,
                 'bgicon':iconbg,
-                'barclass':barclass
+                'barclass':barclass,
+                'symbole':symboles
             })
         else:
             result.append({
@@ -206,99 +316,17 @@ def livedatasend(request):
                 'Icon_color':iconco,
                 'Icon':icon,
                 'bgicon':iconbg,
-                'barclass':barclass
+                'barclass':barclass,
+                'symbole':symboles
             })
     result.sort(key=lambda x: x['device_id'])
     return JsonResponse(result,safe=False)
 
 
-def grweekdata(current_date,did):
-    symbols_data=icon_get()
-    device_names=device_names_get()
-    dates = []
-    device2 = []
-    device5 = []
-    deviceid=int(did)
-    if deviceid!=11:
-        symbol=symbols_data[deviceid]
-    else:
-        symbol=""
-    device_name=device_names[deviceid]
-    for i in range(6, -1, -1):
-        day = current_date - timedelta(days=i)
-        dates.append(day)
-        sql1 = Data_store.objects.filter(device_id=did, date_time__date=day).order_by('-date_time').first()
-        value1 = sql1.device_values if sql1 else 0
-        device2.append(value1)
-        sql2 = Data_store.objects.filter(device_id=5, date_time__date=day).order_by('-date_time').first()
-        value2 = sql2.device_values if sql2 else 0
-        device5.append(value2)
-    ra=[]
-    for data in device5:
-        data2_value = int(data)
-        if data2_value >=75:
-            rain="rainy-outline"
-        elif data2_value >=50:
-            rain="cloudy-outline"
-        elif data2_value >=30:
-            rain="partly-sunny-outline"
-        else:
-            rain="sunny-outline"
-        ra.append(rain)
-    output = [{'date': dates, 'value1': device2, 'value2': ra,'Names':device_name,'Symbols':symbol} for dates, device2, ra in zip(dates, device2, ra)]
-    return output
 
 
-def grdaydata(current_date,did):
-    symbols_data=icon_get()
-    device_names=device_names_get()
-    device2 = []
-    device5 = []
-    deviceid=int(did)
-    if deviceid!=11:
-        symbol=symbols_data[deviceid]
-    else:
-        symbol=""
-    device_name=device_names[deviceid]
-    times=[3,6,9,12,15,18,21,24]
-    per=0
-    tmin=0
-    for time in times:
-        hor=time
-        if time==24:
-            tmin=59
-            hor=23
-        start_time = dt_time(hour=per, minute=0)
-        end_time = dt_time(hour=hor, minute=tmin)
-        per=time
-        sql1 = Data_store.objects.filter(
-        device_id=did,
-        date_time__date=current_date,
-        date_time__time__range=(start_time, end_time)
-        ).order_by('-date_time').first()
-        value1 = sql1.device_values if sql1 else 0
-        device2.append(value1)
-        sql2 = Data_store.objects.filter(
-        device_id=5,
-        date_time__date=current_date,
-        date_time__time__range=(start_time, end_time)
-        ).order_by('-date_time').first()
-        value2 = sql2.device_values if sql2 else 0
-        device5.append(value2)
-    ra=[]
-    for data in device5:
-        data2_value = int(data)
-        if data2_value >=75:
-            rain="rainy-outline"
-        elif data2_value >=50:
-            rain="cloudy-outline"
-        elif data2_value >=30:
-            rain="partly-sunny-outline"
-        else:
-            rain="sunny-outline"
-        ra.append(rain)
-    output = [{'date': times, 'value1': device2, 'value2': ra,'Names':device_name,'Symbols':symbol} for times, device2, ra in zip(times, device2, ra)]
-    return output
+
+
 
 def insertvalues(request):
     dataarray=[None]*11
@@ -306,7 +334,7 @@ def insertvalues(request):
     dataarray[1]=int(request.GET.get('temp', None))             # Temperature
     dataarray[2]=int(request.GET.get('sou', None))              # Sound
     dataarray[3]=int(request.GET.get('carbon', None))           # Co2
-    dataarray[4]=0                                              # Chance of Rain
+    dataarray[4]=rain_prediction()                              # Chance of Rain
     dataarray[5]=int(request.GET.get('windspeed', None))        # Wind Speed
     dataarray[6]=int(request.GET.get('no2', None))              # NO2
     dataarray[7]=int(request.GET.get('press', None))            # Atmospheric Pressure
@@ -322,3 +350,27 @@ def insertvalues(request):
     return JsonResponse("DONE",safe=False) 
 
 
+def rain_prediction():
+    input_values = []
+
+    Windspeedsql = Data_store.objects.filter(device_id=6,date_time__date=todays).order_by('-date_time').first()
+    input_values.append(Windspeedsql.device_values)
+
+    humiditysql = Data_store.objects.filter(device_id=1,date_time__date=todays).order_by('-date_time').first()
+    input_values.append(humiditysql.device_values)
+
+    pressureql = Data_store.objects.filter(device_id=8,date_time__date=todays).order_by('-date_time').first()
+    input_values.append(pressureql.device_values)
+
+    tempsql = Data_store.objects.filter(device_id=2,date_time__date=todays).order_by('-date_time').first()
+    input_values.append(tempsql.device_values)
+
+    uvsql = Data_store.objects.filter(device_id=9,date_time__date=todays).order_by('-date_time').first()
+    input_values.append(uvsql.device_values)
+
+
+    columns = ['WindSpeed', 'Humidity', 'Pressure', 'Temperature','UV']
+    data = pd.DataFrame([input_values], columns=columns)
+    probability = Rain_model.predict_proba(data)
+    chance=int(probability[0][1]*100)
+    return chance

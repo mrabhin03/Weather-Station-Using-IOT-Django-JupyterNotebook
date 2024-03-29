@@ -8,11 +8,11 @@ def device_limitsdata():
             {
                 #1 Humidity Sensor
                 'HighColor':"red",
-                'High': 60,
+                'High': 90,
                 'MtoHColor':"orange",
-                'Mid': 30,
+                'Mid': 70,
                 'LtoMColor':"rgb(81, 159, 226)",
-                'Low': 15,
+                'Low': 30,
                 'LowColor':"rgb(3, 209, 255)"
             },
             {
@@ -79,7 +79,7 @@ def device_limitsdata():
                 'HighColor':"red",
                 'High': 1013, 
                 'MtoHColor':"orange",
-                'Mid': 980,
+                'Mid': 700,
                 'LtoMColor':"rgb(81, 159, 226)",
                 'Low': 550,
                 'LowColor':"rgb(3, 209, 255)"
@@ -118,13 +118,25 @@ def device_limitsdata():
     return device_limits
 
 def device_names_get():
-    device_names = ["","Humidity","Temperature","Sound","Co2","Chance of Rain","Wind Speed","NO2","Atmospheric Pressure","UV","Wind Direction","Air Quality"]
+    device_names = ["","Humidity","Temperature","Sound","Co2","Chance of Rain","Wind Speed","NO2","Atmospheric Pressure","UV","Wind Direction","PM 2.5"]
     return device_names
 
 def icon_get():
-    symbols_data = ["","%","°","%","%","%","km/h","%","hPa","%","°"," AQI"]
+    symbols_data = ["","%","°C","%","%","%","km/h","µg/m³","hPa","%","°"," µg/m³"]
     return symbols_data
 
 def device_icon_name_get():
     device_icon = ["","cloudy-outline","thermometer-outline","volume-high-outline","warning-outline","umbrella-outline","speedometer-outline","logo-electron","contract-outline","warning-outline","compass-outline","balloon"]
     return device_icon
+
+def rain_icon_convertion(rain_data):
+    data2_value = int(rain_data)
+    if data2_value >=75:
+        rain="rainy-outline"
+    elif data2_value >=50:
+        rain="cloudy-outline"
+    elif data2_value >=30:
+        rain="partly-sunny-outline"
+    else:
+        rain="sunny-outline"
+    return rain

@@ -84,10 +84,10 @@ var device_limits = {
     },
     {
       //7 NO2 Sensor
-      High: "> 20%",
-      Moder: "10 - 20%",
-      Good: "5 - 10%",
-      Low: "< 5%",
+      High: "> 20 µg/m³",
+      Moder: "10 - 20 µg/m³",
+      Good: "5 - 10 µg/m³",
+      Low: "< 5 µg/m³",
       Lowtx: "The NO2 level below 5 is considered low",
       Hightx: "The NO2 level above 20 is considered high",
       Modertx: "The NO2 level between 10 and 20 is considered moderate",
@@ -129,10 +129,10 @@ var device_limits = {
     },
     {
       //11 Air Quality
-      High: "AQI > 30",
-      Moder: "AQI 20 - 30",
-      Good: "AQI 15 - 20",
-      Low: "AQI < 15",
+      High: "> 30 µg/m³",
+      Moder: "20 - 30 µg/m³",
+      Good: "15 - 20 µg/m³",
+      Low: "< 15 µg/m³",
       Lowtx: "The air quality index below 15 is considered low",
       Hightx: "The air quality index above 30 is considered high",
       Modertx: "The air quality index between 20 and 30 is considered moderate",
@@ -171,15 +171,18 @@ function checkvalue(n, id, dorw, lastdate2, themainelemantdata) {
   theelemantdata = themainelemantdata.querySelector("#arrowint");
   themovesobject[0] = document.getElementById("max_data_name");
   themovesobject[1] = document.getElementById("max_data_value");
-  themovesobject[2] = document.getElementById("max_data_date");
+  themovesobject[2] = document.getElementById("max_data_value_sy");
+  themovesobject[3] = document.getElementById("max_data_date");
 
-  themovesobject[3] = document.getElementById("pre_name");
-  themovesobject[4] = document.getElementById("pre_value");
-  themovesobject[5] = document.getElementById("pre_date");
+  themovesobject[4] = document.getElementById("pre_name");
+  themovesobject[5] = document.getElementById("pre_value");
+  themovesobject[6] = document.getElementById("pre_value_sy");
+  themovesobject[7] = document.getElementById("pre_date");
 
-  themovesobject[6] = document.getElementById("min_data_name");
-  themovesobject[7] = document.getElementById("min_data_value");
-  themovesobject[8] = document.getElementById("min_data_date");
+  themovesobject[8] = document.getElementById("min_data_name");
+  themovesobject[9] = document.getElementById("min_data_value");
+  themovesobject[10] = document.getElementById("min_data_value_sy");
+  themovesobject[11] = document.getElementById("min_data_date");
   if (id == 404) {
     if (n == 0) {
       if (trar == 1) {
@@ -340,16 +343,20 @@ function topvaluesupdate(
     if (nav == 1) {
       dename = "max_data_name";
       devalue = "max_data_value";
+      desyml="max_data_value_sy";
       dedate = "max_data_date";
     } else {
       dename = "min_data_name";
       devalue = "min_data_value";
+      desyml="min_data_value_sy";
       dedate = "min_data_date";
     }
     $("#pre_name").text(devicenameout);
     $("#" + dename).text(devicenameout);
-    $("#" + devalue).text(value + symbol);
-    $("#pre_value").text(average_data + symbol);
+    $("#" + devalue).text(value);
+    $("#" + desyml).text(symbol);
+    $("#pre_value").text(average_data);
+    $("#pre_value_sy").text(symbol);
     if (dorw == 0) {
       if (value_date) {
         predate = lastdate2 + " " + value_date + ":00";
@@ -440,10 +447,10 @@ function themecheck()
         switchval.classList.add("dark");
         imagedata=document.getElementById("imagedata")
         imagedata.src="/Main/Backgroundicondark.png";
-        setTimeout(() => {chartcolorchange();}, 200);
       }
       else{
         body.classList.remove("dark");
+        setTimeout(() => {chartcolorchange();}, 200);
         imagedata.src="/Main/Backgroundicon.png";
       }
 }
