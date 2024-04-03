@@ -334,13 +334,14 @@ def insertvalues(request):
     dataarray[1]=int(request.GET.get('temp', None))             # Temperature
     dataarray[2]=int(request.GET.get('sou', None))              # Sound
     dataarray[3]=int(request.GET.get('carbon', None))           # Co2
-    dataarray[4]=rain_prediction()                              # Chance of Rain
     dataarray[5]=int(request.GET.get('windspeed', None))        # Wind Speed
     dataarray[6]=int(request.GET.get('no2', None))              # NO2
     dataarray[7]=int(request.GET.get('press', None))            # Atmospheric Pressure
     dataarray[8]=int(request.GET.get('uv', None))               # UV
     dataarray[9]=152                                            # Wind Direction
     dataarray[10]=int(request.GET.get('pm25', None))            # Air Quality
+
+    dataarray[4]=rain_prediction(dataarray[5],dataarray[0],dataarray[7],dataarray[1],dataarray[8])                              # Chance of Rain
     i=1
     for value in dataarray:
         insert_data = Data_store(device_values=value, device_id=i)
@@ -350,23 +351,18 @@ def insertvalues(request):
     return JsonResponse("DONE",safe=False) 
 
 
-def rain_prediction():
+def rain_prediction(Windspeed,humidity,Pressure,temperature,uv):
     input_values = []
 
-    Windspeedsql = Data_store.objects.filter(device_id=6,date_time__date=todays).order_by('-date_time').first()
-    input_values.append(Windspeedsql.device_values)
+    input_values.append(Windspeed)
 
-    humiditysql = Data_store.objects.filter(device_id=1,date_time__date=todays).order_by('-date_time').first()
-    input_values.append(humiditysql.device_values)
+    input_values.append(humidity)
 
-    pressureql = Data_store.objects.filter(device_id=8,date_time__date=todays).order_by('-date_time').first()
-    input_values.append(pressureql.device_values)
+    input_values.append(Pressure)
 
-    tempsql = Data_store.objects.filter(device_id=2,date_time__date=todays).order_by('-date_time').first()
-    input_values.append(tempsql.device_values)
+    input_values.append(temperature)
 
-    uvsql = Data_store.objects.filter(device_id=9,date_time__date=todays).order_by('-date_time').first()
-    input_values.append(uvsql.device_values)
+    input_values.append(uv)
 
 
     columns = ['WindSpeed', 'Humidity', 'Pressure', 'Temperature','UV']

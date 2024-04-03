@@ -10,9 +10,9 @@ def device_limitsdata():
                 'HighColor':"red",
                 'High': 90,
                 'MtoHColor':"orange",
-                'Mid': 70,
+                'Mid': 85,
                 'LtoMColor':"rgb(81, 159, 226)",
-                'Low': 30,
+                'Low': 50,
                 'LowColor':"rgb(3, 209, 255)"
             },
             {

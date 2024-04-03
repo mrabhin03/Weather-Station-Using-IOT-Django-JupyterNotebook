@@ -817,9 +817,17 @@
                     }
 
                 }
-                
-                
             }
+
+            function ajaxrepeator() {
+                graphupdates(didval);
+                fullalldaydata();
+                setInterval(function() {
+                    graphupdates(didval);
+                    fullalldaydata();
+                }, 5000);
+            }
+            ajaxrepeator();
             
 
             function fullalldaydata() {
@@ -834,19 +842,12 @@
                     },
                     error: function (error) {
                         console.error('Error fetching live data:', error);
-                    },
-                    complete: function () {
-                        setTimeout(fullalldaydata, delays);
                     }
                 });
             }
-            
-            var updateTimer;
 
             function graphupdates(dv_id) {
-                if (updateTimer) {
-                    clearTimeout(updateTimer);
-                }
+                didval=dv_id
                 $.ajax({
                     url: '/graph_data/',
                     method: 'GET',
@@ -861,12 +862,6 @@
                     },
                     error: function (error) {
                         console.error('Error fetching live data:', error);
-                    },
-                    complete: function () {
-                        
-                        updateTimer = setTimeout(function() {
-                            graphupdates(dv_id);
-                        }, 5000);
                     }
                 });
             }
@@ -906,9 +901,6 @@
                 });
             }
             
-            graphupdates(didval);
-            
-            fullalldaydata();
         </script>
         {% endblock details %}
         <script>
@@ -928,7 +920,7 @@
                         console.error('Error fetching live data:', error);
                     },
                     complete: function () {
-                        setTimeout(todaytemper, 5000);
+                        setTimeout(todaytemper, 500);
                     }
                 });
             }
