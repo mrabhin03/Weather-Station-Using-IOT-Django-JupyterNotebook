@@ -27,6 +27,7 @@
     --speedborderblue:rgb(6, 116, 212);
     --barlevelborder:white;
     --animationhover:rgb(0, 0, 0);
+    --boxshadow:transparent;
     
 
     --limit_color_low:rgb(0, 234, 255);
@@ -67,13 +68,13 @@ body.dark{
     --dirwind:url('winddirwhite.png');
     --limitdata_border:rgb(0, 0, 0);
     --darktheme:rgba(213, 213, 213, 0.447);
-    --darkthemebutton:rgb(255, 255, 255);
+    --darkthemebutton:yellow;
     --darkthemetext:rgb(255, 255, 255);
     --speedborderorg:rgb(182, 234, 255);
     --speedborderblue:rgb(18, 113, 197);
     --barlevelborder:rgb(0, 0, 0);
     --animationhover:rgb(255, 255, 255);
-    
+    --boxshadow:rgb(34, 34, 34);
 
     --limit_color_low:rgb(0, 187, 204);
     --limit_color_good:rgb(23, 197, 0);
@@ -162,6 +163,8 @@ body{
     cursor: pointer;
     margin-top: 5px;
     transition: var(--anime);
+    box-shadow: inset 0 0 10px 5px var(--boxshadow);
+    border: 2px solid white;
 }
 .switch{
     transform: translateX(calc(0% + 3px));

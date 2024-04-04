@@ -10,7 +10,7 @@ device_values = {
             'Min': 78
         },{
             #Temperature
-            'Max': 40,
+            'Max': 36,
             'Min': 28
         },{
             #Sound
@@ -22,12 +22,12 @@ device_values = {
             'Min': 1
         },{
             #Chance of Rain
-            'Max': 75,
-            'Min': 25
+            'Max': 80,
+            'Min': 20
         },{
             #Wind Speed sensor
-            'Max': 15,
-            'Min': 7
+            'Max': 13,
+            'Min': 3
         },{
             #NO2 Sensor
             'Max': 6,
@@ -35,7 +35,7 @@ device_values = {
         },{
             #Atmospheric Pressure
             'Max': 1015,
-            'Min': 980
+            'Min': 995
         },{
             #UV Sensor
             'Max': 10,
@@ -54,7 +54,7 @@ time=[0,3,6,9,12,15,18,21,23]
 
 
 datefrom=1
-dateto=3
+dateto=4
 month=4
 
 day=datefrom

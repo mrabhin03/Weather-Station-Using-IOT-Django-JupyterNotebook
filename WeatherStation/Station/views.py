@@ -100,17 +100,7 @@ def today(request):
         device_values= latest_record.device_values
     else:
 
-        old_data_sql = Data_store.objects.filter(device_id=device_id).order_by('-date_time')[:7]
-        device_values = [0,0,0,0,0,0,0]
-        i=0
-        for record in old_data_sql:
-            device_values[i]=record.device_values
-            i+=1
-        device_values = device_values[::-1]
-
-        predataset_format = np.array([device_values])
-        predicted_value = model.predict(predataset_format.reshape(1, 7))
-        predata=int(predicted_value) 
+        predata=Todaystemppred(device_id)
         date_time= None
         device_values= predata
 
@@ -157,17 +147,8 @@ def grweekdata(current_date,did):
         rain=rain_icon_convertion(data)
         ra.append(rain)
 
-    art=[]
     if current_date==todays:
-        for yadata in device2:
-            inval=yadata
-            if yadata==0:
-                filtered_arr = [x for x in device2 if x != 0]
-                inval = min(filtered_arr)
-            art.append(inval)
-        new_data = np.array([art])
-        predicted_temp = model.predict(new_data.reshape(1, 7))
-        predata=int(predicted_temp) 
+        predata=weekend_prediction(device2)
         device2.append(predata) 
         rain=rain_icon_convertion(predata)
         ra.append(rain)
@@ -228,12 +209,12 @@ def grdaydata(current_date,did):
             pred.append(0)
         elif current_date_time_datetime.date()==current_date:
             predata=daygraphpred(current_date,start_time,end_time,did)
-            #daygraphrainpred(current_date,start_time,end_time)
             device2.append(predata)
             if int(did)==5:
                 device5.append(predata)
             else:
-                device5.append(0)
+                rain_return=daygraphpred(current_date,start_time,end_time,5)
+                device5.append(rain_return)
             pred.append(1)
         else:
             device2.append(0)
@@ -357,9 +338,6 @@ def livedatasend(request):
 
 
 
-
-
-
 def insertvalues(request):
     dataarray=[None]*11
     dataarray[0]=int(request.GET.get('hum', None))              # Humidity
@@ -373,7 +351,7 @@ def insertvalues(request):
     dataarray[9]=152                                            # Wind Direction
     dataarray[10]=int(request.GET.get('pm25', None))            # Air Quality
 
-    dataarray[4]=rain_prediction(dataarray[5],dataarray[0],dataarray[7],dataarray[1],dataarray[8])    # Chance of Rain
+    dataarray[4]=rain_prediction(dataarray[5],dataarray[0],dataarray[7],dataarray[1])    # Chance of Rain
     i=1
     for value in dataarray:
         insert_data = Data_store(device_values=value, device_id=i)
@@ -383,22 +361,4 @@ def insertvalues(request):
     return JsonResponse("DONE",safe=False) 
 
 
-def rain_prediction(Windspeed,humidity,Pressure,temperature,uv):
-    input_values = []
 
-    input_values.append(Windspeed)
-
-    input_values.append(humidity)
-
-    input_values.append(Pressure)
-
-    input_values.append(temperature)
-
-    input_values.append(uv)
-
-
-    columns = ['WindSpeed', 'Humidity', 'Pressure', 'Temperature','UV']
-    data = pd.DataFrame([input_values], columns=columns)
-    probability = Rain_model.predict_proba(data)
-    chance=int(probability[0][1]*100)
-    return chance

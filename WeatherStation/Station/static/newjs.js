@@ -398,7 +398,7 @@ function topvaluesupdate(
     
   }, timeout_t1);
 }
-var perdevice = [0, 1, 2, 5, 11];
+var perdevice = [0, 1, 2, 5];
 var iva=2
 function homegraphdata(nav, obj) {
   arrowdata = obj.querySelector("#homeswitch");
@@ -413,7 +413,7 @@ function homegraphdata(nav, obj) {
       }
     }
   } else {
-    if (iva == 4) {
+    if (iva == 3) {
       arrowdata.classList.add("invalidmove");
     } else {
       arrowdata.classList.add("validmoveR");

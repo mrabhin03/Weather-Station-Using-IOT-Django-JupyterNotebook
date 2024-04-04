@@ -3,7 +3,12 @@ from datetime import timedelta
 import numpy as np
 import pandas as pd
 from joblib import load
-model=load('./TheModel/Temperature_Model.joblib')
+
+Temperature_Model=load('./TheModel/Temperature_Model.joblib')
+Humidity_Model=load('./TheModel/Humidity_Ke_model.joblib')
+Pressure_Model=load('./TheModel/Pressure_model.joblib')
+WindSpeed_Model=load('./TheModel/WindSpeed_model.joblib')
+
 Rain_model=load('./TheModel/Rain_Prediction.joblib')
 
 def daygraphpred(current_date,start_time,end_time,did):
@@ -17,7 +22,11 @@ def daygraphpred(current_date,start_time,end_time,did):
         olddata = olddatasql.device_values if olddatasql else 0
         predataset.append(olddata)
     predataset_format = np.array([predataset])
-    predicted_value = model.predict(predataset_format.reshape(1, 7))
+    
+    if int(did)==2:
+        predicted_value = Temperature_Model.predict(predataset_format.reshape(1, 7))
+    else:
+        predicted_value = Humidity_Model.predict(predataset_format.reshape(1, 7))
     pred=int(predicted_value)
     return pred
 
@@ -57,22 +66,68 @@ def daygraphrainpred(current_date,start_time,end_time):
         uv_data.append(uv)
     sample=[]
     wind_format = np.array([wind_data])
-    sample.append(int(model.predict(wind_format.reshape(1, 7))))
+    sample.append(int(WindSpeed_Model.predict(wind_format.reshape(1, 7))))
 
     humidity_format = np.array([humidity_data])
-    sample.append(int(model.predict(humidity_format.reshape(1, 7))))
+    sample.append(int(Humidity_Model.predict(humidity_format.reshape(1, 7))))
 
     Pressure_format = np.array([Pressure_data])
-    sample.append(int(model.predict(Pressure_format.reshape(1, 7))))
+    sample.append(int(Pressure_Model.predict(Pressure_format.reshape(1, 7))))
 
     temperature_format = np.array([temperature_data])
-    sample.append(int(model.predict(temperature_format.reshape(1, 7))))
+    sample.append(int(Temperature_Model.predict(temperature_format.reshape(1, 7))))
 
-    uv_format = np.array([uv_data])
-    sample.append(int(model.predict(uv_format.reshape(1, 7))))
-
-    columns = ['WindSpeed', 'Humidity', 'Pressure', 'Temperature','UV']
+    columns = ['WindSpeed', 'Humidity', 'Pressure', 'Temperature']
     data = pd.DataFrame([sample], columns=columns)
     probability = Rain_model.predict_proba(data)
     chance=int(probability[0][1]*100)
-    print(chance)
+    return chance
+
+
+
+def weekend_prediction(device2):
+    art=[]
+    for yadata in device2:
+        inval=yadata
+        if yadata==0:
+            filtered_arr = [x for x in device2 if x != 0]
+            inval = min(filtered_arr)
+        art.append(inval)
+    new_data = np.array([art])
+    predicted_temp = Temperature_Model.predict(new_data.reshape(1, 7))
+    predata=int(predicted_temp)
+    return predata
+
+
+def rain_prediction(Windspeed,humidity,Pressure,temperature):
+    input_values = []
+
+    input_values.append(Windspeed)
+
+    input_values.append(humidity)
+
+    input_values.append(Pressure)
+
+    input_values.append(temperature)
+
+
+    columns = ['WindSpeed', 'Humidity', 'Pressure', 'Temperature']
+    data = pd.DataFrame([input_values], columns=columns)
+    probability = Rain_model.predict_proba(data)
+    chance=int(probability[0][1]*100)
+    return chance
+
+
+def Todaystemppred(device_id):
+    old_data_sql = Data_store.objects.filter(device_id=device_id).order_by('-date_time')[:7]
+    device_values = [0,0,0,0,0,0,0]
+    i=0
+    for record in old_data_sql:
+        device_values[i]=record.device_values
+        i+=1
+    device_values = device_values[::-1]
+
+    predataset_format = np.array([device_values])
+    predicted_value = Temperature_Model.predict(predataset_format.reshape(1, 7))
+    predata=int(predicted_value) 
+    return predata
