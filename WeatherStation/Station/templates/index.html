@@ -144,18 +144,31 @@
                             }
                             else{newlabelarray[i]=gradata[i].date}
                             if(dorw==1)
-                            {if(i+1!=li)
                             {
-                                newitemarray[i]=gradata[i].value1;
-                                if(i+2==li){
+                                if(i+1!=li)
+                                {
+                                    newitemarray[i]=gradata[i].value1;
+                                    if(i+2==li){
+                                        newitemarray2[i]=gradata[i].value1;
+                                    }
+                                }
+                                else{
                                     newitemarray2[i]=gradata[i].value1;
                                 }
                             }
                             else{
-                                newitemarray2[i]=gradata[i].value1;
-                            }}
-                            else{
-                                newitemarray[i]=gradata[i].value1;
+                                if(gradata[i].predicts==0)
+                                {
+                                    newitemarray[i]=gradata[i].value1;
+
+                                }
+                                else{
+                                    if(i!=0){
+                                    if(gradata[i-1].predicts==0){
+                                        newitemarray2[i-1]=gradata[i-1].value1;
+                                    }}
+                                    newitemarray2[i]=gradata[i].value1;
+                                }
                             }
                             
                             
@@ -915,12 +928,16 @@
                         $('#todayTemperature').text(newdata[0]+"°");
                         $('#todaydate').text("Today "+newdata[1]);
                         $('#todaytime').text(newdata[2]);
+                        if(newdata[3]=="None"){
+                            document.getElementById("todayTemperature").style.color="yellow";
+                        }
+                        else{document.getElementById("todayTemperature").style.color="white";}
                     },
                     error: function (error) {
                         console.error('Error fetching live data:', error);
                     },
                     complete: function () {
-                        setTimeout(todaytemper, 500);
+                        setTimeout(todaytemper, 1000);
                     }
                 });
             }

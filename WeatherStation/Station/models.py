@@ -12,7 +12,7 @@ class Devices_details(models.Model):
 class Data_store(models.Model):
     id = models.AutoField(primary_key=True)
     device_values = models.IntegerField()
-    date_time = models.DateTimeField(auto_now_add=True)
+    date_time = models.DateTimeField()
     device_id = models.IntegerField()
     class Meta:
         db_table = 'Data_store'

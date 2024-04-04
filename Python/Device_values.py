@@ -6,8 +6,8 @@ device_values = {
         },
         {
             #Humidity
-            'Max': 30,
-            'Min': 20
+            'Max': 86,
+            'Min': 78
         },{
             #Temperature
             'Max': 40,
@@ -22,8 +22,8 @@ device_values = {
             'Min': 1
         },{
             #Chance of Rain
-            'Max': 100,
-            'Min': 0
+            'Max': 75,
+            'Min': 25
         },{
             #Wind Speed sensor
             'Max': 15,
@@ -34,8 +34,8 @@ device_values = {
             'Min': 1
         },{
             #Atmospheric Pressure
-            'Max': 998,
-            'Min': 970
+            'Max': 1015,
+            'Min': 980
         },{
             #UV Sensor
             'Max': 10,
@@ -53,9 +53,9 @@ device_values = {
 time=[0,3,6,9,12,15,18,21,23]
 
 
-datefrom=19
-dateto=19
-month=3
+datefrom=1
+dateto=3
+month=4
 
 day=datefrom
 while day<=dateto:

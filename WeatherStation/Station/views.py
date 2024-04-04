@@ -10,10 +10,10 @@ from joblib import load
 from django.http import JsonResponse
 from datetime import time as dt_time
 from .Commons import *
+from .Predictions import *
 import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score
-
 
 current_date_time_datetime = datetime.now()
 graphdate=timezone.localdate()
@@ -26,17 +26,17 @@ sessions=0
 
 def home(request):
     global sessions
-    if sessions==0:
-        if 'load' in request.session:
-            del request.session['load']
-        sessions=1
-    if 'admin' in request.session:
-        del request.session['admin']
-    if 'load' in request.session:
-        loader="1"
-    else:
-        request.session['load'] = 1
-        loader="0"
+    # if sessions==0:
+    #     if 'load' in request.session:
+    #         del request.session['load']
+    #     sessions=1
+    # if 'admin' in request.session:
+    #     del request.session['admin']
+    # if 'load' in request.session:
+    loader="1"
+    # else:
+    #     request.session['load'] = 1
+    #     loader="0"
     datevalue = totaldate.strftime('%Y-%m-%d')
     return render(request, 'index.html',{'tdate':datevalue,'Load':loader})
 
@@ -96,18 +96,25 @@ def today(request):
             date_time__date=current_date
         ).order_by('-date_time').first()
     if latest_record:
-        result.append({
-                'device_id': latest_record.device_id,
-                'date_time': latest_record.date_time,
-                'device_values': latest_record.device_values
-            })
+        date_time=latest_record.date_time,
+        device_values= latest_record.device_values
     else:
-        result.append({
-                'device_id': device_id,
-                'date_time': None,
-                'device_values': 0
-            })
-    timeandall=str(result[0]['device_values'])+","+str(dated)+","+str(timet)
+
+        old_data_sql = Data_store.objects.filter(device_id=device_id).order_by('-date_time')[:7]
+        device_values = [0,0,0,0,0,0,0]
+        i=0
+        for record in old_data_sql:
+            device_values[i]=record.device_values
+            i+=1
+        device_values = device_values[::-1]
+
+        predataset_format = np.array([device_values])
+        predicted_value = model.predict(predataset_format.reshape(1, 7))
+        predata=int(predicted_value) 
+        date_time= None
+        device_values= predata
+
+    timeandall=str(device_values)+","+str(dated)+","+str(timet)+","+str(date_time)
     return JsonResponse( timeandall,safe=False)
 
 
@@ -171,19 +178,28 @@ def grweekdata(current_date,did):
 
 
 def grdaydata(current_date,did):
-    
-
     symbols_data=icon_get()
     device_names=device_names_get()
     device2 = []
     device5 = []
+    pred=[]
     deviceid=int(did)
     if deviceid!=11:
         symbol=symbols_data[deviceid]
     else:
         symbol=""
     device_name=device_names[deviceid]
+
+    datasql = Data_store.objects.filter(device_id=did, date_time__date=current_date).order_by('-date_time').first()
+    lasthour=datasql.date_time.hour if datasql else 0
+    
+    limit_time=0
     times=[3,6,9,12,15,18,21,24]
+    if lasthour!=0:
+        for timedata in times:
+            if lasthour<timedata:
+                limit_time=timedata
+                break
     per=0
     tmin=0
     for time in times:
@@ -194,21 +210,37 @@ def grdaydata(current_date,did):
         start_time = dt_time(hour=per, minute=0)
         end_time = dt_time(hour=hor, minute=tmin)
         per=time
-        sql1 = Data_store.objects.filter(
-        device_id=did,
-        date_time__date=current_date,
-        date_time__time__range=(start_time, end_time)
-        ).order_by('-date_time').first()
-        value1 = sql1.device_values if sql1 else 0
-        device2.append(value1)
-        sql2 = Data_store.objects.filter(
-        device_id=5,
-        date_time__date=current_date,
-        date_time__time__range=(start_time, end_time)
-        ).order_by('-date_time').first()
-        value2 = sql2.device_values if sql2 else 0
-        device5.append(value2)
+        if limit_time>=time:
+            sql1 = Data_store.objects.filter(
+            device_id=did,
+            date_time__date=current_date,
+            date_time__time__range=(start_time, end_time)
+            ).order_by('-date_time').first()
+            value1 = sql1.device_values if sql1 else 0
+            device2.append(value1)
+            sql2 = Data_store.objects.filter(
+            device_id=5,
+            date_time__date=current_date,
+            date_time__time__range=(start_time, end_time)
+            ).order_by('-date_time').first()
+            value2 = sql2.device_values if sql2 else 0
+            device5.append(value2)
+            pred.append(0)
+        elif current_date_time_datetime.date()==current_date:
+            predata=daygraphpred(current_date,start_time,end_time,did)
+            #daygraphrainpred(current_date,start_time,end_time)
+            device2.append(predata)
+            if int(did)==5:
+                device5.append(predata)
+            else:
+                device5.append(0)
+            pred.append(1)
+        else:
+            device2.append(0)
+            device5.append(0)
+            pred.append(0)
     ra=[]
+    
     for data in device5:
         data2_value = int(data)
         if data2_value >=75:
@@ -220,7 +252,7 @@ def grdaydata(current_date,did):
         else:
             rain="sunny-outline"
         ra.append(rain)
-    output = [{'date': times, 'value1': device2, 'value2': ra,'Names':device_name,'Symbols':symbol} for times, device2, ra in zip(times, device2, ra)]
+    output = [{'date': times, 'value1': device2, 'value2': ra,'predicts':pred,'Names':device_name,'Symbols':symbol} for times, device2, ra,pred in zip(times, device2, ra,pred)]
     return output
 
 
@@ -341,7 +373,7 @@ def insertvalues(request):
     dataarray[9]=152                                            # Wind Direction
     dataarray[10]=int(request.GET.get('pm25', None))            # Air Quality
 
-    dataarray[4]=rain_prediction(dataarray[5],dataarray[0],dataarray[7],dataarray[1],dataarray[8])                              # Chance of Rain
+    dataarray[4]=rain_prediction(dataarray[5],dataarray[0],dataarray[7],dataarray[1],dataarray[8])    # Chance of Rain
     i=1
     for value in dataarray:
         insert_data = Data_store(device_values=value, device_id=i)
