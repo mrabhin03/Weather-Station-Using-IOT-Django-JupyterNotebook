@@ -55,6 +55,7 @@
       <div class="canvasdata2">
         <canvas height="6500" width="30000" id="pergraphdisplay"></canvas>
       </div>
+      <!--<button class="calender">Calender</button>-->
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <script>
         delays = 5000;
@@ -199,7 +200,7 @@
               datasets.push({
                 data: itemdata,
                 borderColor: "rgb(100, 180, 280)",
-                fill: true,
+                fill: false,
                 backgroundColor: "rgb(81, 159, 226)",
                 tension: 0.15,
                 borderWidth: 3,
@@ -350,6 +351,7 @@
                 if (isLight(colors)) {
                   color2 = "black";
                 } else {
+                  var colors = `rgb(${Math.floor(Math.random() * 200) + 50}, ${Math.floor(Math.random() * 200) + 50}, ${Math.floor(Math.random() * 200) + 50})`;
                   color2 = "white";
                 }
                 textbox.style.color = color2;

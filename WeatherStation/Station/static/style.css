@@ -1305,6 +1305,10 @@ body{
     }
 }
 
+.calender{
+    margin-bottom: 5px;
+}
+
 
 
 @media (min-width: 900px){
@@ -1619,7 +1623,7 @@ body{
     }
     .details_block{
         height: auto;
-        margin-top: 790px;
+        margin-top: 0px;
     }
     .theprdetailsbox{
         height: 180px;

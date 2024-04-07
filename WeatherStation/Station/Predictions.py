@@ -3,6 +3,7 @@ from datetime import timedelta
 import numpy as np
 import pandas as pd
 from joblib import load
+from django.http import JsonResponse
 
 Temperature_Model=load('./TheModel/Temperature_Model.joblib')
 Humidity_Model=load('./TheModel/Humidity_Ke_model.joblib')
@@ -13,17 +14,20 @@ Rain_model=load('./TheModel/Rain_Prediction.joblib')
 
 def daygraphpred(current_date,start_time,end_time,did):
     predataset=[]
+    did=int(did)
+    lastdata= Data_store.objects.filter(device_id=did,date_time__time__range=(start_time, end_time)).order_by('-date_time').first()
+    lastinput_value=lastdata.device_values
     for i in range(7, 0, -1):
         day = current_date - timedelta(days=i)
         olddatasql = Data_store.objects.filter(
         device_id=did,
         date_time__date=day,
         date_time__time__range=(start_time, end_time)).order_by('-date_time').first()
-        olddata = olddatasql.device_values if olddatasql else 0
+        olddata = olddatasql.device_values if olddatasql else lastinput_value
         predataset.append(olddata)
     predataset_format = np.array([predataset])
     
-    if int(did)==2:
+    if did==2:
         predicted_value = Temperature_Model.predict(predataset_format.reshape(1, 7))
     else:
         predicted_value = Humidity_Model.predict(predataset_format.reshape(1, 7))
@@ -80,7 +84,7 @@ def daygraphrainpred(current_date,start_time,end_time):
     columns = ['WindSpeed', 'Humidity', 'Pressure', 'Temperature']
     data = pd.DataFrame([sample], columns=columns)
     probability = Rain_model.predict_proba(data)
-    chance=int(probability[0][1]*100)
+    chance=int(probability[0][2]*100)
     return chance
 
 
@@ -114,7 +118,7 @@ def rain_prediction(Windspeed,humidity,Pressure,temperature):
     columns = ['WindSpeed', 'Humidity', 'Pressure', 'Temperature']
     data = pd.DataFrame([input_values], columns=columns)
     probability = Rain_model.predict_proba(data)
-    chance=int(probability[0][1]*100)
+    chance=round(probability[0][2]*100)
     return chance
 
 
@@ -131,3 +135,29 @@ def Todaystemppred(device_id):
     predicted_value = Temperature_Model.predict(predataset_format.reshape(1, 7))
     predata=int(predicted_value) 
     return predata
+
+
+def update_rain_database(request):
+    rain_sql = Data_store.objects.filter(device_id=5).order_by('-id')
+    for j in rain_sql:
+
+        wind_sql=Data_store.objects.filter(device_id=6,date_time=j.date_time).first()
+        WindSpeed=wind_sql.device_values
+
+        Humidity_sql=Data_store.objects.filter(device_id=1,date_time=j.date_time).first()
+        Humidity=Humidity_sql.device_values
+
+        Pressure_sql=Data_store.objects.filter(device_id=8,date_time=j.date_time).first()
+        Pressure=Pressure_sql.device_values
+
+        Temperature_sql=Data_store.objects.filter(device_id=2,date_time=j.date_time).first()
+        Temperature=Temperature_sql.device_values
+
+        Rain_out=rain_prediction(WindSpeed,Humidity,Pressure,Temperature)
+
+        update = Data_store.objects.get(id=j.id)
+        update.device_values=Rain_out
+        update.save()
+
+
+    return JsonResponse("okay",safe=False)

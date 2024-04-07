@@ -19,6 +19,7 @@ from django.urls import path
 from Station import views as station
 from Station import Details as Page2
 from Station import Admin_page as Admins
+from Station import Predictions as update
 urlpatterns = [
     path('adminlog/', admin.site.urls),
     path('', station.home,name='home'),
@@ -39,6 +40,8 @@ urlpatterns = [
     path('logout/',Admins.logout,name='logout'),
     path('admin/data/',Admins.dataview,name='dataview'),
     path('admin_data_out/',Admins.admin_lastdata,name='admin_lastdata'),
-    path('statuschange/',Admins.thestatuschange,name='changestatus')
+    path('statuschange/',Admins.thestatuschange,name='changestatus'),
+
+    path('update/',update.update_rain_database,name='updates')
     
 ]
