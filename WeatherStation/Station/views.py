@@ -26,17 +26,17 @@ sessions=0
 
 def home(request):
     global sessions
-    # if sessions==0:
-    #     if 'load' in request.session:
-    #         del request.session['load']
-    #     sessions=1
-    # if 'admin' in request.session:
-    #     del request.session['admin']
-    # if 'load' in request.session:
-    loader="1"
-    # else:
-    #     request.session['load'] = 1
-    #     loader="0"
+    if sessions==0:
+         if 'load' in request.session:
+            del request.session['load']
+            sessions=1
+    if 'admin' in request.session:
+        del request.session['admin']
+    if 'load' in request.session:
+        loader="1"
+    else:
+        request.session['load'] = 1
+        loader="0"
     datevalue = totaldate.strftime('%Y-%m-%d')
     return render(request, 'index.html',{'tdate':datevalue,'Load':loader})
 
