@@ -1293,6 +1293,9 @@ body{
     animation: loadert .8s ease-in-out infinite;
     animation-delay: 0.7s;
 }
+.yellowWarning{
+    color: yellow;
+}
 @keyframes loadert{
     0%{
         height: 15px;

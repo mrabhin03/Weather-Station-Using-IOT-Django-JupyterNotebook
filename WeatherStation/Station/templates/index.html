@@ -319,8 +319,8 @@
                         <div>
                             <div>
                                 <div class="humditytitle">
-                                    <b>Humidity</b>
-                                    <div class="icon" onclick="nextpagedata(404,1)"><b><ion-icon name="cloud-outline"></ion-icon></b></div>
+                                    <b>{{ device.0.Name }}</b>
+                                    <div class="icon" onclick="nextpagedata(404,1)"><b><ion-icon name="{{ device.0.Icon }}"></ion-icon></b></div>
                                 </div>
                                 <div class="humdity">
                                     <b id="humidity">0</b><b id="humsy" style="font-size: 27px; margin-left: 2px;">%</b>
@@ -338,8 +338,8 @@
                             </div>
                             <div>
                                 <div class="temperaturetitle">
-                                    <b>Temperature</b>
-                                    <div id="ticon" class="icon" onclick="nextpagedata(404,2)"><b><ion-icon id="tempwarningicon" name="thermometer-outline"></ion-icon></b></div>
+                                    <b>{{ device.1.Name }}</b>
+                                    <div id="ticon" class="icon" onclick="nextpagedata(404,2)"><b><ion-icon id="tempwarningicon" name="{{ device.1.Icon }}"></ion-icon></b></div>
                                 </div>
                                 <div class="temperatured">
                                     <b id="Temperature">0</b><b id="temsy" style="font-size: 30px; margin-left: 2px;"></b>
@@ -357,9 +357,9 @@
                             </div>
                             <div>
                                 <div class="raintitle">
-                                    <b >Chance of Rain</b>
+                                    <b >{{ device.4.Name }}</b>
                                     <div class="icon" id="rainicon" onclick="nextpagedata(5,1)">
-                                        <b><ion-icon id="rainnew" name="sunny-outline"></ion-icon></b></div>
+                                        <b><ion-icon id="rainnew" name="{{ device.4.Name }}"></ion-icon></b></div>
                                 </div>
                                 <div class="rain">
                                     <b id="rain">0</b><b id="rainsy" style="font-size: 27px; margin-left: 2px;">%</b>
@@ -379,9 +379,9 @@
                         <div>
                             <div>
                                 <div class="windtitle">
-                                    <b >Wind Speed</b>
+                                    <b >{{ device.5.Name }}</b>
                                     <div class="icon" id="windicon" onclick="nextpagedata(404,4)">
-                                        <b><ion-icon name="speedometer-outline"></ion-icon></b>
+                                        <b><ion-icon name="{{ device.5.Icon }}"></ion-icon></b>
                                     </div>
                                 </div>
                                 <div class="wind">
@@ -408,8 +408,8 @@
                             </div>
                             <div >
                                 <div class="windirtitle">
-                                    <b>Wind Direction</b>
-                                    <div class="icon" onclick="nextpagedata(404,1)"><b><ion-icon name="compass-outline"></ion-icon></b></div>
+                                    <b>{{ device.9.Name }}</b>
+                                    <div class="icon" onclick="nextpagedata(404,1)"><b><ion-icon name="{{ device.9.Icon }}"></ion-icon></b></div>
                                 </div>
                                 <div class="wibr">
                                     <div class="dirdata"><table style="text-align: center;">
@@ -434,9 +434,9 @@
                             </div>
                             <div>
                                 <div class="atmtitle">
-                                    <b >Atmospheric Pressure</b>
+                                    <b >{{ device.7.Name }}</b>
                                     <div class="icon" id="atmicon" onclick="nextpagedata(8,1)">
-                                        <b><ion-icon name="contract-outline"></ion-icon></b></div>
+                                        <b><ion-icon name="{{ device.7.Icon }}"></ion-icon></b></div>
                                 </div>
                                 <div class="atm">
                                     <div class="speedar">
@@ -465,15 +465,15 @@
                         <div>
                             <div>
                                 <div class="no2title">
-                                    <b>NO² Presents</b>
-                                    <div class="icon" id="no2icon" onclick="nextpagedata(404,5)"><b><ion-icon name="logo-electron"></ion-icon></b></div>
+                                    <b>{{ device.6.Name }}</b>
+                                    <div class="icon" id="no2icon" onclick="nextpagedata(404,5)"><b><ion-icon name="{{ device.6.Icon }}"></ion-icon></b></div>
                                 </div>
                                 <div class="no2">
-                                    <b id="no2">0</b><b id="n02sy" style="font-size: 14px;margin-left: 3px;">µg/m³</b>
+                                    <b id="no2">0</b><b id="n02sy" style="font-size: 27px;margin-left: 2px;">µg/m³</b>
                                 </div>
                                 <div class="level">
                                     <div class="limits">
-                                        <div style="justify-content: baseline;" >0%</div>
+                                        <div style="justify-content: baseline;" >0{{ device.6.Symbole }}</div>
                                         <div style="justify-content: center;">50%</div>
                                         <div style="justify-content: end;">100%</div>
                                     </div>
@@ -486,8 +486,8 @@
                             
                             <div>
                                 <div class="co2title">
-                                    <b>CO² Presents</b>
-                                    <div class="icon" id="co2icon" onclick="nextpagedata(404,3)"><b><ion-icon id="co2warningicon" name="warning-outline"></ion-icon></b></div>
+                                    <b>{{ device.3.Name }}</b>
+                                    <div class="icon" id="co2icon" onclick="nextpagedata(404,3)"><b><ion-icon id="co2warningicon" name="{{ device.3.Icon }}"></ion-icon></b></div>
                                 </div>
                                 <div class="co2">
                                     <b id="co2">0</b><b id="cosy" style="font-size: 27px; margin-left: 2px;">%</b>
@@ -506,8 +506,8 @@
 
                             <div>
                                 <div class="uvtitle">
-                                    <b>UV Sensor</b>
-                                    <div class="icon" id="co2icon" onclick="nextpagedata(404,9)"><b><ion-icon name="warning-outline"></ion-icon></b></div>
+                                    <b>{{ device.8.Name }}</b>
+                                    <div class="icon" id="co2icon" onclick="nextpagedata(404,9)"><b><ion-icon name="{{ device.8.Icon }}"></ion-icon></b></div>
                                 </div>
                                 <div class="uvs">
                                     <b id="uvs">0</b><b id="uvssy" style="font-size: 27px; margin-left: 2px;">%</b>
@@ -527,8 +527,8 @@
                         <div>
                             <div>
                                 <div class="soundtitle">
-                                    <b>Sound</b>
-                                    <div class="icon" onclick="nextpagedata(3,1)"><b><ion-icon name="volume-high-outline"></ion-icon></b></div>
+                                    <b>{{ device.2.Name }}</b>
+                                    <div class="icon" onclick="nextpagedata(3,1)"><b><ion-icon name="{{ device.2.Icon }}"></ion-icon></b></div>
                                 </div>
                                 <div class="sound">
                                     <b id="Sound">0</b><b id="sousy" style="font-size: 27px; margin-left: 2px;">%</b>
@@ -547,9 +547,9 @@
                             
                             <div>
                                 <div class="airqtitle">
-                                    <b>PM 2.5</b>
+                                    <b>{{ device.10.Name }}</b>
                                     <div id="theaq" class="icon" onclick="nextpagedata(404,11)">
-                                        <b><ion-icon name="balloon"></ion-icon></b></div>
+                                        <b><ion-icon name="{{ device.10.Icon }}"></ion-icon></b></div>
                                 </div>
                                 <div class="airq">
                                     <b id="airq">0</b><b id="airsy" style="font-size: 14px; margin-left: 3px;"></b>
@@ -601,9 +601,9 @@
                 var tempbarwar = document.getElementById('Temperaturebar');
                 if (tempbarwar.classList.contains('warning')) {
                     tempbarwar.classList.remove('warning');
-                    document.getElementById('Temperature').classList.remove("colorWarning")}
+                    document.getElementById('Temperature').classList.remove("colorWarning");document.getElementById('temsy').classList.remove("colorWarning")}
                 if(temperatureValue >= "60"){tempbarwar.classList.add("warning");
-                    document.getElementById('Temperature').classList.add("colorWarning")}
+                    document.getElementById('Temperature').classList.add("colorWarning");document.getElementById('temsy').classList.add("colorWarning")}
                 
 
 
@@ -620,12 +620,17 @@
                 document.getElementById('co2bar').style.width =  co2Value+"%";
                 document.getElementById('co2bar').style.backgroundColor=data[3].Dev_Color;
                 document.getElementById('co2icon').style.backgroundColor=data[3].bgicon;
+                document.getElementById('co2icon').style.color=data[3].Icon_color;
                 var co2WarningIcon = document.getElementById('co2bar');
-                if (co2WarningIcon.classList.contains('warning')) {co2WarningIcon.classList.remove('warning');document.getElementById('co2').classList.remove('colorWarning');}
-
-                if(co2Value >= "20"){
+                if (co2WarningIcon.classList.contains('warning')) {co2WarningIcon.classList.remove('warning');document.getElementById('co2').classList.remove('colorWarning');document.getElementById('cosy').classList.remove('colorWarning');}
+                if(document.getElementById('co2').classList.contains('yellowWarning')){document.getElementById('co2').classList.remove('yellowWarning');document.getElementById('cosy').classList.remove('yellowWarning');}
+                if(co2Value >= "90"){
                 co2WarningIcon.classList.add('warning');
-                document.getElementById('co2').classList.add('colorWarning');}
+                document.getElementById('co2').classList.add('colorWarning');document.getElementById('cosy').classList.add('colorWarning');}
+                else if(co2Value >= "55"){
+                    document.getElementById('co2').classList.add('yellowWarning');
+                    document.getElementById('cosy').classList.add('yellowWarning');
+                }
 
 
                 var rainValue = data[4].device_values;
@@ -674,7 +679,7 @@
                 var no2Value = data[6].device_values;
                 $('#n02sy').text(data[6].symbole);
                 $('#no2').text(no2Value);
-                document.getElementById('no2bar').style.width =  no2Value+"%";
+                document.getElementById('no2bar').style.width =  0+"%";
                 document.getElementById('no2bar').style.backgroundColor=data[6].Dev_Color;
 
 

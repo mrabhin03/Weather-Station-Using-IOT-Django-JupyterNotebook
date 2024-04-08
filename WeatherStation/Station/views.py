@@ -14,6 +14,7 @@ from .Predictions import *
 import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score
+import random
 
 current_date_time_datetime = datetime.now()
 graphdate=timezone.localdate()
@@ -25,25 +26,51 @@ Rain_model=load('./TheModel/Rain_Prediction.joblib')
 sessions=0
 
 def home(request):
+    devices_all=[]
+    icon_datas=device_icon_name_get()
+    name=device_names_get()
+    symbole=icon_get()
     global sessions
-    if sessions==0:
-         if 'load' in request.session:
-            del request.session['load']
-            sessions=1
-    if 'admin' in request.session:
-        del request.session['admin']
-    if 'load' in request.session:
-        loader="1"
-    else:
-        request.session['load'] = 1
-        loader="0"
+    # if sessions==0:
+    #      if 'load' in request.session:
+    #         del request.session['load']
+    #         sessions=1
+    # if 'admin' in request.session:
+    #     del request.session['admin']
+    # if 'load' in request.session:
+    loader="1"
+    # else:
+    #     request.session['load'] = 1
+    #     loader="0"
+    distinct_devices = Devices_details.objects.values('device_id')
+    for device in distinct_devices:
+        device_id=device['device_id']
+        devices_all.append({
+            'Name':name[device_id],
+            'Icon':icon_datas[device_id],
+            'Symbole':symbole[device_id]
+        })
     datevalue = totaldate.strftime('%Y-%m-%d')
-    return render(request, 'index.html',{'tdate':datevalue,'Load':loader})
+    return render(request, 'index.html',{'device':devices_all,'tdate':datevalue,'Load':loader})
 
 
 def viewmoredetails(request):
+    icon_datas=device_icon_name_get()
+    name=device_names_get()
+    symbol=icon_get()
+    devices_name=[]
+    device_basic=[]
     devices_data = Devices_details.objects.filter(device_id__in=[3,5,8]).values()
-    return render(request,'details.html',{'Devices':devices_data})
+    distinct_devices = Devices_details.objects.values('device_id')
+    for device in distinct_devices:
+        device_id=device['device_id']
+        device_basic.append({
+            'Name':name[device_id],
+            'Icon':icon_datas[device_id],
+            'Symbole':symbol[device_id]
+        })
+    print(devices_name)
+    return render(request,'details.html',{'Devices':devices_data,'Device_data':device_basic})
 
 def loadernew(request):
     global sessions
@@ -207,7 +234,7 @@ def grdaydata(current_date,did):
             value2 = sql2.device_values if sql2 else 0
             device5.append(value2)
             pred.append(0)
-        elif current_date_time_datetime.date()==current_date:
+        elif current_date_time_datetime.date()==current_date or current_date_time_datetime.date()+timedelta(days=1)==current_date:
             predata=daygraphpred(current_date,start_time,end_time,did)
             device2.append(predata)
             if int(did)==5:
@@ -307,7 +334,8 @@ def livedatasend(request):
                     color=device_limits['limits'][device_id]['LtoMColor']
                 else:
                     if device_id==4:
-                        iconbg="violet"
+                        iconbg="yellow"
+                        iconco="black"
                     color=device_limits['limits'][device_id]['LowColor']
             result.append({
                 'device_id': latest_record.device_id,
@@ -343,14 +371,13 @@ def insertvalues(request):
     dataarray[0]=int(request.GET.get('hum', None))              # Humidity
     dataarray[1]=int(request.GET.get('temp', None))             # Temperature
     dataarray[2]=int(request.GET.get('sou', None))              # Sound
-    dataarray[3]=int(request.GET.get('carbon', None))           # Co2
+    dataarray[3]=int(request.GET.get('ldp', None))              # Ligth
     dataarray[5]=int(request.GET.get('windspeed', None))        # Wind Speed
-    dataarray[6]=int(request.GET.get('no2', None))              # NO2
+    dataarray[6]=int(request.GET.get('moi', None))              # Moisture
     dataarray[7]=int(request.GET.get('press', None))            # Atmospheric Pressure
     dataarray[8]=int(request.GET.get('uv', None))               # UV
-    dataarray[9]=152                                            # Wind Direction
-    dataarray[10]=int(request.GET.get('pm25', None))            # Air Quality
-
+    dataarray[9]=random.randint(10, 358)                        # Wind Direction
+    dataarray[10]=int(request.GET.get('pm25', None))            # pm
     dataarray[4]=rain_prediction(dataarray[5],dataarray[0],dataarray[7],dataarray[1])    # Chance of Rain
     i=1
     for value in dataarray:

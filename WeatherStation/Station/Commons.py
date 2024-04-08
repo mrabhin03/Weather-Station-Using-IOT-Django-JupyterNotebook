@@ -35,13 +35,13 @@ def device_limitsdata():
                 'Low': 15,
                 'LowColor':"rgb(3, 209, 255)"
             },{
-                #4 Co2 Sensor
+                #4 Sun Light
                 'HighColor':"rgb(255, 53, 53)",
-                'High': 20, 
-                'MtoHColor':"orange",
-                'Mid': 5,
-                'LtoMColor':"rgb(81, 159, 226)",
-                'Low': 2,
+                'High': 90, 
+                'MtoHColor':"yellow",
+                'Mid': 60,
+                'LtoMColor':"yellow",
+                'Low': 25,
                 'LowColor':"rgb(3, 209, 255)"
             },
             {
@@ -65,7 +65,7 @@ def device_limitsdata():
                 'LowColor':"rgb(3, 209, 255)"
             },
             {
-                #7 NO2 Sensor
+                #7 Moisture
                 'HighColor':"red",
                 'High': 20, 
                 'MtoHColor':"orange",
@@ -118,15 +118,15 @@ def device_limitsdata():
     return device_limits
 
 def device_names_get():
-    device_names = ["","Humidity","Temperature","Sound","Co2","Chance of Rain","Wind Speed","NO2","Atmospheric Pressure","UV","Wind Direction","PM 2.5"]
+    device_names = ["","Humidity","Temperature","Sound","Sun Light","Chance of Rain","Wind Speed","Moisture","Atmospheric Pressure","UV","Wind Direction","PM 2.5"]
     return device_names
 
 def icon_get():
-    symbols_data = ["","%","°C","%","%","%","km/h","µg/m³","hPa","%","°"," µg/m³"]
+    symbols_data = ["","%","°C","%","%","%","km/h","%","hPa","%","°"," µg/m³"]
     return symbols_data
 
 def device_icon_name_get():
-    device_icon = ["","cloudy-outline","thermometer-outline","volume-high-outline","warning-outline","umbrella-outline","speedometer-outline","logo-electron","contract-outline","warning-outline","compass-outline","balloon"]
+    device_icon = ["","cloudy-outline","thermometer-outline","volume-high-outline","sunny-outline","umbrella-outline","speedometer-outline","logo-electron","contract-outline","warning-outline","compass-outline","balloon"]
     return device_icon
 
 def rain_icon_convertion(rain_data):

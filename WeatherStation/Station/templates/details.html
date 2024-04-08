@@ -61,47 +61,19 @@
         delays = 5000;
         var k = 0;
         var perchart;
-        symbols_data = [
-          "",
-          "%",
-          "°C",
-          "%",
-          "%",
-          "%",
-          "km/h",
-          "µg/m³",
-          "hPa",
-          "%",
-          "°",
-          "µg/m³",
-        ];
-        device_icon = [
-          "",
-          "cloudy-outline",
-          "thermometer-outline",
-          "volume-high-outline",
-          "warning-outline",
-          "umbrella-outline",
-          "speedometer-outline",
-          "logo-electron",
-          "contract-outline",
-          "warning-outline",
-          "compass-outline",
-          "balloon-outline",
-        ];
-        device_names = [
-          "Humidity",
-          "Temperature",
-          "Sound",
-          "Co2",
-          "Chance of Rain",
-          "Wind Speed",
-          "NO2",
-          "Atmospheric Pressure",
-          "UV",
-          "Wind Direction",
-          "PM 2.5",
-        ];
+        device_names=[]
+        device_icon = []
+        symbols_data = []
+        device_icon.push("")
+        symbols_data.push("")
+
+        "{% for hi in Device_data %}"
+        device_names.push("{{ hi.Name }}")
+        device_icon.push("{{ hi.Icon }}")
+        symbols_data.push("{{ hi.Symbole }}")
+      
+        "{% endfor %}"
+
         function pertheweekchange() {
           thevalue = document.getElementById("weekorday");
           previousbutton = document.getElementById("submitBtnpre");
