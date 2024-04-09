@@ -28,7 +28,11 @@
     --barlevelborder:white;
     --animationhover:rgb(0, 0, 0);
     --boxshadow:transparent;
-    
+    --calender:rgba(255, 255, 255, 0.629);
+    --calender_text:black;
+    --calender_red:rgb(255, 0, 0);
+    --cal_body:white;
+
 
     --limit_color_low:rgb(0, 234, 255);
     --limit_color_good:rgb(30, 255, 0);
@@ -75,6 +79,10 @@ body.dark{
     --barlevelborder:rgb(0, 0, 0);
     --animationhover:rgb(255, 255, 255);
     --boxshadow:rgb(34, 34, 34);
+    --calender:rgba(0, 0, 0, 0.162);
+    --calender_text:white;
+    --calender_red:rgb(207, 3, 3);
+    --cal_body:transparent;
 
     --limit_color_low:rgb(0, 187, 204);
     --limit_color_good:rgb(23, 197, 0);
@@ -1311,6 +1319,140 @@ body{
 .calender{
     margin-bottom: 5px;
 }
+.calender_main{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+}
+.header_calender{
+    transition: var(--anime);
+    background-color: var(--calender);
+    width: 96%;
+    height: 5%;
+    margin: 5px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.header_calender>div{
+    display: flex;
+    align-items: center;
+    justify-content: baseline;
+    height: 100%;
+    width: 300px;
+    color: var(--calender_text);
+    transition: var(--anime);
+}
+.header_calender>*:not(:first-child){
+    justify-content: center;
+}
+.header_calender>*:last-child{
+    justify-content: end;
+    padding-right: 10px;
+}
+
+.header_calender>div>a{
+    transition: var(--anime);
+    color: var(--calender_text);
+}
+.header_calender>div>h6{
+    font-size: 25px;
+    font-weight: 0;
+}
+.clender_body{
+    width: 96%;
+    height: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    
+}
+.calender_div{
+    font-size: 30px;
+    height: 100px;
+    width: 123px;
+    overflow: hidden;
+    transition: var(--anime);
+    background-color: rgba(48, 48, 48, 0.451);
+    border: 2px solid var(--calender_text);
+    border-radius: 5px;
+    margin-top: 4px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    
+}
+.values_d{
+    margin-bottom: 1px;
+    height: 25px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.icon_store{
+    width: 100%;
+    height: 20px;
+    border-bottom: 2px solid var(--calender_text);
+    background-color: var(--calender_red);
+    transition: var(--anime);
+}
+.days{
+    height: 30px;
+    color: white;
+    background-color: gray;
+    width: 124px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    justify-content: center;
+}
+.left_cal,.right_cal{
+    cursor: pointer;
+    height: 100%;
+    transition: var(--anime);
+    background-color: var(--calender);
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--blacktext);
+    font-size: 50px;
+}
+.right_cal{
+    border-top-right-radius: 20px;border-bottom-right-radius: 20px;
+}
+.left_cal{
+    border-top-left-radius: 20px;border-bottom-left-radius: 20px;
+}
+.thedate{
+    height: 50px;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    font-size: 40px;
+    justify-content: center;
+    margin-top: 10px;
+}
+.center_cal{
+    height: 650px;
+    width: 900px;
+    display: grid;
+    margin-top: -20px;
+    padding-left: 0px;
+    padding-top: 0px;
+    grid-template-columns: repeat(7, 1fr); 
+    grid-template-rows: repeat(6, 1fr); 
+    grid-gap: -10px; 
+}
+
 
 
 
@@ -1320,6 +1462,7 @@ body{
     }
 
 }
+
 @media (min-height: 1200px) and (max-width: 1250px) {
     .tmep{
         font-size: 200px;

@@ -116,7 +116,17 @@ def device_limitsdata():
         ]
     }
     return device_limits
-
+def weekdays():
+    day_names = {
+        0: "Monday",
+        1: "Tuesday",
+        2: "Wednesday",
+        3: "Thursday",
+        4: "Friday",
+        5: "Saturday",
+        6: "Sunday"
+    }
+    return day_names
 def device_names_get():
     device_names = ["","Humidity","Temperature","Sound","Sun Light","Chance of Rain","Wind Speed","Moisture","Atmospheric Pressure","UV","Wind Direction","PM 2.5"]
     return device_names

@@ -463,20 +463,23 @@ function themechange()
     switchval=document.getElementById("switchdata");
     body_data=document.querySelector("body");
     imagedata=document.getElementById("imagedata")
-  
     if(body_data.classList.contains("dark"))
     {
         imagedata.src="/Main/Backgroundicon.png";
         body_data.classList.remove("dark")
         switchval.classList.remove("dark");
-        chartdata.options.scales.x.grid.color=chartdata.options.scales.y.grid.color = 'rgba(0, 0, 0, 0.07)';
-        chartdata.options.scales.x.ticks.color=chartdata.options.scales.y.ticks.color = 'black';
+        if(chartdata!=0){
+          chartdata.options.scales.x.grid.color=chartdata.options.scales.y.grid.color = 'rgba(0, 0, 0, 0.07)';
+          chartdata.options.scales.x.ticks.color=chartdata.options.scales.y.ticks.color = 'black';
+        }
         localStorage.setItem("mode", "light");
     }
     else{
         imagedata.src="/Main/Backgroundicondark.png";
-        chartdata.options.scales.x.grid.color=chartdata.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.1)';
-        chartdata.options.scales.x.ticks.color=chartdata.options.scales.y.ticks.color = 'white';
+        if(chartdata!=0){
+          chartdata.options.scales.x.grid.color=chartdata.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.1)';
+          chartdata.options.scales.x.ticks.color=chartdata.options.scales.y.ticks.color = 'white';
+        }
         body_data.classList.add("dark")
         switchval.classList.add("dark");
         localStorage.setItem("mode", "dark");

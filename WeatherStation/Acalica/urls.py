@@ -20,6 +20,7 @@ from Station import views as station
 from Station import Details as Page2
 from Station import Admin_page as Admins
 from Station import Predictions as update
+from Station import Calender
 urlpatterns = [
     path('adminlog/', admin.site.urls),
     path('', station.home,name='home'),
@@ -41,6 +42,9 @@ urlpatterns = [
     path('admin/data/',Admins.dataview,name='dataview'),
     path('admin_data_out/',Admins.admin_lastdata,name='admin_lastdata'),
     path('statuschange/',Admins.thestatuschange,name='changestatus'),
+
+    path('calender/',Calender.calender,name='calender'),
+    path('idchanger/',Calender.id_change,name='id_change'),
 
     path('update/',update.update_rain_database,name='updates')
     

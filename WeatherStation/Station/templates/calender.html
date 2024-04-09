@@ -1,0 +1,104 @@
+{% extends 'index.html' %} {% block details %}
+<div class="viewdetails">
+  <div class="calender_main">
+    <div class="header_calender">
+        <div class="arrow">
+        <a style="margin-left: 10px" href="/"><ion-icon name="arrow-back-outline"></ion-icon></a>
+    </div>
+    <div><h6 id="Header"></h6></div>
+    <div><input onchange="input_date(this)" value="{{ month_y }}" type="month"></div>
+    </div>
+    <div  class="clender_body">
+      <div onclick="update_date_int(this,0)" class="left_cal"><ion-icon id="arrowint" name="chevron-back-outline"></ion-icon></div>
+      <div class="center_cal">
+        
+        {% for D in days %}
+        <div class="days">{{ D }}</div>
+        {% endfor %}
+
+        {% for i in limit %}
+        <div class="calender_div">
+            <div class="icon_store"></div>
+          <div class="thedate" ><h3 id="date{{ i }}"></h3></div>
+          <div class="values_d" id="val_dr{{ i }}" ><h4 id="val{{ i }}"></h4></div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div onclick="update_date_int(this,1)" class="right_cal"><ion-icon id="arrowint" name="chevron-forward-outline"></ion-icon></div>
+    </div>
+  </div>
+</div>
+<script>
+    date_val="{{ month_y }}"
+    did=1;
+function update_cal() {
+          $.ajax({
+            url: "/idchanger/",
+            method: "GET",
+            data: { id: did,date_value:date_val },
+            dataType: "json",
+            success: function (data) {
+                distridute_cal(data)
+            },
+            error: function (error) {
+              console.error("Error fetching new date:", error);
+            },
+          });
+        }
+        function distridute_cal(data){
+            $('#Header').text(data[1].Name);
+            
+            for(i=0;i<data.length;i++){
+               
+                $('#val'+i).text("");
+                $('#date'+i).text("");
+                if(data[i].Date!=0){
+                    $('#val'+i).text(data[i].Value+""+data[i].Symbole);
+                    $('#date'+i).text(data[i].Date);
+                }
+                else{
+                    document.getElementById('val_dr'+i).style.backgroundColor="rgba(255, 255, 255, 0)";
+                }
+            }
+        }
+        update_cal()
+        function update_date_int(div_main,nav){
+            arrowdata = div_main.querySelector("#arrowint");
+            if (nav == 0) {
+                if (did == 1) {
+                arrowdata.classList.add("invalidmove");
+                } else {
+                arrowdata.classList.add("validmoveL");
+                did--;
+                }
+            } else {
+                if (did == 11) {
+                arrowdata.classList.add("invalidmove");
+                } else {
+                arrowdata.classList.add("validmoveR");
+                did++;
+                }
+            }
+            setTimeout(() => {
+                if (arrowdata.classList.contains("validmoveL")) {
+                arrowdata.classList.remove("validmoveL");
+                }
+                if (arrowdata.classList.contains("validmoveR")) {
+                arrowdata.classList.remove("validmoveR");
+                }
+                if (arrowdata.classList.contains("invalidmove")) {
+                arrowdata.classList.remove("invalidmove");
+                }
+            }, 500);
+            update_cal()
+        }
+        function input_date(data){
+            date_val=data.value
+            update_cal()
+        }
+        function needchart(){
+            return 0
+        }
+</script>
+{% endblock %}
