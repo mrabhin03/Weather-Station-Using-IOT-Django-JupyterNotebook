@@ -31,17 +31,17 @@ def home(request):
     name=device_names_get()
     symbole=icon_get()
     global sessions
-    # if sessions==0:
-    #      if 'load' in request.session:
-    #         del request.session['load']
-    #         sessions=1
-    # if 'admin' in request.session:
-    #     del request.session['admin']
-    # if 'load' in request.session:
-    loader="1"
-    # else:
-    #     request.session['load'] = 1
-    #     loader="0"
+    if sessions==0:
+        if 'load' in request.session:
+            del request.session['load']
+            sessions=1
+    if 'admin' in request.session:
+        del request.session['admin']
+    if 'load' in request.session:
+        loader="1"
+    else:
+        request.session['load'] = 1
+        loader="0"
     distinct_devices = Devices_details.objects.values('device_id')
     for device in distinct_devices:
         device_id=device['device_id']
@@ -60,7 +60,7 @@ def viewmoredetails(request):
     symbol=icon_get()
     devices_name=[]
     device_basic=[]
-    devices_data = Devices_details.objects.filter(device_id__in=[3,5,8]).values()
+    devices_data = Devices_details.objects.values()
     distinct_devices = Devices_details.objects.values('device_id')
     for device in distinct_devices:
         device_id=device['device_id']
@@ -175,7 +175,8 @@ def grweekdata(current_date,did):
         ra.append(rain)
 
     if current_date==todays:
-        predata=weekend_prediction(device2)
+        last = Data_store.objects.filter(device_id=did).order_by('-date_time').first()
+        predata=weekend_prediction(device2,last.device_values)
         device2.append(predata) 
         rain=rain_icon_convertion(predata)
         ra.append(rain)

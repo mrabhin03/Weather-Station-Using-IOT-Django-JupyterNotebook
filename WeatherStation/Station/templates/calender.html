@@ -3,7 +3,7 @@
   <div class="calender_main">
     <div class="header_calender">
         <div class="arrow">
-        <a style="margin-left: 10px" href="/"><ion-icon name="arrow-back-outline"></ion-icon></a>
+        <a style="margin-left: 10px" href="{% url 'details' %}"><ion-icon name="arrow-back-outline"></ion-icon></a>
     </div>
     <div><h6 id="Header"></h6></div>
     <div><input onchange="input_date(this)" value="{{ month_y }}" type="month"></div>
@@ -50,7 +50,7 @@ function update_cal() {
             $('#Header').text(data[1].Name);
             
             for(i=0;i<data.length;i++){
-               
+              document.getElementById('val_dr'+i).style.backgroundColor="rgba(0, 0, 0, 0.3)";
                 $('#val'+i).text("");
                 $('#date'+i).text("");
                 $('#today'+i).text("");

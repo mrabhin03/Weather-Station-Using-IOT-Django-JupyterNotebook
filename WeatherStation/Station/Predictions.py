@@ -89,12 +89,14 @@ def daygraphrainpred(current_date,start_time,end_time):
 
 
 
-def weekend_prediction(device2):
+def weekend_prediction(device2,last):
     art=[]
     for yadata in device2:
         inval=yadata
         if yadata==0:
             filtered_arr = [x for x in device2 if x != 0]
+            if not filtered_arr:
+                filtered_arr.append(last)
             inval = min(filtered_arr)
         art.append(inval)
     new_data = np.array([art])
