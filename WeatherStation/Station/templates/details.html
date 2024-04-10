@@ -55,7 +55,8 @@
       <div class="canvasdata2">
         <canvas height="6500" width="30000" id="pergraphdisplay"></canvas>
       </div>
-      <!--<button class="calender">Calender</button>-->
+      
+      
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <script>
         delays = 5000;
@@ -587,7 +588,7 @@
       </script>
     </div>
   </div>
-
+  <div style="width: 95%;  height: 40px; display: flex; align-items: center; justify-content: end; margin-top: 10px; "><a href="{% url 'calender' %}" style="margin-right: 20px; "><button style="height: 30px; width: 120px; font-size: 15px;cursor: pointer;" class="calender_button" >Calender View</button></a></div>
   <div class="otherdetails">
     <div onclick="checkvalue(0,tempid,dorw,lastdate2,this)" class="leftmov">
       <ion-icon id="arrowint" name="chevron-back-outline"></ion-icon>

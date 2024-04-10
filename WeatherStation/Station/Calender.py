@@ -35,13 +35,18 @@ def id_change(request):
             'Date':0,
             'Value':0,
             'Symbole':"",
-            'Name':name[did]
+            'Name':name[did],
+            'Today':""
         })
     
     num_days = calendar.monthrange(year, month)[1]
     data_sy=symboles[did]
     for day in range(1, num_days + 1):
         day_val="{year}-{month:02d}-{day:02d}".format(year=year, month=month, day=day)
+        if day_val==str(todays):
+            Tday="Today"
+        else:
+            Tday=""
         thedate="{day:02d}".format(day=day)
         sql1 = Data_store.objects.filter(device_id=did, date_time__date=day_val).order_by('-date_time').first()
         value1 = sql1.device_values if sql1 else "---"
@@ -50,7 +55,8 @@ def id_change(request):
             'Date':thedate,
             'Value':value1,
             'Symbole':data_sy,
-            'Name':name[did]
+            'Name':name[did],
+            'Today':Tday
             })
         i+=1
     while i!=42:
@@ -58,7 +64,8 @@ def id_change(request):
             'Date':0,
             'Value':0,
             'Symbole':"",
-            'Name':name[did]
+            'Name':name[did],
+            'Today':""
         })
         i+=1
     return JsonResponse( values_data,safe=False)
