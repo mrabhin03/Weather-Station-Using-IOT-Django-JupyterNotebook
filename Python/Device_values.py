@@ -54,7 +54,7 @@ time=[0,3,6,9,12,15,18,21,23]
 
 
 datefrom=1
-dateto=30
+dateto=10
 month=4
 
 day=datefrom
