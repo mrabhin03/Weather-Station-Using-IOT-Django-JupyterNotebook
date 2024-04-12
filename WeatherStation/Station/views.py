@@ -113,6 +113,7 @@ def day_update(request):
 
 
 def today(request):
+    icon=icon_get()
     dated = time.strftime("%d %b", time.localtime())
     timet = time.strftime("%H:%M", time.localtime())
     current_date = timezone.localdate()
@@ -122,16 +123,16 @@ def today(request):
         device_id=device_id,
             date_time__date=current_date
         ).order_by('-date_time').first()
+    data=icon[device_id][0]
     if latest_record:
-        date_time=latest_record.date_time,
+        date_time=1
         device_values= latest_record.device_values
     else:
 
         predata=Todaystemppred(device_id)
         date_time= None
         device_values= predata
-
-    timeandall=str(device_values)+","+str(dated)+","+str(timet)+","+str(date_time)
+    timeandall=str(device_values)+","+str(dated)+","+str(timet)+","+str(date_time)+","+data
     return JsonResponse( timeandall,safe=False)
 
 

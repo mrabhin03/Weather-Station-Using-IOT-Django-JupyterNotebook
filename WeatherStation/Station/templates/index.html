@@ -132,7 +132,7 @@
                             valdata.appendChild(dayst);
                             themaingraphlabel.appendChild(valdata);
                             if(gradata[i].value1==0){$('#daystem'+i).text("---");}
-                            else{$('#daystem'+i).text(gradata[i].value1+gradata[0].Symbols);}
+                            else{graphtopanume("daystem"+i,gradata[i].value1,gradata[0].Symbols);}
                             
                             var iconElement = document.getElementById('rainic'+i);
                             iconElement.setAttribute('name', gradata[i].value2);
@@ -293,6 +293,37 @@
                         }
                         
                     }
+
+                    function graphtopanume(id,data,symbole){
+                        data=parseInt(data)
+                        timer_up1=30
+                        data_olt=document.getElementById(id).innerHTML
+                        if(data_olt==""){
+                            data_olt=0
+                            
+                        }
+                        else{
+                            data_olt=parseInt(data_olt.replace(symbole, ''));
+                        }
+                        dif=Math.abs(data_olt-data)
+                        if(dif>20){timer_up1=5}else{timer_up1=20}
+                        if(data!=data_olt){
+
+                        if(data_olt>data){
+                            data_olt--;
+                            $('#'+id).text(data_olt+symbole);
+                            setTimeout(() => {
+                                graphtopanume(id,data,symbole)
+                            }, timer_up1); 
+                        }
+                        else if(data_olt<data){
+                            data_olt++;}
+                            $('#'+id).text(data_olt+symbole);
+                            setTimeout(() => {
+                                graphtopanume(id,data,symbole)
+                            }, timer_up1);
+                        }
+                        }
                     setCanvasSize();
                     window.addEventListener('resize', setCanvasSize);
                     function theweekchange(){
@@ -584,16 +615,16 @@
             var offbar1=offbar2="5px solid rgb(194, 194, 194)"
             function fulldata(data) {
                 humidityValue = data[0].device_values;
-                $('#humidity').text(humidityValue);
+                data_animation_base(humidityValue,"humidity")
                 $('#humsy').text(data[0].symbole);
                 document.getElementById('humiditybar').style.width =  humidityValue+"%";
                 document.getElementById('humiditybar').style.backgroundColor=data[0].Dev_Color;
 
 
-
+                
                 var temperatureValue = data[1].device_values;
                 $('#temsy').text(data[1].symbole);
-                $('#Temperature').text(temperatureValue);
+                data_animation_base(temperatureValue,"Temperature")
                 document.getElementById('Temperaturebar').style.width =  temperatureValue+"%";
                 document.getElementById('ticon').style.backgroundColor=data[1].Dev_Color;
                 document.getElementById('Temperaturebar').style.backgroundColor=data[1].Dev_Color;
@@ -609,14 +640,14 @@
 
                 var soundValue = data[2].device_values;
                 $('#sousy').text(data[2].symbole);
-                $('#Sound').text(soundValue);
+                data_animation_base(soundValue,"Sound")
                 document.getElementById('Soundbar').style.width =  soundValue+"%";
                 document.getElementById('Soundbar').style.backgroundColor=data[2].Dev_Color;
 
 
                 var co2Value = data[3].device_values;
                 $('#cosy').text(data[3].symbole);
-                $('#co2').text(co2Value);
+                data_animation_base(co2Value,"co2")
                 document.getElementById('co2bar').style.width =  co2Value+"%";
                 document.getElementById('co2bar').style.backgroundColor=data[3].Dev_Color;
                 document.getElementById('co2icon').style.backgroundColor=data[3].bgicon;
@@ -634,7 +665,7 @@
 
 
                 var rainValue = data[4].device_values;
-                $('#rain').text(rainValue);
+                data_animation_base(rainValue,"rain")
                 document.getElementById('rainbar').style.width =  rainValue+"%";
                 document.getElementById('rainbar').style.backgroundColor=data[4].Dev_Color;
                 document.getElementById('rainicon').style.backgroundColor=data[4].Dev_Color;
@@ -651,7 +682,7 @@
                 if (windarrow.classList.contains('speedwarning')) {windarrow.classList.remove('speedwarning');}
                 if(per<=0){per=0}
                 else if(per>=180){per=180}
-                $('#winds').text(windValue);
+                data_animation_base(windValue,"winds")
                 document.getElementById('windicon').style.color="white";
                 document.getElementById('windbar').style.transform =  "rotate("+per+"deg)";
                 tr1=per-45
@@ -678,14 +709,13 @@
 
                 var no2Value = data[6].device_values;
                 $('#n02sy').text(data[6].symbole);
-                $('#no2').text(no2Value);
+                data_animation_base(no2Value,"no2")
                 document.getElementById('no2bar').style.width =  0+"%";
                 document.getElementById('no2bar').style.backgroundColor=data[6].Dev_Color;
 
 
                 var atmValue = data[7].device_values;
-                $('#atmosy').text(data[7].symbole);
-                $('#atmdata').text(atmValue);
+                data_animation_base(atmValue,"atmdata")
                 thepsvalue = ((atmValue - 300) / (1100 - 300)) * (180 - 0) + 0;
                 if(thepsvalue<=0){thepsvalue=0}
                 else if(thepsvalue>=180){thepsvalue=180}
@@ -721,7 +751,7 @@
 
                 var uvrays = data[8].device_values;
                 $('#uvssy').text(data[8].symbole);
-                $('#uvs').text(uvrays);
+                data_animation_base(uvrays,"uvs")
                 document.getElementById('uvsbar').style.width =  uvrays+"%";
                 document.getElementById('uvsbar').style.backgroundColor=data[8].Dev_Color;
 
@@ -750,15 +780,39 @@
                 }
 
                 var air = data[10].device_values;
-                $('#airq').text(air);
+                data_animation_base(air,"airq")
                 $('#airsy').text(data[10].symbole);
                 document.getElementById('airqbar').style.width =  air+"%";
                 document.getElementById('airqbar').style.backgroundColor=document.getElementById('theaq').style.backgroundColor=data[10].Dev_Color;
                 
                 
             }
-
-            
+            timer_up1=30
+            function data_animation_base(data,data_id,to){
+                data=parseInt(data)
+                data_olt=parseInt(document.getElementById(data_id).innerHTML)
+                dif=Math.abs(data_olt-data)
+                if(data_id!="atmdata")
+                {if(dif>30){timer_up1=5} else if(dif<5){timer_up1=200}else{timer_up1=30}}
+                else{timer_up1=40;}
+                if(data_olt>data){
+                    if(data_id!="atmdata"){data_olt--;}
+                    else{data_olt=data_olt-30; if(data_olt<data){data_olt=data}}
+                    $('#'+data_id).text(data_olt);
+                    setTimeout(() => {
+                        data_animation_base(data,data_id)
+                    }, timer_up1); 
+                }
+                else if(data_olt<data){
+                    if(data_id!="atmdata"){data_olt++;}
+                    else{data_olt=data_olt+30; if(data_olt>data){data_olt=data}}
+                    $('#'+data_id).text(data_olt);
+                    setTimeout(() => {
+                        data_animation_base(data,data_id)
+                    }, timer_up1);
+                }
+                
+            }
 
 
             function createWindLevels(i,windValue) {
@@ -863,7 +917,7 @@
                     }
                 });
             }
-
+            var grtemp=[]
             function graphupdates(dv_id) {
                 didval=dv_id
                 $.ajax({
@@ -876,7 +930,14 @@
                             $('#mainweekday').text("Today's "+data[0].Names+" ");}
                         else if(dorw==1){$('#mainweekday').text("Weekly "+data[0].Names+" ");}
                         else if(dorw==0){$('#mainweekday').text(lastdate1+" "+data[0].Names+" ");}
-                        graph(data);
+                        var areEqual = JSON.stringify(grtemp) === JSON.stringify(data);
+                        if(!areEqual)
+                        {
+                            grtemp=data
+                            graph(data);
+                        }
+
+                        
                     },
                     error: function (error) {
                         console.error('Error fetching live data:', error);
@@ -930,7 +991,7 @@
                     dataType: 'json',
                     success: function (data) {
                         var newdata = data.split(',');
-                        $('#todayTemperature').text(newdata[0]+"°");
+                        data_animation(newdata[0],newdata[4],"todayTemperature")
                         $('#todaydate').text("Today "+newdata[1]);
                         $('#todaytime').text(newdata[2]);
                         if(newdata[3]=="None"){
@@ -942,11 +1003,34 @@
                         console.error('Error fetching live data:', error);
                     },
                     complete: function () {
-                        setTimeout(todaytemper, 10000);
+                        setTimeout(todaytemper, 1000);
                     }
                 });
             }
             themecheck()
+            timer_up=30
+            function data_animation(temp,symbole,id){
+                temp=parseInt(temp)
+                data_olt=document.getElementById(id).innerHTML
+                data_olt=parseInt(data_olt.replace("°", ''));
+                dif=Math.abs(data_olt-temp)
+                if(dif<5){timer_up=500}else{timer_up=30}
+                if(data_olt>temp){
+                    data_olt--;
+                    $('#'+id).text(data_olt+""+symbole);
+                    setTimeout(() => {
+                        data_animation(temp,symbole,id)
+                    }, timer_up); 
+                }
+                else if(data_olt<temp){
+                    data_olt++;
+                    $('#'+id).text(data_olt+""+symbole);
+                    setTimeout(() => {
+                        data_animation(temp,symbole,id)
+                    }, timer_up);
+                }
+                
+            }
         </script>
         <script src="https://kit.fontawesome.com/bc67d18a07.js" crossorigin="anonymous"></script>
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
