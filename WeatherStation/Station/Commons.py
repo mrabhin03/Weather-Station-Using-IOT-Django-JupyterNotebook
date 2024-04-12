@@ -132,7 +132,7 @@ def device_names_get():
     return device_names
 
 def icon_get():
-    symbols_data = ["","%","°C","%","%","%","km/h","%","hPa","%","°"," µg/m³"]
+    symbols_data = ["","%","°C","%","%","%","km/h","%","hPa","%","°","m"]
     return symbols_data
 
 def device_icon_name_get():

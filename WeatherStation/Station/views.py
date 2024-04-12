@@ -60,10 +60,14 @@ def viewmoredetails(request):
     symbol=icon_get()
     devices_name=[]
     device_basic=[]
-    devices_data = Devices_details.objects.values()
+    devices_data = []
     distinct_devices = Devices_details.objects.values('device_id')
     for device in distinct_devices:
         device_id=device['device_id']
+        devices_data.append({
+            'device_id':device_id,
+            'device_name':name[device_id]
+        })
         device_basic.append({
             'Name':name[device_id],
             'Icon':icon_datas[device_id],

@@ -49,15 +49,15 @@ var device_limits = {
       GoodTx: "The sound level between 15 and 30 is considered good",
     },
     {
-      //4 Co2 Sensor
+      //4 Sun Light
       High: "> 20%",
       Moder: "5 - 20%",
       Good: "2 - 5%",
       Low: "< 2%",
-      Lowtx: "The CO2 level below 2 is considered low",
-      Hightx: "The CO2 level above 20 is considered high",
-      Modertx: "The CO2 level between 5 and 20 is considered moderate",
-      GoodTx: "The CO2 level between 2 and 5 is considered good",
+      Lowtx: "The Sun Light level below 2 is considered low",
+      Hightx: "The Sun Light level above 20 is considered high",
+      Modertx: "The Sun Light level between 5 and 20 is considered moderate",
+      GoodTx: "The Sun Light level between 2 and 5 is considered good",
     },
     {
       //5 Chance of Rain
@@ -83,15 +83,15 @@ var device_limits = {
       GoodTx: "The wind speed between 5 km/h and 12 km/h is considered good",
     },
     {
-      //7 NO2 Sensor
-      High: "> 20 µg/m³",
-      Moder: "10 - 20 µg/m³",
-      Good: "5 - 10 µg/m³",
-      Low: "< 5 µg/m³",
-      Lowtx: "The NO2 level below 5 is considered low",
-      Hightx: "The NO2 level above 20 is considered high",
-      Modertx: "The NO2 level between 10 and 20 is considered moderate",
-      GoodTx: "The NO2 level between 5 and 10 is considered good",
+      //7 Moisture Sensor
+      High: "> 20%",
+      Moder: "10 - 20%",
+      Good: "5 - 10%",
+      Low: "< 5%",
+      Lowtx: "The Moisture level below 5 is considered low",
+      Hightx: "The Moisture level above 20 is considered high",
+      Modertx: "The Moisture level between 10 and 20 is considered moderate",
+      GoodTx: "The Moisture level between 5 and 10 is considered good",
     },
     {
       //8 Atmospheric Pressure
@@ -128,15 +128,15 @@ var device_limits = {
       GoodTx: "The wind direction between 15° and 30° is considered good",
     },
     {
-      //11 Air Quality
-      High: "> 30 µg/m³",
-      Moder: "20 - 30 µg/m³",
-      Good: "15 - 20 µg/m³",
-      Low: "< 15 µg/m³",
-      Lowtx: "The air quality index below 15 is considered low",
-      Hightx: "The air quality index above 30 is considered high",
-      Modertx: "The air quality index between 20 and 30 is considered moderate",
-      GoodTx: "The air quality index between 15 and 20 is considered good",
+      //11 Altitude
+      High: "> 30m",
+      Moder: "20 - 30m",
+      Good: "15 - 20m",
+      Low: "< 15m",
+      Lowtx: "The Altitude below 15 meter is considered low",
+      Hightx: "The Altitude above 30 meter is considered high",
+      Modertx: "The Altitude between 20 and 30 meter is considered moderate",
+      GoodTx: "The Altitude between 15 and 20 meter is considered good",
     },
   ],
 };
