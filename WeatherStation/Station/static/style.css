@@ -900,6 +900,7 @@ body{
     justify-content: space-between;
 }
 .colord1{
+    cursor: pointer;
     background-color: rgb(0, 157, 255);
     height: 30px;
     width: 110px;
@@ -947,6 +948,7 @@ body{
     border: 2px solid rgb(120, 120, 120);
 }
 .coloricon{
+    cursor: pointer;
     color: black;
     height: 25px;
     width: 25px;
@@ -957,6 +959,7 @@ body{
     justify-content: center;
 }
 .colotext{
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: baseline;

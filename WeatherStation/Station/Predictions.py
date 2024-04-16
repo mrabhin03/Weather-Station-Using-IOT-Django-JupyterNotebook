@@ -16,7 +16,7 @@ def daygraphpred(current_date,start_time,end_time,did):
     predataset=[]
     did=int(did)
     lastdata= Data_store.objects.filter(device_id=did,date_time__time__range=(start_time, end_time)).order_by('-date_time').first()
-    lastinput_value=lastdata.device_values
+    lastinput_value=lastdata.device_values if lastdata else 25
     for i in range(7, 0, -1):
         day = current_date - timedelta(days=i)
         olddatasql = Data_store.objects.filter(

@@ -2,7 +2,7 @@ var prevbox = document.getElementById("Humidity");
 var tempid = localStorage.getItem("tempid") || 404;
 var trar = localStorage.getItem("trar") || 1;
 var ar = 1;
-selcteddv = [3, 5, 8];
+selcteddv = [1,2,3,4, 5,6,7, 8,9,10,11];
 timeout_t1=0
 var device_limits = {
   limits: [
@@ -163,12 +163,13 @@ function updatemain(maxdata, mindata,average,color_data) {
 
 var themovesobject = [];
 alldevs = [0, 1, 2, 4, 6, 7, 9, 11];
+buttonaray=[0, 1, 2, 4, 6, 7, 9, 11]
 
-function checkvalue(n, id, dorw, lastdate2, themainelemantdata) {
+function checkvalue(n, id, dorw, lastdate2, themainelemantdata,newval) {
   timeout_t1=300
   trar=parseInt(trar)
   if(trar>alldevs.length){trar=alldevs.indexOf(trar);}
-  theelemantdata = themainelemantdata.querySelector("#arrowint");
+  
   themovesobject[0] = document.getElementById("max_data_name");
   themovesobject[1] = document.getElementById("max_data_value");
   themovesobject[2] = document.getElementById("max_data_value_sy");
@@ -183,6 +184,32 @@ function checkvalue(n, id, dorw, lastdate2, themainelemantdata) {
   themovesobject[9] = document.getElementById("min_data_value");
   themovesobject[10] = document.getElementById("min_data_value_sy");
   themovesobject[11] = document.getElementById("min_data_date");
+  if(themainelemantdata==0){
+    trar=parseInt(newval)
+    trar=alldevs.indexOf(trar)
+    topvaluesupdate(
+      dorw,
+      maxdatabase["Name"][alldevs[trar]],
+      maxdatabase["Value"][alldevs[trar]],
+      maxdatabase["symbol"][alldevs[trar]],
+      maxdatabase["Date"][alldevs[trar]],
+      lastdate2,
+      1,
+      1
+    );
+    topvaluesupdate(
+      dorw,
+      mindatabase["Name"][alldevs[trar]],
+      mindatabase["Value"][alldevs[trar]],
+      mindatabase["symbol"][alldevs[trar]],
+      mindatabase["Date"][alldevs[trar]],
+      lastdate2,
+      0,
+      1
+    );
+  }
+  else{
+    theelemantdata = themainelemantdata.querySelector("#arrowint");
   if (id == 404) {
     if (n == 0) {
       if (trar == 1) {
@@ -262,7 +289,7 @@ function checkvalue(n, id, dorw, lastdate2, themainelemantdata) {
         ar--;
       }
     } else {
-      if (ar == 2) {
+      if (ar == 10) {
         theelemantdata.classList.add("invalidmove");
       } else {
         theelemantdata.classList.add("validmoveR");
@@ -305,6 +332,7 @@ function checkvalue(n, id, dorw, lastdate2, themainelemantdata) {
       }
     }
   }, 500);
+}
 }
 
 function topvaluesupdate(

@@ -383,7 +383,7 @@ def insertvalues(request):
     dataarray[7]=int(request.GET.get('press', None))            # Atmospheric Pressure
     dataarray[8]=int(request.GET.get('uv', None))               # UV
     dataarray[9]=random.randint(10, 358)                        # Wind Direction
-    dataarray[10]=int(request.GET.get('pm25', None))            # pm
+    dataarray[10]=int(request.GET.get('atti', None))            # Altitude
     dataarray[4]=rain_prediction(dataarray[5],dataarray[0],dataarray[7],dataarray[1])    # Chance of Rain
     i=1
     for value in dataarray:
