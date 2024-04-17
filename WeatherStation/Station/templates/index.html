@@ -587,9 +587,9 @@
                                 </div>
                                 <div class="level">
                                     <div class="limits">
-                                        <div style="justify-content: baseline;" >0%</div>
-                                        <div style="justify-content: center;">50%</div>
-                                        <div style="justify-content: end;">100%</div>
+                                        <div style="justify-content: baseline;" >0m</div>
+                                        <div style="justify-content: center;">100m</div>
+                                        <div style="justify-content: end;">200m</div>
                                     </div>
                                     <div class="levelbar">
                                         <div id="airqbar"></div>
@@ -710,7 +710,7 @@
                 var no2Value = data[6].device_values;
                 $('#n02sy').text(data[6].symbole);
                 data_animation_base(no2Value,"no2")
-                document.getElementById('no2bar').style.width =  0+"%";
+                document.getElementById('no2bar').style.width =  no2Value+"%";
                 document.getElementById('no2bar').style.backgroundColor=data[6].Dev_Color;
 
 
@@ -782,7 +782,8 @@
                 var air = data[10].device_values;
                 data_animation_base(air,"airq")
                 $('#airsy').text(data[10].symbole);
-                document.getElementById('airqbar').style.width =  air+"%";
+                data_perca=(air/200)*100
+                document.getElementById('airqbar').style.width =  data_perca+"%";
                 document.getElementById('airqbar').style.backgroundColor=document.getElementById('theaq').style.backgroundColor=data[10].Dev_Color;
                 
                 
@@ -1003,7 +1004,7 @@
                         console.error('Error fetching live data:', error);
                     },
                     complete: function () {
-                        setTimeout(todaytemper, 1000);
+                        setTimeout(todaytemper, 5000);
                     }
                 });
             }

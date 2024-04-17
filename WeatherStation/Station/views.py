@@ -378,8 +378,12 @@ def insertvalues(request):
     dataarray[1]=int(request.GET.get('temp', None))             # Temperature
     dataarray[2]=int(request.GET.get('sou', None))              # Sound
     dataarray[3]=int(request.GET.get('ldp', None))              # Ligth
-    dataarray[5]=int(request.GET.get('windspeed', None))        # Wind Speed
-    dataarray[6]=int(request.GET.get('moi', None))              # Moisture
+    if int(request.GET.get('windspeed', None)) >30:
+        data=Data_store.objects.filter(device_id=4).first()
+        dataarray[5]=data.device_values
+    else:
+        dataarray[5]=int(request.GET.get('windspeed', None)) 
+    dataarray[6]=int(request.GET.get('hum', None))              # Moisture
     dataarray[7]=int(request.GET.get('press', None))            # Atmospheric Pressure
     dataarray[8]=int(request.GET.get('uv', None))               # UV
     dataarray[9]=random.randint(10, 358)                        # Wind Direction

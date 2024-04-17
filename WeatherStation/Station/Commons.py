@@ -67,11 +67,11 @@ def device_limitsdata():
             {
                 #7 Moisture
                 'HighColor':"red",
-                'High': 20, 
+                'High': 90, 
                 'MtoHColor':"orange",
-                'Mid': 10,
+                'Mid': 85,
                 'LtoMColor':"rgb(81, 159, 226)",
-                'Low': 5,
+                'Low': 50,
                 'LowColor':"rgb(3, 209, 255)"
             },
             {
@@ -104,13 +104,13 @@ def device_limitsdata():
                 'LowColor':"rgb(3, 209, 255)"
             },
             {
-                #11 Air Quality
+                #11 Altitude
                 'HighColor':"red",
-                'High': 30, 
+                'High': 150, 
                 'MtoHColor':"orange",
-                'Mid': 20,
+                'Mid': 130,
                 'LtoMColor':"rgb(0, 255, 174)",
-                'Low': 15,
+                'Low': 100,
                 'LowColor':"rgb(3, 209, 255)"
             }
         ]
