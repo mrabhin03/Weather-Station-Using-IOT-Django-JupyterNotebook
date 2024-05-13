@@ -13,7 +13,6 @@ from .Commons import *
 from .Predictions import *
 import numpy as np
 import pandas as pd
-from sklearn.metrics import accuracy_score
 import random
 
 current_date_time_datetime = datetime.now()
@@ -30,18 +29,18 @@ def home(request):
     icon_datas=device_icon_name_get()
     name=device_names_get()
     symbole=icon_get()
-    global sessions
-    if sessions==0:
-        if 'load' in request.session:
-            del request.session['load']
-            sessions=1
-    if 'admin' in request.session:
-        del request.session['admin']
-    if 'load' in request.session:
-        loader="1"
-    else:
-        request.session['load'] = 1
-        loader="0"
+    # global sessions
+    # if sessions==0:
+    #     if 'load' in request.session:
+    #         del request.session['load']
+    #         sessions=1
+    # if 'admin' in request.session:
+    #     del request.session['admin']
+    # if 'load' in request.session:
+    loader="1"
+    # else:
+    #     request.session['load'] = 1
+    #     loader="0"
     distinct_devices = Devices_details.objects.values('device_id')
     for device in distinct_devices:
         device_id=device['device_id']
@@ -73,7 +72,6 @@ def viewmoredetails(request):
             'Icon':icon_datas[device_id],
             'Symbole':symbol[device_id]
         })
-    print(devices_name)
     return render(request,'details.html',{'Devices':devices_data,'Device_data':device_basic})
 
 def loadernew(request):
@@ -378,7 +376,7 @@ def insertvalues(request):
     dataarray[1]=int(request.GET.get('temp', None))             # Temperature
     dataarray[2]=int(request.GET.get('sou', None))              # Sound
     dataarray[3]=int(request.GET.get('ldp', None))              # Ligth
-    if int(request.GET.get('windspeed', None)) >30:
+    if int(request.GET.get('windspeed', None)) >30:             # windspeed
         data=Data_store.objects.filter(device_id=4).first()
         dataarray[5]=data.device_values
     else:

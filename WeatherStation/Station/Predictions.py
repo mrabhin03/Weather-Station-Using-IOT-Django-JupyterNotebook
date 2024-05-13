@@ -63,7 +63,7 @@ def daygraphrainpred(current_date,start_time,end_time):
         date_time__date=day,date_time__time__range=(start_time, end_time)).order_by('-date_time').first()
         temperature = temperaturesql.device_values if temperaturesql else 0
         temperature_data.append(temperature)
-
+        
         uvsql = Data_store.objects.filter(device_id=9,
         date_time__date=day,date_time__time__range=(start_time, end_time)).order_by('-date_time').first()
         uv = uvsql.device_values if uvsql else 0
