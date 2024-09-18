@@ -17,9 +17,9 @@ device_values = {
             'Max': 30,
             'Min': 6
         },{
-            #Co2
-            'Max': 6,
-            'Min': 1
+            #Sun Light
+            'Max': 60,
+            'Min': 40
         },{
             #Chance of Rain
             'Max': 80,
@@ -29,9 +29,9 @@ device_values = {
             'Max': 13,
             'Min': 3
         },{
-            #NO2 Sensor
-            'Max': 6,
-            'Min': 1
+            #Moisture
+            'Max': 86,
+            'Min': 78
         },{
             #Atmospheric Pressure
             'Max': 1015,
@@ -45,17 +45,17 @@ device_values = {
             'Max': 360,
             'Min': 0
         },{
-            #Air Quality
-            'Max': 45,
-            'Min': 10
+            #Altitude
+            'Max': 126,
+            'Min': 124
         },
     ]}
 time=[0,3,6,9,12,15,18,21,23]
 
 
-datefrom=1
-dateto=10
-month=4
+datefrom=20
+dateto=27
+month=5
 
 day=datefrom
 while day<=dateto:
