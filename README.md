@@ -74,13 +74,13 @@ This project is an IoT-based weather monitoring system that integrates **Django*
 ## 📷 Screenshots
 
 **Home Page**:  
-![Home Page](Images/Home.png)
+![Home Page](Home.png)
 
 **Details Page**:  
-![Details Page](Images/Details.png)
+![Details Page](Details.png)
 
 **Calendar View**:  
-![Calendar View](Images/Calender.png)
+![Calendar View](Calender.png)
 
 ---
 
