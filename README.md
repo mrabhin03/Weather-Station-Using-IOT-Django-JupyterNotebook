@@ -90,4 +90,15 @@ This project is licensed under the MIT License.
 
 ---
 
+## Packages Needed
+  - pip install django
+  - pip install django mysqlclient
+  - pip install django-extensions
+  - pip install joblib
+  - pip install numpy
+  - pip install pandas
+  - pip install scikit-learn
+
+---
+
 > For more information, visit the [GitHub Repository](https://github.com/mrabhin03/Weather-Station-Using-IOT-Django-JupyterNotebook).
