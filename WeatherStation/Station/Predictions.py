@@ -120,7 +120,7 @@ def rain_prediction(Windspeed,humidity,Pressure,temperature):
     columns = ['WindSpeed', 'Humidity', 'Pressure', 'Temperature']
     data = pd.DataFrame([input_values], columns=columns)
     probability = Rain_model.predict_proba(data)
-    chance=round(probability[0][2]*100)
+    chance=round(probability[0][1]*100)
     return chance
 
 

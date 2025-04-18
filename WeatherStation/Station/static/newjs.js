@@ -38,15 +38,15 @@ var device_limits = {
       GoodTx: "The temperature between 15°C and 30°C is considered good",
     },
     {
-      //3 Sound Sensor
+      //3 PM2.5 Sensor
       High: "60 - 100%",
       Moder: "30 - 60%",
       Good: "15 - 30%",
       Low: "0 - 15%",
-      Lowtx: "The sound level below 15 is considered low",
-      Hightx: "The sound level above 60 is considered high",
-      Modertx: "The sound level between 30 and 60 is considered moderate",
-      GoodTx: "The sound level between 15 and 30 is considered good",
+      Lowtx: "The PM2.5 level below 15 is considered low",
+      Hightx: "The PM2.5 level above 60 is considered high",
+      Modertx: "The PM2.5 level between 30 and 60 is considered moderate",
+      GoodTx: "The PM2.5 level between 15 and 30 is considered good",
     },
     {
       //4 Sun Light

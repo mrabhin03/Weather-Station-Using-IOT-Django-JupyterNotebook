@@ -371,20 +371,20 @@ def livedatasend(request):
 
 
 def insertvalues(request):
+    if int(request.GET.get('temp', None))>50:
+        return JsonResponse("Fail",safe=False) 
     dataarray=[None]*11
     dataarray[0]=int(request.GET.get('hum', None))              # Humidity
     dataarray[1]=int(request.GET.get('temp', None))             # Temperature
-    dataarray[2]=int(request.GET.get('sou', None))              # Sound
+    dataarray[2]=int(request.GET.get('pm25', None))            # Air Quality
+    if dataarray[2] >80:
+        dataarray[2]=dataarray[2]-30
     dataarray[3]=int(request.GET.get('ldp', None))              # Ligth
-    if int(request.GET.get('windspeed', None)) >30:             # windspeed
-        data=Data_store.objects.filter(device_id=4).first()
-        dataarray[5]=data.device_values
-    else:
-        dataarray[5]=int(request.GET.get('windspeed', None)) 
+    dataarray[5]=5                                             # windspeed
     dataarray[6]=int(request.GET.get('hum', None))              # Moisture
     dataarray[7]=int(request.GET.get('press', None))            # Atmospheric Pressure
     dataarray[8]=int(request.GET.get('uv', None))               # UV
-    dataarray[9]=random.randint(10, 358)                        # Wind Direction
+    dataarray[9]=0                        # Wind Direction
     dataarray[10]=int(request.GET.get('atti', None))            # Altitude
     dataarray[4]=rain_prediction(dataarray[5],dataarray[0],dataarray[7],dataarray[1])    # Chance of Rain
     i=1

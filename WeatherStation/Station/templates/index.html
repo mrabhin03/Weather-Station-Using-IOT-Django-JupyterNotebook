@@ -409,57 +409,42 @@
                         </div>
                         <div>
                             <div>
-                                <div class="windtitle">
-                                    <b >{{ device.5.Name }}</b>
-                                    <div class="icon" id="windicon" onclick="nextpagedata(404,4)">
-                                        <b><ion-icon name="{{ device.5.Icon }}"></ion-icon></b>
-                                    </div>
+                                <div class="uvtitle">
+                                    <b>{{ device.8.Name }}</b>
+                                    <div class="icon" id="co2icon" onclick="nextpagedata(404,9)"><b><ion-icon name="{{ device.8.Icon }}"></ion-icon></b></div>
                                 </div>
-                                <div class="wind">
-                                    <div class="speedar">
-                                        <div class="windpower">
-                                            <div id="powerhigh1" class="windpowersub">
-                                            </div>
-                                        </div>
-                                        <div id="ficr" class="speedarcir">
-                                            <div id="scecr" class="seccirlcle">
-                                                <div class="speedararrowco" id="windbar">
-                                                    <div id="wibar" class="speed1"></div>
-                                                </div>
-                                                <div class="speed2"></div>
-                                            </div>
-                                        </div>    
-                                        <div class="windpower">
-                                            <div id="powerhigh2" class="windpowersub">
-                                            </div>
-                                        </div>
+                                <div class="uvs">
+                                    <b id="uvs">0</b><b id="uvssy" style="font-size: 27px; margin-left: 2px;">%</b>
+                                </div>
+                                <div class="level">
+                                    <div class="limits">
+                                        <div style="justify-content: baseline;" >0%</div>
+                                        <div style="justify-content: center;">50%</div>
+                                        <div style="justify-content: end;">100%</div>
                                     </div>
-                                    <div class="speedar2" ><b id="winds">0</b><b id="windspsy" style=" margin-left: 2px;">km/h</b></div>
+                                    <div class="levelbar">
+                                        <div id="uvsbar"></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div >
-                                <div class="windirtitle">
-                                    <b>{{ device.9.Name }}</b>
-                                    <div class="icon" onclick="nextpagedata(404,1)"><b><ion-icon name="{{ device.9.Icon }}"></ion-icon></b></div>
+                            
+                            <div>
+                                <div class="airqtitle">
+                                    <b>{{ device.10.Name }}</b>
+                                    <div id="theaq" class="icon" onclick="nextpagedata(404,11)">
+                                        <b><ion-icon name="{{ device.10.Icon }}"></ion-icon></b></div>
                                 </div>
-                                <div class="wibr">
-                                    <div class="dirdata"><table style="text-align: center;">
-                                        <tr>
-                                            <td id="topdir"></td>
-                                        </tr>
-                                        <tr >
-                                            <td><ion-icon  name="arrow-up-outline"></ion-icon></td>
-                                        </tr>
-                                        <tr>
-                                            <td id="bottomdir"></td>
-                                        </tr>
-                                    </table></div>
-                                    <div id="load" class="dircir">
-                                        <div id="dirwbar" class="dirarrow"></div>
+                                <div class="airq">
+                                    <b id="airq">0</b><b id="airsy" style="font-size: 14px; margin-left: 3px;"></b>
+                                </div>
+                                <div class="level">
+                                    <div class="limits">
+                                        <div style="justify-content: baseline;" >0m</div>
+                                        <div style="justify-content: center;">100m</div>
+                                        <div style="justify-content: end;">200m</div>
                                     </div>
-                                    <div class="dirdata">
-                                        <div class="valuewind" id="winddeg"></div>
-                                        <div class="valuewind2" id="windsp"></div>
+                                    <div class="levelbar">
+                                        <div id="airqbar"></div>
                                     </div>
                                 </div>
                             </div>
@@ -513,7 +498,36 @@
                                     </div>
                                 </div>
                             </div>
-                            
+                            <div>
+                                
+                                <div class="windtitle">
+                                    <b >{{ device.5.Name }}</b>
+                                    <div class="icon" id="windicon" onclick="nextpagedata(404,4)">
+                                        <b><ion-icon name="{{ device.5.Icon }}"></ion-icon></b>
+                                    </div>
+                                </div>
+                                <div class="wind">
+                                    <div class="speedar">
+                                        <div class="windpower">
+                                            <div id="powerhigh1" class="windpowersub">
+                                            </div>
+                                        </div>
+                                        <div id="ficr" class="speedarcir">
+                                            <div id="scecr" class="seccirlcle">
+                                                <div class="speedararrowco" id="windbar">
+                                                    <div id="wibar" class="speed1"></div>
+                                                </div>
+                                                <div class="speed2"></div>
+                                            </div>
+                                        </div>    
+                                        <div class="windpower">
+                                            <div id="powerhigh2" class="windpowersub">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="speedar2" ><b id="winds">0</b><b id="windspsy" style=" margin-left: 2px;">km/h</b></div>
+                                </div>
+                            </div>
                             
                             <div>
                                 <div class="co2title">
@@ -535,26 +549,9 @@
                                 </div>
                             </div>
 
-                            <div>
-                                <div class="uvtitle">
-                                    <b>{{ device.8.Name }}</b>
-                                    <div class="icon" id="co2icon" onclick="nextpagedata(404,9)"><b><ion-icon name="{{ device.8.Icon }}"></ion-icon></b></div>
-                                </div>
-                                <div class="uvs">
-                                    <b id="uvs">0</b><b id="uvssy" style="font-size: 27px; margin-left: 2px;">%</b>
-                                </div>
-                                <div class="level">
-                                    <div class="limits">
-                                        <div style="justify-content: baseline;" >0%</div>
-                                        <div style="justify-content: center;">50%</div>
-                                        <div style="justify-content: end;">100%</div>
-                                    </div>
-                                    <div class="levelbar">
-                                        <div id="uvsbar"></div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
+
                         <div>
                             <div>
                                 <div class="soundtitle">
@@ -576,26 +573,34 @@
                                 </div>
                             </div>
                             
-                            <div>
-                                <div class="airqtitle">
-                                    <b>{{ device.10.Name }}</b>
-                                    <div id="theaq" class="icon" onclick="nextpagedata(404,11)">
-                                        <b><ion-icon name="{{ device.10.Icon }}"></ion-icon></b></div>
+                            
+                            <div >
+                                <div class="windirtitle">
+                                    <b>{{ device.9.Name }}</b>
+                                    <div class="icon" onclick="nextpagedata(404,1)"><b><ion-icon name="{{ device.9.Icon }}"></ion-icon></b></div>
                                 </div>
-                                <div class="airq">
-                                    <b id="airq">0</b><b id="airsy" style="font-size: 14px; margin-left: 3px;"></b>
-                                </div>
-                                <div class="level">
-                                    <div class="limits">
-                                        <div style="justify-content: baseline;" >0m</div>
-                                        <div style="justify-content: center;">100m</div>
-                                        <div style="justify-content: end;">200m</div>
+                                <div class="wibr">
+                                    <div class="dirdata"><table style="text-align: center;">
+                                        <tr>
+                                            <td id="topdir"></td>
+                                        </tr>
+                                        <tr >
+                                            <td><ion-icon  name="arrow-up-outline"></ion-icon></td>
+                                        </tr>
+                                        <tr>
+                                            <td id="bottomdir"></td>
+                                        </tr>
+                                    </table></div>
+                                    <div id="load" class="dircir">
+                                        <div id="dirwbar" class="dirarrow"></div>
                                     </div>
-                                    <div class="levelbar">
-                                        <div id="airqbar"></div>
+                                    <div class="dirdata">
+                                        <div class="valuewind" id="winddeg"></div>
+                                        <div class="valuewind2" id="windsp"></div>
                                     </div>
                                 </div>
                             </div>
+
                             <a href="details"><div class="theviewmorebutton" style="display: flex; flex-direction: row; align-items: center; justify-content: center; font-size: 25px;">More details<ion-icon name="arrow-forward-outline"></ion-icon></div></a>
                         </div>
                     </div>

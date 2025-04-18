@@ -128,7 +128,7 @@ def weekdays():
     }
     return day_names
 def device_names_get():
-    device_names = ["","Humidity","Temperature","Sound","Sun Light","Chance of Rain","Wind Speed","Moisture","Atmospheric Pressure","UV","Wind Direction","Altitude"]
+    device_names = ["","Humidity","Temperature","PM 2.5","Sun Light","Chance of Rain","Wind Speed","Moisture","Atmospheric Pressure","UV","Wind Direction","Altitude"]
     return device_names
 
 def icon_get():
